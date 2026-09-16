@@ -21,7 +21,13 @@ def verify(directory):
     splits=pd.read_csv(splitpath,dtype={'essay_id':str})
     truth=pd.read_csv(ROOT/'train.csv',dtype={'essay_id':str}).set_index('essay_id').score
     frames={}
-    for name,split in [('selection','selection'),('reviewed_train','train')]:
+    parts=[('reviewed_train','train')]
+    if config.get('selection_evaluated',True):
+        parts.append(('selection','selection'))
+    else:
+        assert 'selection' not in report
+        assert not (directory/'selection_predictions.csv').exists()
+    for name,split in parts:
         pred=pd.read_csv(directory/f'{name}_predictions.csv',dtype={'essay_id':str})
         assert pred.essay_id.is_unique
         allowed=set(splits.loc[splits.split==split,'essay_id'])
@@ -57,8 +63,9 @@ def main():
     result={}
     for name,r in runs.items():
         pred=r['reviewed_train'];sub=pred[pred.essay_id.isin(common)]
-        result[name]={'verified':True,'selection':metrics(r['selection'].score.to_numpy(),r['selection'].prediction.to_numpy(),FIXED),
-                      'common_train':metrics(sub.score.to_numpy(),sub.prediction.to_numpy(),FIXED)}
+        result[name]={'verified':True,'common_train':metrics(sub.score.to_numpy(),sub.prediction.to_numpy(),FIXED)}
+        if 'selection' in r:
+            result[name]['selection']=metrics(r['selection'].score.to_numpy(),r['selection'].prediction.to_numpy(),FIXED)
     print(json.dumps(result,indent=2))
 
 if __name__=='__main__':
