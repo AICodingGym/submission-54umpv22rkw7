@@ -82,4 +82,13 @@ How reliably can a 4B model distinguish source patchwork from original developme
 - 6215c79 (6) explicitly connects an advertising example back to learning, whereas 7ebd70b (3) drifts into business benefits. Assess the actual function of an example rather than banning topics such as advertising.
 - 980a15b (6) criticizes the source author's thesis placement. That is the student's argument, not evidence that our scoring rubric should require all theses in opening paragraphs.
 - Keep ambiguous anchors such as 896afa6 (5) and 963705b (6); do not falsely present adjacent grades as perfectly separable by a single rule.
-- Current coverage: 216/10,905 full semantic reviews; 10,689 remain. New Qwen evaluation has not begun.
+- Coverage at that update: 216/10,905 full semantic reviews; 10,689 remained. New Qwen evaluation has not begun.
+
+## Evidence update after batches 13–14 (252 essays reviewed)
+
+- c369266 (4) critiques FACS reliability at length with almost no classroom application. Task relevance is holistic and uncertain when the original task is missing; do not use classroom mentions as a hard gate. Informal/profane wording is also not an automatic low-score trigger.
+- 74f76a7 (5) is substantially descriptive/paraphrastic, with some explanatory framing. This is a stronger counterexample to an absolute summary ceiling than earlier score-4 examples. Separate identifying development from demanding every paragraph contain original analysis.
+- 952c47b (4, 1,015 words) contains extensive source-linked benefits and practical objections. Its lower label than some more formulaic responses remains difficult to explain. Preserve uncertainty; do not invent a categorical penalty for length, lowercase starts, or practical counterarguments.
+- 59b254f (4) is highly formulaic but links quoted material to a clear classroom purpose. 954f9af (3) discusses authority and article structure but repeats broad praise. Judge actual substance, not analytical terminology or template presence.
+- 8531c68 (1) develops car necessity while ostensibly opposing driverless technology: multiple examples can support a misread issue. Contrast with c369266 to avoid making topical specificity a simplistic keyword rule.
+- Current coverage: 252/10,905 complete semantic reviews; 10,653 remain. No new model evaluation or score improvement is claimed.
