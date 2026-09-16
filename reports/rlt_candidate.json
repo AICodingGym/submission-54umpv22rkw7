@@ -1,0 +1,16 @@
+{
+  "status": "frozen_for_submission",
+  "model_dir": "runs/rlt_cached_norm_v1",
+  "version": "B0",
+  "selected_epoch": 1,
+  "model_sha256": "2106da2676b4ea51cc8ef16ff1a111cc46b1f8bc20301c166e23234e707b14d5",
+  "selection": {
+    "qwk": 0.8342006147154317,
+    "mae": 0.3384714193962749
+  },
+  "selection_target": 0.8341167069970928,
+  "selection_qwk_delta": 8.390771833888255e-05,
+  "platform_target": 0.82349,
+  "final_validation_evaluated": false,
+  "note": "Selection advantage is only about 0.000084 QWK; no claim of statistically reliable superiority."
+}

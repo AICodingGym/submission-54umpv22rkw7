@@ -1,0 +1,55 @@
+{
+  "models": {
+    "rlt_cached_norm_v1": {
+      "selected_epoch": 1,
+      "B0": {
+        "qwk": 0.8342006147154317,
+        "mae": 0.3384714193962749
+      },
+      "B1": {
+        "qwk": 0.8304173299932336,
+        "mae": 0.34617854849068724
+      },
+      "model_sha256": "2106da2676b4ea51cc8ef16ff1a111cc46b1f8bc20301c166e23234e707b14d5",
+      "cache": {
+        "rows": 10905,
+        "tokens": 4712907,
+        "dtype": "float32",
+        "storage": "CPU RAM, run-local",
+        "bytes": 14478050304,
+        "sha256": "de406da244deccfc0c6ecb0ab1be85e153de098023083dfd4e00eea53da15777",
+        "seconds": 171.67397936199995,
+        "encoder_precision": "bf16"
+      },
+      "epoch_seconds": 385.4903012069917
+    },
+    "rlt_cached_plain_v1": {
+      "selected_epoch": 5,
+      "B0": {
+        "qwk": 0.8287998541647678,
+        "mae": 0.36480411046885036
+      },
+      "B1": {
+        "qwk": 0.8265884850738118,
+        "mae": 0.3705844572896596
+      },
+      "model_sha256": "30afa88b1c6f9971b360fbe4d8ba32dcc84bbb20f33ff63cd4e57dde8355c071",
+      "cache": {
+        "rows": 10905,
+        "tokens": 4712907,
+        "dtype": "float32",
+        "storage": "CPU RAM, run-local",
+        "bytes": 14478050304,
+        "sha256": "de406da244deccfc0c6ecb0ab1be85e153de098023083dfd4e00eea53da15777",
+        "seconds": 179.88353932600148,
+        "encoder_precision": "bf16"
+      },
+      "epoch_seconds": 412.835132404005
+    }
+  },
+  "identical_train_feature_cache": true,
+  "training_concurrent_on_one_gpu": true,
+  "selected_run": "rlt_cached_norm_v1",
+  "selected_version": "B0",
+  "final_validation_evaluated": false
+}
