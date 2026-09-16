@@ -1,0 +1,11 @@
+{
+  "prediction_rows_audited": 14019,
+  "selection_reload_rows": 1557,
+  "all_token_lengths_recomputed": true,
+  "max_reload_raw_difference": 0.0,
+  "all_integer_predictions_match": true,
+  "all_report_metrics_recomputed": true,
+  "reserved_final_rows": 1557,
+  "final_validation_evaluated": false,
+  "model_sha256": "6d8a90152fab45d55890527e4ec6fb510e0b778919f38991babeeb19d5f21a51"
+}

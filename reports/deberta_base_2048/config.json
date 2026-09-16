@@ -1,0 +1,46 @@
+{
+  "epochs": 10,
+  "model_size": "base",
+  "max_length": 2048,
+  "output_dir": "/home/chao/test/learning-agency-lab-automated-essay-scoring-2/outputs_deberta_base_2048",
+  "batch_size": 4,
+  "eval_batch_size": 4,
+  "smoke": false,
+  "prepare_only": false,
+  "seed": 42,
+  "model": "microsoft/deberta-v3-base",
+  "revision": "8ccc9b6f36199bec6961081d44eb72fb3f7353f3",
+  "truncation": "right",
+  "gradient_accumulation": 8,
+  "gradient_checkpointing": true,
+  "dynamic_padding": true,
+  "precision": "bf16",
+  "encoder_lr": 2e-05,
+  "head_lr": 0.0001,
+  "weight_decay": 0.01,
+  "warmup_ratio": 0.1,
+  "loss": "FP32 MSE",
+  "gpu": "NVIDIA GeForce RTX 3080",
+  "torch": "2.11.0+cu128",
+  "split_sha256": "6a744961c657093ef34c4910660acaeb0f7bbe8a03c156f01415a1be08c8f588",
+  "lengths": {
+    "train": {
+      "rows": 10905,
+      "truncated": 0,
+      "truncated_fraction": 0.0,
+      "max_tokens": 1778
+    },
+    "selection": {
+      "rows": 1557,
+      "truncated": 0,
+      "truncated_fraction": 0.0,
+      "max_tokens": 1483
+    },
+    "calibration": {
+      "rows": 1557,
+      "truncated": 0,
+      "truncated_fraction": 0.0,
+      "max_tokens": 1401
+    }
+  }
+}

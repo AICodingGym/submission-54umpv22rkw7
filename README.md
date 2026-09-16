@@ -1,5 +1,10 @@
 # Essay scoring baseline
 
+当前固定强基线为 **DeBERTa-v3-base、2048-token 上限、动态 padding、第 5 轮 B0**。
+10 轮训练后，同一选择集 QWK 为 **0.8341**、MAE 为 **0.3404**；校准未改善，
+选择未校准 B0 提交。三个开发集合均无截断。详见
+[全文强基线结果](DEBERTA_2048_RESULTS.md) 和 [RLT 后续实验](RLT_EXPERIMENTS.md)。
+
 新增 DeBERTa-v3-base 10 轮训练结果：同一 DeBERTa 选择集上，最佳第 5 轮
 B0/B1 QWK 为 0.8143 / 0.8146；原 small 为 0.7910 / 0.8010。
 第 6–10 轮未进一步改善。模型使用 `score_deberta.py --model-dir outputs_deberta_base`

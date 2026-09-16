@@ -22,6 +22,34 @@ HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 ../.venv/bin/python verify_deberta_run.p
 三个开发集合的指标，检查划分与标签，独立重载全部选择集预测，并保存
 `verification.json`、环境版本和权重哈希。最终验证集继续保留。
 
+## 2048-token 全文对照
+
+已完成 10 轮训练，最佳第 5 轮 B0 QWK 为 0.834117；B1 校准未改善，
+因此固定 B0 为强基线。结果与长作文分组比较见 [全文结果](DEBERTA_2048_RESULTS.md)。
+
+`--max-length` 控制训练、验证与报告中的截断界限；默认仍为 512。
+非默认长度写入单独目录，例如 `outputs_deberta_base_2048/`，
+评分入口自动读取保存的长度。每个 batch 只补齐到该 batch 的实际最长
+序列，不固定补齐到 2048。
+
+```bash
+HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 ../.venv/bin/python deberta_baseline.py --model-size base --max-length 2048 --epochs 10 --smoke
+HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 ../.venv/bin/python deberta_baseline.py --model-size base --max-length 2048 --epochs 10
+HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 ../.venv/bin/python verify_deberta_run.py --run-dir outputs_deberta_base_2048
+../.venv/bin/python score_deberta.py --model-dir outputs_deberta_base_2048 --device cuda --version B0 --file essay.txt
+```
+
+本次从相同的原始 base 权重重新训练，保留 10 轮调度、batch 4、
+累积 8、随机种子、数据划分与最佳 B0 QWK 选择规则。
+三个开发集合的最长序列分别为 train 1778、selection 1483、calibration
+1401 tokens，2048 上限覆盖全部文本。最终验证集继续保留。
+
+该 DeBERTa 权重不使用输入绝对位置嵌入；本轮沿用原有相对位置桶及其
+距离映射，没有扩展或重新初始化位置参数。最长作文的短试跑已通过前向、
+反向、保存与重载，显存分配峰值 5.75 GiB、缓存保留峰值 10.33 GiB。
+短试跑按真实 token 长度选择最长样本。完整核验还会重新分词核对每篇
+长度与截断标记，并比较原来超过 512 tokens 的相同作文组。
+
 ## 原 small 基线
 
 作文原文 → DeBERTa-v3-small → attention mask 平均池化 → 线性回归头。

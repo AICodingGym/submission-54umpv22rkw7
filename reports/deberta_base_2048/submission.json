@@ -1,0 +1,20 @@
+{
+  "model": "microsoft/deberta-v3-base",
+  "max_length": 2048,
+  "selected_epoch": 5,
+  "version": "B0",
+  "rows": 1731,
+  "submission_file": "outputs_deberta_base_2048/submission.csv",
+  "submission_sha256": "50df86e2e1e8916247a9af4dfa294a87fd3723c9d4d232bef206ba1e7393abe2",
+  "score_counts": {
+    "1": 126,
+    "2": 517,
+    "3": 600,
+    "4": 368,
+    "5": 108,
+    "6": 12
+  },
+  "sample_id_order_verified": true,
+  "threshold_mapping_verified": true,
+  "status": "prepared"
+}

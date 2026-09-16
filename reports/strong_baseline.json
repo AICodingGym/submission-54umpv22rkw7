@@ -1,0 +1,69 @@
+{
+  "model_dir": "outputs_deberta_base_2048",
+  "model": "microsoft/deberta-v3-base",
+  "max_length": 2048,
+  "dynamic_padding": true,
+  "trained_epochs": 10,
+  "selected_epoch": 5,
+  "version": "B0",
+  "selection": {
+    "rows": 1557,
+    "qwk": 0.8341167069970928,
+    "mae": 0.340398201669878,
+    "continuous_mae": 0.42729657888412476,
+    "confusion_matrix": [
+      [
+        70,
+        37,
+        5,
+        0,
+        0,
+        0
+      ],
+      [
+        41,
+        306,
+        75,
+        3,
+        0,
+        0
+      ],
+      [
+        1,
+        97,
+        383,
+        79,
+        3,
+        0
+      ],
+      [
+        0,
+        3,
+        90,
+        224,
+        39,
+        0
+      ],
+      [
+        0,
+        0,
+        2,
+        28,
+        56,
+        2
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        8,
+        5
+      ]
+    ]
+  },
+  "model_sha256": "6d8a90152fab45d55890527e4ec6fb510e0b778919f38991babeeb19d5f21a51",
+  "split_sha256": "6a744961c657093ef34c4910660acaeb0f7bbe8a03c156f01415a1be08c8f588",
+  "final_validation_evaluated": false,
+  "status": "verified_pending_submission"
+}

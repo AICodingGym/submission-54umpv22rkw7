@@ -1,0 +1,18 @@
+{
+  "packages": {
+    "torch": "2.11.0+cu128",
+    "transformers": "4.57.6",
+    "numpy": "2.4.6",
+    "pandas": "3.0.5",
+    "scikit-learn": "1.9.1",
+    "sentencepiece": "0.2.1",
+    "protobuf": "7.36.1",
+    "huggingface-hub": "0.36.2",
+    "tokenizers": "0.22.2"
+  },
+  "base_weights_sha256": "691d48a2800b926a19e3051def466fc2cca4f59a15e42ce4a0cf7f1b380b5e33",
+  "base_model_revision": "8ccc9b6f36199bec6961081d44eb72fb3f7353f3",
+  "training_script_sha256": "b97102b1080ebbbcc5967d02c797ed438b0258f099262f01afc1a908f63c78f4",
+  "encoder_layers": 12,
+  "model_parameters": 183832321
+}

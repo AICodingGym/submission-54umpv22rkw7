@@ -63,6 +63,8 @@ def main():
     # Only the three development partitions enter the audit or inference.
     source = pd.read_csv(ROOT / 'train.csv', dtype={'essay_id': str})
     source = source[source.essay_id.isin(split.loc[split.split != 'final_validation', 'essay_id'])].set_index('essay_id')
+    torch.set_num_threads(8)
+    scorer = DebertaScorer(directory, device='cuda', version='B1')
     audited = 0
     for name in ['train', 'selection', 'calibration']:
         pred = pd.read_csv(directory / f'{name}_predictions.csv', dtype={'essay_id': str})
@@ -71,7 +73,10 @@ def main():
         assert np.array_equal(pred.score, source.loc[pred.essay_id, 'score'])
         raw = pred.raw_prediction.to_numpy()
         assert np.isfinite(raw).all()
+        full_tokens = scorer.tokenizer(source.loc[pred.essay_id, 'full_text'].tolist(), truncation=False)['input_ids']
+        assert np.array_equal(pred.token_length, [len(ids) for ids in full_tokens])
         assert np.array_equal(pred.truncated, pred.token_length > config['max_length'])
+        assert int(pred.truncated.sum()) == config['lengths'][name]['truncated']
         for version, boundaries in [('B0', np.arange(1.5, 6, 1)), ('B1', thresholds)]:
             scores = np.searchsorted(boundaries, raw, side='right') + 1
             assert np.array_equal(pred[version], scores)
@@ -79,8 +84,6 @@ def main():
             for group, mask in [('truncated', pred.truncated.to_numpy()), ('untruncated', ~pred.truncated.to_numpy())]:
                 check_metrics(report['splits'][name][f'{group}_{version}'], pred.score.to_numpy()[mask], raw[mask], scores[mask])
         audited += len(pred)
-    torch.set_num_threads(8)
-    scorer = DebertaScorer(directory, device='cuda', version='B1')
     selection = pd.read_csv(directory / 'selection_predictions.csv', dtype={'essay_id': str})
     raw, scores = scorer.predict(source.loc[selection.essay_id, 'full_text'].tolist(), batch_size=config['eval_batch_size'])
     difference = float(np.max(np.abs(raw - selection.raw_prediction.to_numpy(dtype=np.float32))))
@@ -89,6 +92,7 @@ def main():
     assert np.array_equal(np.searchsorted(np.arange(1.5, 6, 1), raw, side='right') + 1, selection.B0)
     assert not (directory / 'final_validation_predictions.csv').exists()
     verification = {'prediction_rows_audited': audited, 'selection_reload_rows': len(selection),
+                    'all_token_lengths_recomputed': True,
                     'max_reload_raw_difference': difference, 'all_integer_predictions_match': True,
                     'all_report_metrics_recomputed': True, 'reserved_final_rows': int((split.split == 'final_validation').sum()),
                     'final_validation_evaluated': False, 'model_sha256': sha256(directory / 'model/model.pt')}

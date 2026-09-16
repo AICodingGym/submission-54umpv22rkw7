@@ -142,14 +142,15 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--epochs', type=int, default=4)
     parser.add_argument('--model-size', choices=['small', 'base'], default='small')
+    parser.add_argument('--max-length', type=int, default=512)
     parser.add_argument('--output-dir', type=Path)
     parser.add_argument('--batch-size', type=int, choices=[2, 4], default=4)
     parser.add_argument('--eval-batch-size', type=int, default=4)
     parser.add_argument('--smoke', action='store_true')
     parser.add_argument('--prepare-only', action='store_true')
     args = parser.parse_args()
-    if args.epochs < 1 or args.eval_batch_size < 1:
-        parser.error('epochs and eval batch size must be positive')
+    if args.epochs < 1 or args.eval_batch_size < 1 or args.max_length < 2:
+        parser.error('epochs and eval batch size must be positive; max length must be at least 2')
     torch.set_num_threads(8)
     random.seed(42)
     np.random.seed(42)
@@ -164,7 +165,8 @@ def main():
     if not torch.cuda.is_available():
         raise RuntimeError('CUDA GPU access required')
     suffix = '' if args.model_size == 'small' else f'_{args.model_size}'
-    output = args.output_dir or ROOT / f'outputs_deberta{suffix}{"_smoke" if args.smoke else ""}'
+    length_suffix = '' if args.max_length == 512 else f'_{args.max_length}'
+    output = args.output_dir or ROOT / f'outputs_deberta{suffix}{length_suffix}{"_smoke" if args.smoke else ""}'
     output = output.resolve()
     output.mkdir(parents=True, exist_ok=True)
     if (output / 'config.json').exists():
@@ -176,23 +178,27 @@ def main():
     data, tokens, lengths = {}, {}, {}
     for name in ['train', 'selection', 'calibration']:
         part = frame[frame.split == name].copy().reset_index(drop=True)
-        if args.smoke:
-            # 256 long essays = 64 full-length microbatches, 8 optimizer updates.
-            part = part.iloc[np.argsort(-part.full_text.str.len().to_numpy())[:256 if name == 'train' else 32]].reset_index(drop=True)
         full = tokenizer(part.full_text.tolist(), truncation=False)['input_ids']
+        if args.smoke:
+            # Stress actual longest token sequences, including the maximum length.
+            indices = np.argsort([-len(ids) for ids in full])[:256 if name == 'train' else 32]
+            part = part.iloc[indices].reset_index(drop=True)
+            full = [full[i] for i in indices]
         lengths[name] = np.array([len(ids) for ids in full])
-        tokens[name] = tokenizer(part.full_text.tolist(), truncation=True, max_length=512)['input_ids']
+        tokens[name] = tokenizer(part.full_text.tolist(), truncation=True, max_length=args.max_length)['input_ids']
         data[name] = part
     bf16 = torch.cuda.is_bf16_supported()
     accumulation = 32 // args.batch_size
     config = {**vars(args), 'output_dir': str(output), 'seed': 42,
               'model': f'microsoft/deberta-v3-{args.model_size}', 'revision': snapshot.name,
-              'max_length': 512, 'truncation': 'right', 'gradient_accumulation': accumulation,
+              'max_length': args.max_length, 'truncation': 'right', 'gradient_accumulation': accumulation,
               'gradient_checkpointing': True, 'dynamic_padding': True, 'precision': 'bf16' if bf16 else 'fp32',
               'encoder_lr': 2e-5, 'head_lr': 1e-4, 'weight_decay': .01, 'warmup_ratio': .1,
               'loss': 'FP32 MSE', 'gpu': torch.cuda.get_device_name(), 'torch': torch.__version__,
               'split_sha256': hashlib.sha256((ROOT / 'splits/deberta_seed42.csv').read_bytes()).hexdigest(),
-              'lengths': {k: {'rows': len(v), 'truncated': int((v > 512).sum()), 'truncated_fraction': float((v > 512).mean())} for k, v in lengths.items()}}
+              'lengths': {k: {'rows': len(v), 'truncated': int((v > args.max_length).sum()),
+                              'truncated_fraction': float((v > args.max_length).mean()),
+                              'max_tokens': int(v.max())} for k, v in lengths.items()}}
     write_json(output / 'config.json', config)
     print(json.dumps(config), flush=True)
     model = EssayRegressor(snapshot).cuda()
@@ -284,7 +290,7 @@ def main():
     for name in ['train', 'selection', 'calibration']:
         raw, elapsed = (calibration, calibration_time) if name == 'calibration' else predict(name)
         y = data[name].score.to_numpy()
-        truncated = lengths[name] > 512
+        truncated = lengths[name] > args.max_length
         report['splits'][name] = {'B0': metrics(y, raw, FIXED), 'B1': metrics(y, raw, thresholds),
             'truncated_B0': metrics(y[truncated], raw[truncated], FIXED),
             'truncated_B1': metrics(y[truncated], raw[truncated], thresholds),
