@@ -29,3 +29,11 @@ Run with `teacher_eval.py --prompt rubric_research/rubrics/v0002_prompt.txt --ex
 Full selection 1,557 rows: argmax QWK **0.269514**, MAE **1.156712**; expected fixed-threshold QWK **0.263218**, MAE **1.165703**. Predictions: 1→1, 2→0, 3→310, 4→889, 5→357, 6→0. One essay truncated. Total scoring 448.3 s; peak allocation 7.916 GiB. Worse than old uncalibrated GEPA G1 (QWK 0.324540, MAE 0.773924). The verbose rubric alone did not improve performance. No calibration performed. Selection ID coverage, probability normalization and QWK recomputation checked.
 
 v0002 started after v0001 completed, with prompt prepared from train errors before seeing v0001 selection results.
+
+## v0002 interim training diagnosis and next controlled check
+
+On the same 338 non-demonstration training essays, v0001 QWK is 0.434128, MAE 1.183432; v0002 QWK is 0.396643, MAE 1.295858. Four demonstrations did not fix compression or low-score overrating. v0002 full selection was still running at this update; do not infer its result from training diagnostics.
+
+Prepared v0003 reuses the v0001 rubric with A–F category codes in place of numeric grades. A maps to 1 and F to 6; probabilities and argmax are mapped identically. This tests output-code sensitivity without changing model weights, the six grading levels, input limits or nonthinking inference. It will first score reviewed train only using `--letters --train-only`, after the active GPU evaluation finishes. No claim that this change improves quality until measured.
+
+`verify_teacher.py` independently checks completed-run prompt/data/split fingerprints, partition membership, demonstration exclusion, original labels, probability normalization, decoded scores, expected values and recomputed QWK/MAE/confusion matrices. It also reports both versions on common diagnostic train IDs.
