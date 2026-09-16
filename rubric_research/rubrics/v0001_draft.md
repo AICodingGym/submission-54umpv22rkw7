@@ -99,4 +99,13 @@ How reliably can a 4B model distinguish source patchwork from original developme
 - 552af61 (3) has meaningful causal explanation, while 49080ed (4) is more descriptive. Preserve this uncertain adjacent-grade contrast. Do not invent a missing-conclusion penalty or attribute the difference entirely to factual accuracy.
 - e03613b (1) is fluent and argumentative but strongly source-like in passages repeated across the corpus. The observed distinction is student-owned response versus assembled material, but exact copying has not been independently verified; apparent polish alone is unreliable.
 - 10416ad (5) sustains one central classroom adaptation theme through distinct explanations and scenarios. Count meaningful elaboration, not merely nominal reasons.
-- Current coverage: 270/10,905 full semantic reviews; 10,635 remain. New Qwen evaluation has not started.
+- Coverage at that update: 270/10,905 full semantic reviews; 10,635 remained. New Qwen evaluation has not started.
+
+## Evidence update after batch 16 (288 essays reviewed)
+
+- a8171b6 (5) separates nearly every sentence with blank lines. Assess logical grouping/progression, not raw paragraph counts or visual formatting.
+- 4d00492 (6, 1,302 words) and 8cad5af (1, 675 words) contrast sustained writer-owned argument with source-like accumulation. No length-derived score rule follows; long-input truncation needs separate later inference auditing.
+- 0cdf1ff (5) spends substantial space on nonclassroom applications as alternatives to classroom use. This is purposeful comparison rather than automatically off-task content. 6b207f2 (4) also tolerates some drift, reinforcing soft holistic task assessment.
+- d3cc1d2 (2) includes concrete privacy-related reasoning. Presence of an example or how/why explanation alone does not establish 3; exact adjacent-grade distinctions remain uncertain.
+- 2fa5ce8 (4) has one sentence that appears to reverse its stance, while the rest consistently opposes driverless cars. Interpret local slips in the context of the whole response rather than mechanically penalizing a contradiction keyword.
+- Current coverage: 288/10,905 full semantic reviews; 10,617 remain. No new Qwen evaluation yet.
