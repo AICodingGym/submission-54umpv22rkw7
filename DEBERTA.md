@@ -25,7 +25,8 @@ HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 ../.venv/bin/python verify_deberta_run.p
 ## 2048-token 全文对照
 
 已完成 10 轮训练，最佳第 5 轮 B0 QWK 为 0.834117；B1 校准未改善，
-因此固定 B0 为强基线。结果与长作文分组比较见 [全文结果](DEBERTA_2048_RESULTS.md)。
+因此固定 B0 为本地强基线。平台得分 0.82030，低于旧 512 版的 0.82349，
+故平台最佳仍为旧版。结果与长作文分组比较见 [全文结果](DEBERTA_2048_RESULTS.md)。
 
 `--max-length` 控制训练、验证与报告中的截断界限；默认仍为 512。
 非默认长度写入单独目录，例如 `outputs_deberta_base_2048/`，
