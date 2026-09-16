@@ -1,0 +1,122 @@
+{
+  "run": "runs/rlt_frozen_v1",
+  "status": "verified_below_strong_baseline",
+  "best_epoch": 10,
+  "selection_B0": {
+    "rows": 1557,
+    "qwk": 0.8081417424070595,
+    "mae": 0.35581245985870263,
+    "continuous_mae": 0.42531710863113403,
+    "confusion_matrix": [
+      [
+        39,
+        64,
+        8,
+        1,
+        0,
+        0
+      ],
+      [
+        18,
+        313,
+        90,
+        4,
+        0,
+        0
+      ],
+      [
+        0,
+        84,
+        407,
+        70,
+        2,
+        0
+      ],
+      [
+        0,
+        1,
+        113,
+        216,
+        26,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        46,
+        41,
+        1
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        9,
+        4
+      ]
+    ]
+  },
+  "selection_B1": {
+    "rows": 1557,
+    "qwk": 0.8237614646602778,
+    "mae": 0.37315350032113037,
+    "continuous_mae": 0.42531710863113403,
+    "confusion_matrix": [
+      [
+        65,
+        41,
+        5,
+        1,
+        0,
+        0
+      ],
+      [
+        45,
+        317,
+        59,
+        4,
+        0,
+        0
+      ],
+      [
+        2,
+        131,
+        337,
+        90,
+        3,
+        0
+      ],
+      [
+        0,
+        4,
+        84,
+        229,
+        37,
+        2
+      ],
+      [
+        0,
+        0,
+        0,
+        32,
+        41,
+        15
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        4,
+        9
+      ]
+    ]
+  },
+  "target_selection_qwk": 0.8341167069970928,
+  "training_and_selection_seconds": 1537.6801997440125,
+  "next_experiment": "Jointly fine-tune original base encoder with the same K=4, D=256, reconstruction weight 0.1, full-text input, and fixed split.",
+  "platform_submitted": false,
+  "final_validation_evaluated": false
+}

@@ -1,0 +1,69 @@
+{
+  "model_size": "base",
+  "source": "/home/chao/test/learning-agency-lab-automated-essay-scoring-2/models/hub/models--microsoft--deberta-v3-base/snapshots/8ccc9b6f36199bec6961081d44eb72fb3f7353f3",
+  "output_dir": "runs/rlt_frozen_v1",
+  "epochs": 10,
+  "batch_size": 4,
+  "effective_batch_size": 32,
+  "eval_batch_size": 4,
+  "max_length": 2048,
+  "pooling": "latent",
+  "num_latents": 4,
+  "latent_dim": 256,
+  "num_heads": 4,
+  "dropout": 0.1,
+  "reconstruction_weight": 0.1,
+  "finetune_encoder": false,
+  "encoder_lr": 2e-05,
+  "head_lr": 0.0001,
+  "seed": 42,
+  "device": "cuda",
+  "smoke": false,
+  "architecture": {
+    "pooling": "latent",
+    "num_latents": 4,
+    "latent_dim": 256,
+    "num_heads": 4,
+    "dropout": 0.1,
+    "reconstruction_weight": 0.1,
+    "finetune_encoder": false
+  },
+  "revision": "8ccc9b6f36199bec6961081d44eb72fb3f7353f3",
+  "precision": "bf16",
+  "split_sha256": "6a744961c657093ef34c4910660acaeb0f7bbe8a03c156f01415a1be08c8f588",
+  "data_sha256": "ce6b0bd2c7d790a64ad3d2a8e15e3563d90e881c787638caa93504445caa65d0",
+  "torch": "2.11.0+cu128",
+  "final_validation_evaluated": false,
+  "truncation": "right",
+  "padding": "batch_longest",
+  "teacher": "frozen initial encoder",
+  "lengths": {
+    "train": {
+      "rows": 10905,
+      "truncated": 0,
+      "max_tokens": 1778
+    },
+    "selection": {
+      "rows": 1557,
+      "truncated": 0,
+      "max_tokens": 1483
+    },
+    "calibration": {
+      "rows": 1557,
+      "truncated": 0,
+      "max_tokens": 1401
+    }
+  },
+  "git_commit": "a4ba88746bdd0797dbfab6aa4f521824e955f51e",
+  "code_sha256": {
+    "essay_bottleneck/__init__.py": "d6f2cca2ae3c57ac3b673c7017cb068b9511515316924cea212d56c5d23c0af5",
+    "essay_bottleneck/audit_run.py": "1c188933d6c00b2edef29fd2e7213d0e39f51c6a0afda6d0742ddce97df552b6",
+    "essay_bottleneck/batching.py": "a0badabb1a218c7a84d28c2a7eb2622a250e1f1c0a79de5992a6bbdf56dcef96",
+    "essay_bottleneck/model.py": "dbd6ae8ad92bbaf815683bc87d238b315992c510d84543f24ee43b4cc04b2f6e",
+    "essay_bottleneck/score.py": "90f8d0c22785958e912365e36ce36b0ceb4f730775348ef8d1eb690fb250fd8d",
+    "essay_bottleneck/train.py": "0191bf21d0ee8ed7380aa1d0fe4eb826f0855d668bfd2565ab5daf21074d06c5",
+    "essay_bottleneck/verify.py": "ae6989edf573981b5ba1db478d015a49901ebb8fbac32ae0a2a79d4d1857ef94",
+    "essay_bottleneck/verify_lengths.py": "95a240e1fd60f33244f36cf894306c3b70bd1ddcc8caf4efe241ff0279d12d73",
+    "deberta_baseline.py": "b97102b1080ebbbcc5967d02c797ed438b0258f099262f01afc1a908f63c78f4"
+  }
+}
