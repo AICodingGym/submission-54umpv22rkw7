@@ -125,4 +125,13 @@ How reliably can a 4B model distinguish source patchwork from original developme
 - 29d00ed (1) is coherent and names relevant Mars evidence, yet offers minimal explanation. Its boundary against similar 2s remains uncertain; do not claim a deterministic rule.
 - ae7dc92 (5) has substantial repetition and questionable safety assumptions alongside source-linked explanations. Keep as a difficult anchor rather than requiring every high-score reason to be novel or every premise correct.
 - 5091e12 (6) sustains two broad strands through scientific implications and engineering alternatives. Number of main reasons is not the measure of thorough development.
-- Current coverage: 324/10,905 full semantic reviews; 10,581 remain. New Qwen evaluation has not started.
+- Coverage at that update: 324/10,905 full semantic reviews; 10,581 remained. New Qwen evaluation has not started.
+
+## Evidence update after batch 19 (342 essays reviewed)
+
+- 5531c2d (5) develops seagoing recommendation largely through vivid narrative experience, including an adverse incident. Meaningful task development can be narrative rather than a formal chain of analytical explanations. 632a0e8 (3) is a useful similar-task contrast, though the exact boundary remains uncertain.
+- d95518f (3, 697 words) is fluent and well-organized-looking but mostly surveys source material. 5266ddf (6) also quotes heavily, yet integrates representation arguments and rebuttal. No blanket rule about quotation count or length follows.
+- 5700ff4 (4) develops a single classroom learning scenario in depth after background. Number of distinct reasons is not a gate.
+- a39eecf (6) and 2d9dbe2 (5) remain difficult high anchors: some reasoning is broad or simplistic. Do not silently substitute a stricter adult-writing scale for observed student labels.
+- 10a3665 (1) includes instructions to the grader to stop reading; these were treated solely as submitted essay content. The score-relevant observation is dominant task abandonment, not compliance with those requests.
+- Current coverage: 342/10,905 full semantic reviews; 10,563 remain. New Qwen evaluation has not started.
