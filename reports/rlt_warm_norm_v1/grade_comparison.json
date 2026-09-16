@@ -1,0 +1,138 @@
+{
+  "split": "selection",
+  "note": "Development-set diagnostic after checkpoints are frozen; not independent final evaluation.",
+  "grades": [
+    {
+      "true_grade": 1,
+      "rows": 112,
+      "baseline_B0": {
+        "mean_prediction": 1.4196428571428572,
+        "exact_accuracy": 0.625,
+        "mean_squared_error": 0.5089285714285714,
+        "continuous_mean": 1.4983607700892858
+      },
+      "rlt_B0": {
+        "mean_prediction": 1.4107142857142858,
+        "exact_accuracy": 0.6339285714285714,
+        "mean_squared_error": 0.5,
+        "continuous_mean": 1.4771554129464286
+      },
+      "rlt_B1": {
+        "mean_prediction": 1.3482142857142858,
+        "exact_accuracy": 0.6964285714285714,
+        "mean_squared_error": 0.4375,
+        "continuous_mean": 1.4771554129464286
+      }
+    },
+    {
+      "true_grade": 2,
+      "rows": 425,
+      "baseline_B0": {
+        "mean_prediction": 2.0941176470588236,
+        "exact_accuracy": 0.72,
+        "mean_squared_error": 0.30117647058823527,
+        "continuous_mean": 2.115955882352941
+      },
+      "rlt_B0": {
+        "mean_prediction": 2.0870588235294116,
+        "exact_accuracy": 0.72,
+        "mean_squared_error": 0.29411764705882354,
+        "continuous_mean": 2.089080882352941
+      },
+      "rlt_B1": {
+        "mean_prediction": 2.0447058823529414,
+        "exact_accuracy": 0.6776470588235294,
+        "mean_squared_error": 0.33647058823529413,
+        "continuous_mean": 2.089080882352941
+      }
+    },
+    {
+      "true_grade": 3,
+      "rows": 563,
+      "baseline_B0": {
+        "mean_prediction": 2.975133214920071,
+        "exact_accuracy": 0.6802841918294849,
+        "mean_squared_error": 0.3410301953818828,
+        "continuous_mean": 2.95483181616341
+      },
+      "rlt_B0": {
+        "mean_prediction": 2.9449378330373004,
+        "exact_accuracy": 0.6731793960923623,
+        "mean_squared_error": 0.35346358792184723,
+        "continuous_mean": 2.9310335257548847
+      },
+      "rlt_B1": {
+        "mean_prediction": 2.950266429840142,
+        "exact_accuracy": 0.6731793960923623,
+        "mean_squared_error": 0.369449378330373,
+        "continuous_mean": 2.9310335257548847
+      }
+    },
+    {
+      "true_grade": 4,
+      "rows": 356,
+      "baseline_B0": {
+        "mean_prediction": 3.8398876404494384,
+        "exact_accuracy": 0.6292134831460674,
+        "mean_squared_error": 0.3960674157303371,
+        "continuous_mean": 3.842257724719101
+      },
+      "rlt_B0": {
+        "mean_prediction": 3.794943820224719,
+        "exact_accuracy": 0.6348314606741573,
+        "mean_squared_error": 0.37359550561797755,
+        "continuous_mean": 3.778616573033708
+      },
+      "rlt_B1": {
+        "mean_prediction": 3.848314606741573,
+        "exact_accuracy": 0.5814606741573034,
+        "mean_squared_error": 0.42696629213483145,
+        "continuous_mean": 3.778616573033708
+      }
+    },
+    {
+      "true_grade": 5,
+      "rows": 88,
+      "baseline_B0": {
+        "mean_prediction": 4.659090909090909,
+        "exact_accuracy": 0.6363636363636364,
+        "mean_squared_error": 0.4318181818181818,
+        "continuous_mean": 4.6901633522727275
+      },
+      "rlt_B0": {
+        "mean_prediction": 4.534090909090909,
+        "exact_accuracy": 0.5113636363636364,
+        "mean_squared_error": 0.5568181818181818,
+        "continuous_mean": 4.565518465909091
+      },
+      "rlt_B1": {
+        "mean_prediction": 4.784090909090909,
+        "exact_accuracy": 0.5340909090909091,
+        "mean_squared_error": 0.5340909090909091,
+        "continuous_mean": 4.565518465909091
+      }
+    },
+    {
+      "true_grade": 6,
+      "rows": 13,
+      "baseline_B0": {
+        "mean_prediction": 5.384615384615385,
+        "exact_accuracy": 0.38461538461538464,
+        "mean_squared_error": 0.6153846153846154,
+        "continuous_mean": 5.28125
+      },
+      "rlt_B0": {
+        "mean_prediction": 5.384615384615385,
+        "exact_accuracy": 0.38461538461538464,
+        "mean_squared_error": 0.6153846153846154,
+        "continuous_mean": 5.225961538461538
+      },
+      "rlt_B1": {
+        "mean_prediction": 5.538461538461538,
+        "exact_accuracy": 0.5384615384615384,
+        "mean_squared_error": 0.46153846153846156,
+        "continuous_mean": 5.225961538461538
+      }
+    }
+  ]
+}
