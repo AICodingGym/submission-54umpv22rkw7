@@ -10,6 +10,7 @@ from transformers import AutoTokenizer
 
 from deberta_baseline import FIXED, integer_scores
 from .model import BottleneckRegressor
+from .batching import encode_texts, pad_batch
 
 
 class BottleneckScorer:
@@ -38,14 +39,13 @@ class BottleneckScorer:
             raise ValueError('Provide nonempty essay text')
         if batch_size < 1:
             raise ValueError('batch_size must be positive')
-        tokens = self.tokenizer(texts, truncation=True, max_length=self.max_length)['input_ids']
+        tokens, _, _ = encode_texts(self.tokenizer, texts, self.max_length)
         order = np.argsort([len(ids) for ids in tokens])
         raw = np.empty(len(texts), dtype=np.float32)
         with torch.inference_mode():
             for offset in range(0, len(order), batch_size):
                 indices = order[offset:offset + batch_size]
-                inputs = self.tokenizer.pad({'input_ids': [tokens[i] for i in indices]},
-                                            padding=True, return_tensors='pt').to(self.device)
+                inputs = pad_batch(self.tokenizer, tokens, indices, self.device)
                 with torch.autocast(self.device.type, dtype=torch.bfloat16, enabled=self.bf16):
                     raw[indices] = self.model(**inputs)['scores'].cpu().numpy()
         if not np.isfinite(raw).all():

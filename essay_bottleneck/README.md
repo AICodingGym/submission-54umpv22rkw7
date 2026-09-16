@@ -34,8 +34,17 @@ decoder 只接收 latents 和正弦位置查询，不接收原始 token ID 或�
 作为冻结、eval、无梯度的教师，不随学生更新。这会增加显存占用。
 λ=0 时不创建 decoder 和教师。推理仅执行学生编码器、聚合模块和评分头。
 
-此版保留可配置长度的**右侧截断**，默认 512 tokens，不实现全文分块或段落层次模型。
-压缩模块无法恢复被截掉的内容。长输入须单独验证编码器支持和显存开销。
+默认**保留全文、不截断**，每个 microbatch 只补齐到该 batch 最长作文的 token 数；
+训练和评分共用分词与动态 padding 实现。例如两批最长分别为 730、280 tokens，
+其输入长度分别为 730、280。batch 中的篇数仍由 `--batch-size` 控制。
+不按整份数据的最长作文补齐，也不受 tokenizer 的默认 512-token 建议长度截断。
+
+如需显式限制资源，可指定 `--max-length 512` 等长度上限，截断情况会写入报告。
+保存的长度配置在评分时复用；旧的带上限检查点仍保留其原始截断行为。
+本地 DeBERTa-v3 small/base 使用相对位置且不添加绝对位置嵌入，可执行超过 512
+tokens 的输入；其他带固定绝对位置表的 DeBERTa 配置会在超限时明确报错。
+本版没有全文分块或段落层次模型；超长 batch 的显存需求仍随注意力序列长度显著增加，
+需要时减小 batch size，不会因显存不足而悄悄截断。执行长输入不等于已验证评分质量。
 
 ## 离线验证
 
@@ -43,10 +52,12 @@ decoder 只接收 latents 和正弦位置查询，不接收原始 token ID 或�
 
 ```bash
 HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 ../.venv/bin/python -m essay_bottleneck.verify
+HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 ../.venv/bin/python -m essay_bottleneck.verify_lengths
 ```
 
 验证使用随机初始化的微型 DeBERTa 和临时 tokenizer，在 CPU 上检查：
 梯度边界、教师不变性、padding 不变性、重建梯度、保存重载、推理跳过 decoder，
+默认全文保留、各 batch 动态长度、超过 512-token 输入及显式截断兼容性，
 以及三个配置的训练/评分入口和目录覆盖保护。CLI 短跑使用固定 train、selection、
 calibration 各分档至多两篇作文；临时产物在 `artifacts/` 下，结束后自动清理。
 这些检查不衡量评分质量，不改动已有测试文件。

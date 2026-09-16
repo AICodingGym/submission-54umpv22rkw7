@@ -128,6 +128,12 @@ class BottleneckRegressor(nn.Module):
     def forward(self, input_ids, attention_mask, labels=None, **encoder_inputs):
         if attention_mask.ndim != 2 or not attention_mask.bool().any(dim=1).all():
             raise ValueError('Each essay needs at least one unmasked token')
+        encoder_config = self.encoder.config
+        if (encoder_config.model_type == 'deberta-v2'
+                and getattr(encoder_config, 'position_biased_input', True)
+                and input_ids.shape[1] > encoder_config.max_position_embeddings):
+            raise ValueError('This encoder uses a fixed absolute position table; choose an explicit '
+                             'max length or an encoder supporting longer input')
         inputs = dict(input_ids=input_ids, attention_mask=attention_mask, **encoder_inputs)
         if self.config.finetune_encoder:
             hidden = self.encoder(**inputs).last_hidden_state.float()

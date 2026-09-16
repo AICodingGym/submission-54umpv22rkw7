@@ -17,6 +17,7 @@ from transformers import AutoModel, AutoTokenizer, get_linear_schedule_with_warm
 from deberta_baseline import (FIXED, ROOT, fit_thresholds, integer_scores, metrics,
                               prepare_split, write_json)
 from .model import BottleneckConfig, BottleneckRegressor
+from .batching import encode_texts, pad_batch
 
 
 def parse_args():
@@ -28,7 +29,8 @@ def parse_args():
     parser.add_argument('--batch-size', type=int, default=4)
     parser.add_argument('--effective-batch-size', type=int, default=32)
     parser.add_argument('--eval-batch-size', type=int, default=4)
-    parser.add_argument('--max-length', type=int, default=512)
+    parser.add_argument('--max-length', type=int, default=None,
+                        help='Optional explicit truncation cap; default keeps full essays')
     parser.add_argument('--pooling', choices=['latent', 'mean'], default='latent')
     parser.add_argument('--num-latents', type=int, default=4)
     parser.add_argument('--latent-dim', type=int, default=256)
@@ -44,8 +46,9 @@ def parse_args():
     args = parser.parse_args()
     if min(args.epochs, args.batch_size, args.eval_batch_size, args.effective_batch_size) < 1:
         parser.error('epoch and batch counts must be positive')
-    if args.max_length < 2 or args.effective_batch_size % args.batch_size:
-        parser.error('max length must be >= 2 and effective batch must be a multiple of batch size')
+    if ((args.max_length is not None and args.max_length < 2)
+            or args.effective_batch_size % args.batch_size):
+        parser.error('explicit max length must be >= 2 and effective batch must be a multiple of batch size')
     if any(not math.isfinite(lr) or lr <= 0 for lr in [args.encoder_lr, args.head_lr]):
         parser.error('learning rates must be finite and positive')
     return args
@@ -83,16 +86,15 @@ def main():
             or frame.full_text.str.strip().eq('').any() or not frame.score.isin(range(1, 7)).all()):
         raise ValueError('Invalid essay data')
     frame = prepare_split(frame, split_path)
-    data, tokens, lengths = {}, {}, {}
+    data, tokens, lengths, truncated = {}, {}, {}, {}
     for name in ['train', 'selection', 'calibration']:
         part = frame.loc[frame.split == name].copy()
         if args.smoke:
             part = part.groupby('score', group_keys=False).head(2)
         part = part.reset_index(drop=True)
         data[name] = part
-        full = tokenizer(part.full_text.tolist(), truncation=False)['input_ids']
-        lengths[name] = np.array([len(ids) for ids in full])
-        tokens[name] = tokenizer(part.full_text.tolist(), truncation=True, max_length=args.max_length)['input_ids']
+        tokens[name], lengths[name], truncated[name] = encode_texts(
+            tokenizer, part.full_text.tolist(), args.max_length)
     bf16 = device.type == 'cuda' and torch.cuda.is_bf16_supported()
     encoder = AutoModel.from_pretrained(source, local_files_only=True)
     model = BottleneckRegressor(encoder, architecture).to(device)
@@ -116,8 +118,10 @@ def main():
                   split_sha256=hashlib.sha256(split_path.read_bytes()).hexdigest(),
                   data_sha256=hashlib.sha256((ROOT / 'train.csv').read_bytes()).hexdigest(),
                   torch=torch.__version__, final_validation_evaluated=False,
-                  truncation='right', teacher='frozen initial encoder' if architecture.reconstruction_weight else None,
-                  lengths={name: {'rows': len(v), 'truncated': int((v > args.max_length).sum()),
+                  truncation=tokenizer.truncation_side if args.max_length is not None else 'none',
+                  padding='batch_longest',
+                  teacher='frozen initial encoder' if architecture.reconstruction_weight else None,
+                  lengths={name: {'rows': len(v), 'truncated': int(truncated[name].sum()),
                                   'max_tokens': int(v.max())} for name, v in lengths.items()})
     commit = subprocess.run(['git', 'rev-parse', 'HEAD'], cwd=ROOT, capture_output=True, text=True)
     config['git_commit'] = commit.stdout.strip() if commit.returncode == 0 else None
@@ -129,8 +133,7 @@ def main():
     print(json.dumps(config), flush=True)
 
     def inputs(name, indices):
-        return tokenizer.pad({'input_ids': [tokens[name][i] for i in indices]},
-                             padding=True, return_tensors='pt').to(device)
+        return pad_batch(tokenizer, tokens[name], indices, device)
 
     def predict(name):
         model.eval()
@@ -205,7 +208,7 @@ def main():
         report['splits'][name] = {'B0': metrics(y, raw, FIXED), 'B1': metrics(y, raw, thresholds)}
         data[name][['essay_id', 'score']].assign(raw_prediction=raw, B0=integer_scores(raw),
             B1=integer_scores(raw, thresholds), token_length=lengths[name],
-            truncated=lengths[name] > args.max_length).to_csv(output / f'{name}_predictions.csv', index=False)
+            truncated=truncated[name]).to_csv(output / f'{name}_predictions.csv', index=False)
     write_json(output / 'report.json', report)
     print(json.dumps(report), flush=True)
 
