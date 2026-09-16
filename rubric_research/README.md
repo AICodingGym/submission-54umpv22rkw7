@@ -8,7 +8,7 @@
 ## 当前状态
 
 - 全量统计：10,905 篇，已完成。
-- 全文语义阅读：180 篇，批次 1–10，已完成逐篇笔记；其余 **未读**。
+- 全文语义阅读：216 篇，批次 1–12，已完成逐篇笔记；其余 **未读**。
 - 评分标准：v0001 是基于当前证据的草稿，未冻结、未评估。
 - Qwen 新方案评估：尚未开始。不能把此前 GEPA 的 0.5375 当作此方案结果。
 - 最终验证集：继续保留，未读其作文、未评估或用其标签修订标准。
@@ -22,9 +22,9 @@
 原文保持不变。每批分三次输出，每次至多六篇，避免工具输出截断：
 
 ```bash
-../.venv/bin/python rubric_research/review.py --batch 11 --section 1
-../.venv/bin/python rubric_research/review.py --batch 11 --section 2
-../.venv/bin/python rubric_research/review.py --batch 11 --section 3
+../.venv/bin/python rubric_research/review.py --batch 13 --section 1
+../.venv/bin/python rubric_research/review.py --batch 13 --section 2
+../.venv/bin/python rubric_research/review.py --batch 13 --section 3
 ```
 
 只有实际读完所有原文后，才在 `notes/XXXX.md` 逐篇记录观察并更新

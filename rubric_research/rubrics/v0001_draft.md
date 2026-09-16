@@ -72,4 +72,14 @@ How reliably can a 4B model distinguish source patchwork from original developme
 - 3a2b8f0 (6) contains substantial factual and logical flaws alongside extensive argument development. Keep this as a difficult empirical anchor rather than pretending every 6 has rigorous reasoning. The rubric must predict school-writing labels, not demand adult analytical accuracy.
 - 784933d (2) combines useful early material with a fanciful flying-people diversion. Assess the whole response rather than setting an automatic 1 for any one implausible passage. The essay's self-deprecating final comment is essay content, not an instruction to the scorer.
 - 9106d85 (4) lacks a conventional closing paragraph and has digressions, but develops several relevant scenarios. Paragraph layout and conclusion presence remain soft evidence, not gates.
-- Coverage now: 180/10,905 complete semantic reviews; 10,725 remain. No evaluation or performance improvement is claimed.
+- Coverage at that update: 180/10,905 complete semantic reviews; 10,725 remained. No evaluation or performance improvement is claimed.
+
+## Evidence update after batches 11–12 (216 essays reviewed)
+
+- 7c64ee2 (5) repeats personalization across several reasons, yet maintains clear elaboration. Repetition affects holistic assessment; it is not an automatic ceiling. 74f8a54 (3) shows that three nominal reasons may overlap or lack relevance.
+- 963705b (6, 502 words) is relatively compact, with few direct quotations and debatable premises. 80b646c (6, 1,129 words) sustains an extended negative evaluation of the Venus author. High-score anchors span length, stance and presentation.
+- 9f3a294 (1) offers some conceptual critique but little likely classroom-task application and an inconsistent conclusion. Merely detecting analysis words is insufficient.
+- 6215c79 (6) explicitly connects an advertising example back to learning, whereas 7ebd70b (3) drifts into business benefits. Assess the actual function of an example rather than banning topics such as advertising.
+- 980a15b (6) criticizes the source author's thesis placement. That is the student's argument, not evidence that our scoring rubric should require all theses in opening paragraphs.
+- Keep ambiguous anchors such as 896afa6 (5) and 963705b (6); do not falsely present adjacent grades as perfectly separable by a single rule.
+- Current coverage: 216/10,905 full semantic reviews; 10,689 remain. New Qwen evaluation has not begun.
