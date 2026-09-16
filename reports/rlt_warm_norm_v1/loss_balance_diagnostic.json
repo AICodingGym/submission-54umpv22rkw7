@@ -1,0 +1,120 @@
+{
+  "run": "/home/chao/test/learning-agency-lab-automated-essay-scoring-2/runs/rlt_warm_norm_v1",
+  "model_sha256": "4e54001a10091d00d1170da0a172803f634ac6c9bb35daed86c1efd4559bc25e",
+  "split": "train",
+  "precision": "CPU FP32",
+  "mode": "eval, dropout disabled",
+  "batches": [
+    {
+      "essay_ids": [
+        "663d2cf",
+        "3a20bfb"
+      ],
+      "score_loss": 0.03182161599397659,
+      "reconstruction_loss": 0.49219727516174316,
+      "gradient_cosine": -0.352506160736084,
+      "score_gradient_norm": 3.9097626209259033,
+      "weighted_reconstruction_gradient_norm": 0.010122856125235558,
+      "weighted_gradient_norm_ratio": 0.0025891228578984737
+    },
+    {
+      "essay_ids": [
+        "6adae64",
+        "c81ccdf"
+      ],
+      "score_loss": 0.0296492800116539,
+      "reconstruction_loss": 0.4909098148345947,
+      "gradient_cosine": 0.4239705502986908,
+      "score_gradient_norm": 5.746918678283691,
+      "weighted_reconstruction_gradient_norm": 0.013610495254397392,
+      "weighted_gradient_norm_ratio": 0.0023683118633925915
+    },
+    {
+      "essay_ids": [
+        "1b7e42c",
+        "a779bc6"
+      ],
+      "score_loss": 0.391167014837265,
+      "reconstruction_loss": 0.4690924882888794,
+      "gradient_cosine": -0.1496688574552536,
+      "score_gradient_norm": 12.963623046875,
+      "weighted_reconstruction_gradient_norm": 0.018927251920104027,
+      "weighted_gradient_norm_ratio": 0.0014600279973819852
+    },
+    {
+      "essay_ids": [
+        "6a5eec3",
+        "7a59c2c"
+      ],
+      "score_loss": 0.24777132272720337,
+      "reconstruction_loss": 0.39474719762802124,
+      "gradient_cosine": 0.5440049171447754,
+      "score_gradient_norm": 8.135183334350586,
+      "weighted_reconstruction_gradient_norm": 0.018801935017108917,
+      "weighted_gradient_norm_ratio": 0.0023111875634640455
+    },
+    {
+      "essay_ids": [
+        "49e0d87",
+        "3e9eed3"
+      ],
+      "score_loss": 0.08134343475103378,
+      "reconstruction_loss": 0.4749181866645813,
+      "gradient_cosine": -0.31351643800735474,
+      "score_gradient_norm": 2.754741668701172,
+      "weighted_reconstruction_gradient_norm": 0.009788132272660732,
+      "weighted_gradient_norm_ratio": 0.0035531942266970873
+    },
+    {
+      "essay_ids": [
+        "ae6d438",
+        "7d9d6fe"
+      ],
+      "score_loss": 0.041260067373514175,
+      "reconstruction_loss": 0.44149065017700195,
+      "gradient_cosine": 0.2570071220397949,
+      "score_gradient_norm": 2.3960390090942383,
+      "weighted_reconstruction_gradient_norm": 0.011609943583607674,
+      "weighted_gradient_norm_ratio": 0.004845473449677229
+    },
+    {
+      "essay_ids": [
+        "3ec8931",
+        "7736261"
+      ],
+      "score_loss": 0.0002180048613809049,
+      "reconstruction_loss": 0.4058087468147278,
+      "gradient_cosine": -0.4408404529094696,
+      "score_gradient_norm": 0.2950349748134613,
+      "weighted_reconstruction_gradient_norm": 0.017395945265889168,
+      "weighted_gradient_norm_ratio": 0.05896231532096863
+    },
+    {
+      "essay_ids": [
+        "9baa424",
+        "91d5de5"
+      ],
+      "score_loss": 0.43770548701286316,
+      "reconstruction_loss": 0.4333168864250183,
+      "gradient_cosine": -0.2256476879119873,
+      "score_gradient_norm": 7.818489074707031,
+      "weighted_reconstruction_gradient_norm": 0.010769093409180641,
+      "weighted_gradient_norm_ratio": 0.0013773880200460553
+    },
+    {
+      "essay_ids": [
+        "e2f5624",
+        "0d2070c"
+      ],
+      "score_loss": 0.41124317049980164,
+      "reconstruction_loss": 0.37392520904541016,
+      "gradient_cosine": -0.41391757130622864,
+      "score_gradient_norm": 18.46596336364746,
+      "weighted_reconstruction_gradient_norm": 0.005039125680923462,
+      "weighted_gradient_norm_ratio": 0.00027288723504170775
+    }
+  ],
+  "mean_gradient_cosine": -0.07456828653812408,
+  "mean_weighted_gradient_norm_ratio": 0.008637767614951978,
+  "note": "Small local gradient diagnostic, not evidence that removing reconstruction improves generalization."
+}
