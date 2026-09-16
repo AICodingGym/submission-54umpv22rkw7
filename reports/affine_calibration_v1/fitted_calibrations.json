@@ -1,0 +1,229 @@
+{
+  "method": "Affine score calibration; slope 0.7..1.4 step 0.005, offset -1..1 step 0.005",
+  "tie_break": "Smallest mean squared threshold displacement from half integers",
+  "code_sha256": "2371b00037be020af93fb0b1051964fede2cf5677cefdb5f330670d6e79c8a98",
+  "models": {
+    "rlt_warm_norm_v1": {
+      "source_dir": "/home/chao/test/learning-agency-lab-automated-essay-scoring-2/runs/rlt_warm_norm_v1",
+      "model_sha256": "4e54001a10091d00d1170da0a172803f634ac6c9bb35daed86c1efd4559bc25e",
+      "fit_split": "calibration",
+      "source_calibration_sha256": "d89cf0a527462d2d6bab4af54102a27ecf25c6047c25a429c7a1de1cffc2ac4a",
+      "calibration": {
+        "slope": 1.08,
+        "offset": -0.19999999999999996,
+        "thresholds": [
+          1.574074074074074,
+          2.5,
+          3.425925925925926,
+          4.351851851851852,
+          5.277777777777778
+        ],
+        "calibration_qwk": 0.8239844944221535
+      },
+      "calibration_metrics": {
+        "rows": 1557,
+        "qwk": 0.8239844944221535,
+        "mae": 0.36673089274245346,
+        "continuous_mae": 0.4352445608542068,
+        "confusion_matrix": [
+          [
+            76,
+            35,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            53,
+            276,
+            90,
+            6,
+            0,
+            0
+          ],
+          [
+            2,
+            103,
+            365,
+            91,
+            2,
+            0
+          ],
+          [
+            1,
+            8,
+            80,
+            227,
+            40,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            26,
+            56,
+            5
+          ],
+          [
+            0,
+            0,
+            1,
+            0,
+            4,
+            9
+          ]
+        ]
+      }
+    },
+    "outputs_deberta_base_2048": {
+      "source_dir": "/home/chao/test/learning-agency-lab-automated-essay-scoring-2/outputs_deberta_base_2048",
+      "model_sha256": "6d8a90152fab45d55890527e4ec6fb510e0b778919f38991babeeb19d5f21a51",
+      "fit_split": "calibration",
+      "source_calibration_sha256": "9c724e38f67557cb411679081316449dade63facd5a2cdf7fdf1b306a64b98f2",
+      "calibration": {
+        "slope": 1.06,
+        "offset": -0.21499999999999997,
+        "thresholds": [
+          1.6179245283018866,
+          2.5613207547169807,
+          3.5047169811320753,
+          4.44811320754717,
+          5.391509433962264
+        ],
+        "calibration_qwk": 0.826631544819109
+      },
+      "calibration_metrics": {
+        "rows": 1557,
+        "qwk": 0.826631544819109,
+        "mae": 0.36480411046885036,
+        "continuous_mae": 0.43346078195247273,
+        "confusion_matrix": [
+          [
+            77,
+            34,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            55,
+            285,
+            81,
+            4,
+            0,
+            0
+          ],
+          [
+            1,
+            124,
+            356,
+            80,
+            2,
+            0
+          ],
+          [
+            0,
+            10,
+            81,
+            225,
+            40,
+            0
+          ],
+          [
+            0,
+            0,
+            1,
+            24,
+            59,
+            3
+          ],
+          [
+            0,
+            0,
+            1,
+            0,
+            5,
+            8
+          ]
+        ]
+      }
+    },
+    "outputs_deberta_base": {
+      "source_dir": "/home/chao/test/learning-agency-lab-automated-essay-scoring-2/outputs_deberta_base",
+      "model_sha256": "980f20c2bf44e9dadcd9008849368819f795dc666a1c7bfe5dc18b2af2982eb6",
+      "fit_split": "calibration",
+      "source_calibration_sha256": "4d3e30ac4c949ed5493231ddbeae021da910c4ea11a76ef730a43556ce55afd1",
+      "calibration": {
+        "slope": 1.095,
+        "offset": -0.37,
+        "thresholds": [
+          1.7077625570776258,
+          2.6210045662100456,
+          3.534246575342466,
+          4.447488584474886,
+          5.360730593607306
+        ],
+        "calibration_qwk": 0.8072917587566526
+      },
+      "calibration_metrics": {
+        "rows": 1557,
+        "qwk": 0.8072917587566526,
+        "mae": 0.40783558124598585,
+        "continuous_mae": 0.46820056599229287,
+        "confusion_matrix": [
+          [
+            73,
+            36,
+            2,
+            1,
+            0,
+            0
+          ],
+          [
+            52,
+            265,
+            94,
+            14,
+            0,
+            0
+          ],
+          [
+            0,
+            87,
+            360,
+            112,
+            4,
+            0
+          ],
+          [
+            1,
+            6,
+            72,
+            196,
+            78,
+            3
+          ],
+          [
+            0,
+            0,
+            0,
+            25,
+            56,
+            6
+          ],
+          [
+            0,
+            0,
+            0,
+            1,
+            7,
+            6
+          ]
+        ]
+      }
+    }
+  }
+}
