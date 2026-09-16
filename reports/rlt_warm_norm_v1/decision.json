@@ -1,0 +1,11 @@
+{
+  "selected_epoch": 9,
+  "best_version": "B1",
+  "best_selection_qwk": 0.8307349293738333,
+  "target_selection_qwk": 0.8341167069970928,
+  "beats_target": false,
+  "training_and_epoch_evaluation_seconds": 1134.4946371349943,
+  "platform_submitted": false,
+  "final_validation_evaluated": false,
+  "next_experiment": "Warm-start the complete audited bottleneck model and jointly fine-tune for 6 epochs; encoder learning rate 2e-6, head 1e-5; fixed initial warm-start encoder teacher."
+}
