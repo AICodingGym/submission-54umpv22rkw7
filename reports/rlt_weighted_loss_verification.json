@@ -1,0 +1,27 @@
+{
+  "weighted_mse_matches_manual": true,
+  "score_gradients_match_manual": true,
+  "reconstruction_unchanged": true,
+  "unit_weights_match_unweighted_loss": true,
+  "invalid_weights_rejected": true,
+  "global_train_mean_weight_one": true,
+  "effective_batch_rule": "Per-essay weights are normalized globally; existing sample-count accumulation remains valid.",
+  "gpu_smoke_passed": true,
+  "smoke_used_full_train_frequency": true,
+  "train_class_counts": [
+    788,
+    2974,
+    3940,
+    2495,
+    613,
+    95
+  ],
+  "power_025_weights": [
+    1.3232781887054443,
+    0.9493961334228516,
+    0.8849294185638428,
+    0.9920077323913574,
+    1.4090213775634766,
+    2.2457003593444824
+  ]
+}

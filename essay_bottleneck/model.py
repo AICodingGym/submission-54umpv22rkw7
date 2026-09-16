@@ -132,7 +132,10 @@ class BottleneckRegressor(nn.Module):
             self.teacher.eval()
         return self
 
-    def forward(self, input_ids, attention_mask, labels=None, encoded_hidden=None, **encoder_inputs):
+    def forward(self, input_ids, attention_mask, labels=None, encoded_hidden=None,
+                score_weights=None, **encoder_inputs):
+        if score_weights is not None and labels is None:
+            raise ValueError('Score weights require labels')
         if attention_mask.ndim != 2 or not attention_mask.bool().any(dim=1).all():
             raise ValueError('Each essay needs at least one unmasked token')
         encoder_config = self.encoder.config
@@ -167,7 +170,14 @@ class BottleneckRegressor(nn.Module):
             return result  # Inference never invokes the teacher or decoder.
         if labels.shape != scores.shape:
             raise ValueError('Expected one label per essay')
-        score_loss = F.mse_loss(scores, labels.float())
+        if score_weights is None:
+            score_loss = F.mse_loss(scores, labels.float())
+        else:
+            if (score_weights.shape != scores.shape or score_weights.device != scores.device
+                    or not torch.isfinite(score_weights).all() or (score_weights <= 0).any()):
+                raise ValueError('Expected one finite positive score weight per essay')
+            # Global train-average normalization happens before batching, not inside each microbatch.
+            score_loss = (score_weights.float() * (scores - labels.float()).square()).mean()
         reconstruction_loss = scores.new_zeros(())
         if self.decoder is not None:
             if self.config.finetune_encoder:

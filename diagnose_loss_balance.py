@@ -39,7 +39,10 @@ def main():
         options = ({'truncation': False} if config['max_length'] is None else
                    {'truncation': True, 'max_length': config['max_length']})
         inputs = tokenizer(part.full_text.tolist(), padding=True, return_tensors='pt', **options)
-        result = model(**inputs, labels=torch.tensor(part.score.to_numpy(), dtype=torch.float32))
+        labels = torch.tensor(part.score.to_numpy(), dtype=torch.float32)
+        weights = (torch.tensor(config['class_weights'])[labels.long() - 1]
+                   if config.get('class_weight_power', 0) else None)
+        result = model(**inputs, labels=labels, score_weights=weights)
         score = torch.cat([value.flatten() for value in torch.autograd.grad(
             result['score_loss'], shared, retain_graph=True)])
         reconstruction = torch.cat([value.flatten() for value in torch.autograd.grad(
@@ -52,6 +55,7 @@ def main():
                      'weighted_gradient_norm_ratio': (reconstruction.norm() / score.norm().clamp_min(1e-12)).item()})
     report = {'run': str(run), 'model_sha256': digest, 'split': 'train', 'precision': 'CPU FP32',
               'mode': 'eval, dropout disabled', 'batches': rows,
+              'class_weight_power': config.get('class_weight_power', 0),
               'mean_gradient_cosine': float(np.mean([r['gradient_cosine'] for r in rows])),
               'mean_weighted_gradient_norm_ratio': float(np.mean([r['weighted_gradient_norm_ratio'] for r in rows])),
               'note': 'Small local gradient diagnostic, not evidence that removing reconstruction improves generalization.'}

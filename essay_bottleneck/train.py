@@ -46,6 +46,8 @@ def parse_args():
                         help='Sort lengths within each effective batch; keep its sample membership')
     parser.add_argument('--cache-frozen-features', action='store_true',
                         help='Cache train-only frozen encoder features in CPU RAM')
+    parser.add_argument('--class-weight-power', type=float, default=0.,
+                        help='Inverse train class-frequency power for score MSE; 0 disables weighting')
     parser.add_argument('--encoder-lr', type=float, default=2e-5)
     parser.add_argument('--head-lr', type=float, default=1e-4)
     parser.add_argument('--seed', type=int, default=42)
@@ -63,7 +65,23 @@ def parse_args():
         parser.error('--init-run currently requires --finetune-encoder')
     if args.cache_frozen_features and args.finetune_encoder:
         parser.error('--cache-frozen-features requires a frozen encoder')
+    if not math.isfinite(args.class_weight_power) or not 0 <= args.class_weight_power <= 1:
+        parser.error('--class-weight-power must be finite and in [0, 1]')
     return args
+
+
+def make_score_weights(labels, power):
+    labels = np.asarray(labels)
+    if not len(labels) or not np.isin(labels, np.arange(1, 7)).all():
+        raise ValueError('Expected train grades in 1..6')
+    counts = np.bincount(labels.astype(int), minlength=7)[1:]
+    weights = np.ones(6, dtype=np.float64)
+    if power:
+        if (counts == 0).any():
+            raise ValueError('Class weighting requires train examples in every grade')
+        weights = (len(labels) / (6 * counts)) ** power
+        weights /= np.dot(counts, weights) / counts.sum()
+    return weights.astype(np.float32), counts
 
 
 def load_initial_state(directory, architecture, source, split_path):
@@ -139,6 +157,8 @@ def main():
         data[name] = part
         tokens[name], lengths[name], truncated[name] = encode_texts(
             tokenizer, part.full_text.tolist(), args.max_length)
+    class_weights, class_counts = make_score_weights(
+        frame.loc[frame.split == 'train', 'score'].to_numpy(), args.class_weight_power)
     bf16 = device.type == 'cuda' and torch.cuda.is_bf16_supported()
     initial_state, initial_provenance = (load_initial_state(args.init_run, architecture, source, split_path)
                                          if args.init_run else (None, None))
@@ -178,6 +198,7 @@ def main():
                   truncation=tokenizer.truncation_side if args.max_length is not None else 'none',
                   padding='batch_longest',
                   teacher='frozen initial encoder' if architecture.reconstruction_weight else None,
+                  class_weights=class_weights.tolist(), train_class_counts=class_counts.tolist(),
                   lengths={name: {'rows': len(v), 'truncated': int(truncated[name].sum()),
                                   'max_tokens': int(v.max())} for name, v in lengths.items()})
     if initial_provenance is not None:
@@ -228,6 +249,8 @@ def main():
         write_json(output / 'config.json', config)
         print(json.dumps({'feature_cache': config['feature_cache']}), flush=True)
 
+    score_weight_table = (torch.tensor(class_weights, dtype=torch.float32, device=device)
+                          if args.class_weight_power else None)
     best, best_epoch, history = -np.inf, None, []
     for epoch in range(epochs):
         model.train()
@@ -243,8 +266,11 @@ def main():
             labels = torch.tensor(data['train'].score.to_numpy()[indices], dtype=torch.float32, device=device)
             encoded = (pad_cached_features(cached_features, indices, device)
                        if cached_features is not None else None)
+            batch_weights = (score_weight_table[labels.long() - 1]
+                             if score_weight_table is not None else None)
             with torch.autocast(device.type, dtype=torch.bfloat16, enabled=bf16):
-                result = model(**inputs('train', indices), labels=labels, encoded_hidden=encoded)
+                result = model(**inputs('train', indices), labels=labels, encoded_hidden=encoded,
+                               score_weights=batch_weights)
             if not torch.isfinite(result['loss']):
                 raise ValueError('Nonfinite training loss')
             window_start = batch // accumulation * args.effective_batch_size

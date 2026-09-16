@@ -59,6 +59,10 @@
    对各档样本的权重：按 train 档位频数的逆数取 0.25 或 0.5 次幂，
    再归一化使 train 的平均权重为 1。两个温和加权方案均训练 10 轮，
    不改变重建损失的逐篇平均方式；所有权重仅由 train 标签计算。
+   检查通过：加权 MSE 与手算一致、评分梯度与手算一致、单位权重退化为原损失，
+   重建损失不变，非法权重被拒绝。[加权损失检查](reports/rlt_weighted_loss_verification.json)。
+   GPU 短试跑通过，实际输出目录为 `runs/rlt_weighted_025_v1/` 和
+   `runs/rlt_weighted_050_v1/`；保留 seed 42、10 轮、K=4、D=256、重建权重 0.1。
 
 现有实现的 `essay_bottleneck.verify` 和 `essay_bottleneck.verify_lengths`
 均已通过。它们验证实现正确性，不衡量正式评分质量。日志保存在

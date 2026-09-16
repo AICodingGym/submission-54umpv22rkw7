@@ -115,6 +115,12 @@ HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 ../.venv/bin/python -m essay_bottleneck.
 逐篇表征哈希。不同 padding 形状的 BF16 编码可能存在舍入差异，因此缓存与
 非缓存训练不保证逐位复现；比较架构时双方应使用相同缓存构建方式。
 
+`--class-weight-power 0.25` 或 `0.5` 可温和提高少数评分档的评分损失权重。
+权重由完整 train 的各档频数计算：逆频数取指定次幂，再使 train 平均权重为 1。
+只加权评分 MSE，不改变重建损失；默认 `0` 保持原损失。
+权重按全体训练样本归一化，不能在每个小批次内重新除以权重和，
+以保持梯度累积的样本权重一致。配置保存频数和实际使用的六个权重。
+
 ```bash
 HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 ../.venv/bin/python -m essay_bottleneck.train \
   --source models/deberta_base_2048_supervised --init-run runs/rlt_warm_norm_v1 \
