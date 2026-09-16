@@ -48,3 +48,34 @@ To submit the generated predictions to AI Coding Gym:
 ```bash
 aicodinggym mle submit learning-agency-lab-automated-essay-scoring-2 -F outputs/submission.csv -m "TF-IDF + Ridge baseline"
 ```
+
+## Alternative: handcrafted features + LightGBM
+
+```bash
+../.venv/bin/python baseline_lightgbm.py
+```
+
+`essay_features.py` extracts 51 per-essay features: text length, word length,
+sentence/paragraph length statistics, lexical diversity, punctuation and
+selected pronoun/connective/modal frequencies. Tokenization is a simple English
+regex; these features do not directly measure grammar or argument quality.
+No external dictionaries, models or corpus-level feature fitting are needed.
+
+LightGBM uses 600 trees, learning rate 0.03 and 15 leaves with fixed parameters,
+without holdout tuning or early stopping. It uses exactly the same 80/20 split
+and rounding rule as Ridge:
+
+| Model | Validation QWK ↑ | Validation MAE ↓ |
+| --- | ---: | ---: |
+| TF-IDF + Ridge | 0.735663 | 0.436136 |
+| Handcrafted features + LightGBM | 0.743975 | 0.423620 |
+
+The QWK improvement is 0.008312 on this single split; generalization of this
+gain has not been established with cross-validation or platform evaluation.
+After evaluation the model is refitted on all labeled essays. Artifacts are
+saved separately in `outputs_lightgbm/`, including `submission.csv`,
+`model.joblib`, `metrics.json`, `validation_predictions.csv` and
+`feature_importance.csv` (split counts from the final model).
+Load the pipeline from the project directory so Python can import
+`essay_features.EssayFeatures`, then call `model.predict(texts)` for raw scores
+and `baseline.integer_scores(...)` for submission scores.

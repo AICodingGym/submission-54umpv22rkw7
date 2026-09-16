@@ -45,6 +45,7 @@ lightning_logs/
 runs/
 checkpoints/
 outputs/
+outputs_lightgbm/
 artifacts/
 models/
 *.log
