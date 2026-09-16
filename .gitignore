@@ -46,6 +46,7 @@ runs/
 checkpoints/
 outputs/
 outputs_lightgbm/
+outputs_tuned/
 artifacts/
 models/
 *.log
