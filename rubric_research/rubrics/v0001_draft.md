@@ -48,3 +48,11 @@ Predict the dataset's holistic school-writing score from 1 to 6. The target is t
 ## Remaining questions
 
 How reliably can a 4B model distinguish source patchwork from original development? Which sentence-control failures separate scores 1–3 independently of task and length? How much do task families differ in their human-label boundaries? Need broad corpus review and explicit counterexamples before finalizing.
+
+## Evidence update after batches 4–6 (108 essays reviewed)
+
+- 318dac4 (622 words, score 1) and 92cf776 (364 words, score 4) reinforce that length is not an automatic score.
+- 07d41ed (6) lacks a discrete opposing-view section; high scores do not require this structure.
+- bb8683b (4) is primarily informative, so do not impose a summary ceiling: coherent selection and explanatory framing matter. Conversely 76648c5 (1) explicitly discusses author method but remains very weakly developed and controlled.
+- 27feddd (3) uses abstract rhetoric and a critical stance but repeats one objection; sophisticated-sounding vocabulary is not development.
+- These refinements remain provisional. 10,797 training essays remain unread; no new Qwen evaluation has been run.
