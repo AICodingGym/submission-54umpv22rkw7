@@ -49,3 +49,16 @@
 保存的编码器权重与原始模型逐项完全相同。
 [冻结实验配置、指标、曲线与核验](reports/rlt_frozen_v1/)。
 该方案尚未超过强基线，没有提交平台，也没有使用 final_validation。
+
+## 冻结模型的表征诊断
+
+在固定 train 中每档取前 3 篇，共 18 篇，以 CPU FP32 检查：
+平均归一化注意力熵为 0.999628（接近 1 表示接近均匀），
+平均 latent 两两余弦相似度为 0.994363。
+查询参数本身没有重合，但其输出表征很相似。此小样本诊断不证明表征没有
+互补预测信息，也不证明性能差距由此造成；它为后续查询归一化或初始化
+对照提供假设。当前联合微调实验保持原配置，不在运行中改动模型。
+
+复现：`../.venv/bin/python diagnose_rlt_latents.py --run-dir runs/rlt_frozen_v1`。
+[逐篇诊断](reports/rlt_frozen_v1/latent_diagnostic.json)、
+[查询参数统计](reports/rlt_frozen_v1/query_diagnostic.json)。

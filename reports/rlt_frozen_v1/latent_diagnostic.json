@@ -1,0 +1,154 @@
+{
+  "run": "runs/rlt_frozen_v1",
+  "split": "train",
+  "rows": [
+    {
+      "essay_id": "663d2cf",
+      "score": 3,
+      "tokens": 297,
+      "mean_normalized_attention_entropy": 0.9996397495269775,
+      "mean_latent_pair_cosine": 0.9954816699028015,
+      "min_latent_pair_cosine": 0.9950994253158569
+    },
+    {
+      "essay_id": "3a20bfb",
+      "score": 2,
+      "tokens": 336,
+      "mean_normalized_attention_entropy": 0.9995298385620117,
+      "mean_latent_pair_cosine": 0.9964527487754822,
+      "min_latent_pair_cosine": 0.9961498379707336
+    },
+    {
+      "essay_id": "6adae64",
+      "score": 3,
+      "tokens": 262,
+      "mean_normalized_attention_entropy": 0.9996317625045776,
+      "mean_latent_pair_cosine": 0.9974438548088074,
+      "min_latent_pair_cosine": 0.9972022175788879
+    },
+    {
+      "essay_id": "c81ccdf",
+      "score": 3,
+      "tokens": 436,
+      "mean_normalized_attention_entropy": 0.9996325969696045,
+      "mean_latent_pair_cosine": 0.9963318705558777,
+      "min_latent_pair_cosine": 0.9960201978683472
+    },
+    {
+      "essay_id": "1b7e42c",
+      "score": 1,
+      "tokens": 592,
+      "mean_normalized_attention_entropy": 0.9995893239974976,
+      "mean_latent_pair_cosine": 0.993735134601593,
+      "min_latent_pair_cosine": 0.9931739568710327
+    },
+    {
+      "essay_id": "a779bc6",
+      "score": 4,
+      "tokens": 494,
+      "mean_normalized_attention_entropy": 0.9996229410171509,
+      "mean_latent_pair_cosine": 0.9951140284538269,
+      "min_latent_pair_cosine": 0.9946437478065491
+    },
+    {
+      "essay_id": "6a5eec3",
+      "score": 5,
+      "tokens": 872,
+      "mean_normalized_attention_entropy": 0.9997294545173645,
+      "mean_latent_pair_cosine": 0.9903554916381836,
+      "min_latent_pair_cosine": 0.9894164204597473
+    },
+    {
+      "essay_id": "7a59c2c",
+      "score": 5,
+      "tokens": 621,
+      "mean_normalized_attention_entropy": 0.9996118545532227,
+      "mean_latent_pair_cosine": 0.9937446713447571,
+      "min_latent_pair_cosine": 0.9931634664535522
+    },
+    {
+      "essay_id": "49e0d87",
+      "score": 4,
+      "tokens": 562,
+      "mean_normalized_attention_entropy": 0.9996627569198608,
+      "mean_latent_pair_cosine": 0.9939684271812439,
+      "min_latent_pair_cosine": 0.9934322834014893
+    },
+    {
+      "essay_id": "3e9eed3",
+      "score": 2,
+      "tokens": 339,
+      "mean_normalized_attention_entropy": 0.9995408654212952,
+      "mean_latent_pair_cosine": 0.9961118698120117,
+      "min_latent_pair_cosine": 0.9957917928695679
+    },
+    {
+      "essay_id": "ae6d438",
+      "score": 2,
+      "tokens": 219,
+      "mean_normalized_attention_entropy": 0.999587893486023,
+      "mean_latent_pair_cosine": 0.997520923614502,
+      "min_latent_pair_cosine": 0.9973044395446777
+    },
+    {
+      "essay_id": "7d9d6fe",
+      "score": 4,
+      "tokens": 619,
+      "mean_normalized_attention_entropy": 0.9996377229690552,
+      "mean_latent_pair_cosine": 0.9936516880989075,
+      "min_latent_pair_cosine": 0.9930785894393921
+    },
+    {
+      "essay_id": "3ec8931",
+      "score": 5,
+      "tokens": 828,
+      "mean_normalized_attention_entropy": 0.9997183084487915,
+      "mean_latent_pair_cosine": 0.9883782863616943,
+      "min_latent_pair_cosine": 0.987135648727417
+    },
+    {
+      "essay_id": "7736261",
+      "score": 1,
+      "tokens": 233,
+      "mean_normalized_attention_entropy": 0.999520480632782,
+      "mean_latent_pair_cosine": 0.9966914057731628,
+      "min_latent_pair_cosine": 0.9963796138763428
+    },
+    {
+      "essay_id": "9baa424",
+      "score": 1,
+      "tokens": 205,
+      "mean_normalized_attention_entropy": 0.9994891881942749,
+      "mean_latent_pair_cosine": 0.9968958497047424,
+      "min_latent_pair_cosine": 0.9966146945953369
+    },
+    {
+      "essay_id": "91d5de5",
+      "score": 6,
+      "tokens": 845,
+      "mean_normalized_attention_entropy": 0.9997181296348572,
+      "mean_latent_pair_cosine": 0.9915514588356018,
+      "min_latent_pair_cosine": 0.9907596111297607
+    },
+    {
+      "essay_id": "e2f5624",
+      "score": 6,
+      "tokens": 1111,
+      "mean_normalized_attention_entropy": 0.9997550249099731,
+      "mean_latent_pair_cosine": 0.9911039471626282,
+      "min_latent_pair_cosine": 0.9902411103248596
+    },
+    {
+      "essay_id": "0d2070c",
+      "score": 6,
+      "tokens": 621,
+      "mean_normalized_attention_entropy": 0.9996902346611023,
+      "mean_latent_pair_cosine": 0.9940025806427002,
+      "min_latent_pair_cosine": 0.993478536605835
+    }
+  ],
+  "precision": "CPU FP32",
+  "mean_attention_entropy": 0.9996282292736901,
+  "mean_latent_pair_cosine": 0.9943631059593625,
+  "interpretation": "Small score-balanced train diagnostic only. Entropy near 1 means attention is near uniform; cosine near 1 means latent vectors are similar. Neither alone proves redundant predictive information or a causal performance limitation."
+}
