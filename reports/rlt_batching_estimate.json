@@ -1,0 +1,61 @@
+{
+  "rows": 10905,
+  "microbatch_size": 4,
+  "effective_batch_size": 32,
+  "seed": 42,
+  "epochs": [
+    {
+      "epoch": 1,
+      "padded_token_ratio": 0.7553277731173301,
+      "attention_square_ratio": 0.6357501434870525
+    },
+    {
+      "epoch": 2,
+      "padded_token_ratio": 0.756655365873313,
+      "attention_square_ratio": 0.6373378750717971
+    },
+    {
+      "epoch": 3,
+      "padded_token_ratio": 0.7552460164581773,
+      "attention_square_ratio": 0.6355203642760042
+    },
+    {
+      "epoch": 4,
+      "padded_token_ratio": 0.755774046866244,
+      "attention_square_ratio": 0.636219469354539
+    },
+    {
+      "epoch": 5,
+      "padded_token_ratio": 0.7554855266007044,
+      "attention_square_ratio": 0.6356268858021779
+    },
+    {
+      "epoch": 6,
+      "padded_token_ratio": 0.7581012960479848,
+      "attention_square_ratio": 0.6392790636804778
+    },
+    {
+      "epoch": 7,
+      "padded_token_ratio": 0.7548619978427181,
+      "attention_square_ratio": 0.6348822173822122
+    },
+    {
+      "epoch": 8,
+      "padded_token_ratio": 0.7562457403281995,
+      "attention_square_ratio": 0.6366086912097043
+    },
+    {
+      "epoch": 9,
+      "padded_token_ratio": 0.7569311270110726,
+      "attention_square_ratio": 0.638225021421816
+    },
+    {
+      "epoch": 10,
+      "padded_token_ratio": 0.7555721385345995,
+      "attention_square_ratio": 0.6350972965736911
+    }
+  ],
+  "mean_padded_token_ratio": 0.7560201028680343,
+  "mean_attention_square_ratio": 0.6364547028259471,
+  "note": "Analytical padding work only, not measured runtime. Sort within each already shuffled optimizer batch of 32; preserve its sample membership and sample weighting. Different microbatch order changes dropout and floating-point accumulation."
+}
