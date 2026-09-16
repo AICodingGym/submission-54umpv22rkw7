@@ -1,5 +1,43 @@
 # Essay scoring baseline
 
+## 使用评分系统
+
+现有 `outputs_tuned/model.joblib` 已在全部 15,576 篇标注作文上重新训练。
+`score_essay.py` 提供单篇和批量评分，输出 1–6 的整数总分，无需 GPU。
+在本目录运行：
+
+```bash
+# 单篇：读取 UTF-8 英文作文文件，输出 JSON
+../.venv/bin/python score_essay.py --file essay.txt
+# 或直接输入作文全文
+../.venv/bin/python score_essay.py --text "Your complete English essay here."
+# 批量：输入含 essay_id、full_text 的 CSV，输出 essay_id、score
+../.venv/bin/python score_essay.py --csv test.csv --output artifacts/scored.csv
+```
+
+Python 应用可复用加载后的模型：
+
+```python
+from score_essay import EssayScorer
+
+scorer = EssayScorer()
+scores = scorer.predict(["Your complete English essay here."])
+```
+
+空白作文会被拒绝；批量输入需要非空且唯一的作文 ID。模型路径默认为
+脚本旁的 `outputs_tuned/model.joblib`，也可通过 `--model` 指定相同格式的
+可信本地模型。模型文件不随 Git 提交；缺失时运行 `tune_lightgbm.py` 重建。
+
+现有独立留出集共 3,116 篇，QWK 为 0.7650，平均绝对误差为 0.4756 分，
+完全同分率为 56.13%，误差不超过 1 分的比例为 96.57%。这些是训练流程
+留出模型的评估结果，不是最终全量重训模型的新测试结果，也不是置信度。
+评分入口已核验：1,731 篇测试作文的输出与原有预测完全一致。
+
+当前版本用于与训练数据相似的英文议论文整体评分。数据只有整体分数，
+不能据此验证中文评分、语法/内容等分项分数或评语的准确性。
+Qwen 微调脚本已存在，但 `outputs_lora/` 尚无完整评估结果；本入口使用
+已经训练完成并经过留出评估的 LightGBM 模型。
+
 CPU baseline: word unigram/bigram TF-IDF (up to 100,000 features) followed
 by Ridge regression (`alpha=1`, LSQR solver). Predictions are rounded to
 the nearest integer and clipped to the range 1–6.
