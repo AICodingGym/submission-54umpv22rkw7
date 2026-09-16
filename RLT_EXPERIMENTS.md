@@ -76,6 +76,14 @@
 这不是实测运行时间；重排会改变 dropout 随机数对应和浮点累加次序，
 若用于后续实验会显式记录。[逐轮估算](reports/rlt_batching_estimate.json)。
 
+已为可能的后续 warm-start 实验导出 `models/deberta_base_2048_supervised/`，
+只包含本地强基线第 5 轮编码器和 tokenizer，不含评分头。198 个编码器张量
+重新加载后逐项相同；初始化来自已监督训练的编码器，不能称为原始预训练权重。
+当前 `rlt_joint_v1` 仍从原始 base 出发，没有使用此导出。
+[来源与校验记录](reports/deberta_base_2048/supervised_encoder_export.json)。
+导出工具：`export_deberta_encoder.py --source-run outputs_deberta_base_2048
+--output-dir models/deberta_base_2048_supervised`（已有目标目录会拒绝覆盖）。
+
 ## 最终候选复核工具（尚未执行评估）
 
 候选通过完整审计、选择集超过固定目标且最终模型方案确定后，使用：

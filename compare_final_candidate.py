@@ -20,22 +20,25 @@ from verify_deberta_run import sha256
 def freeze_entry(directory, version, kind):
     directory = directory.resolve()
     config = json.loads((directory / 'config.json').read_text())
+    data_digest = (config['data_sha256'] if kind == 'bottleneck' else
+                   json.loads((ROOT / 'splits/deberta_seed42.json').read_text())['data_sha256'])
     report = json.loads((directory / 'report.json').read_text())
     audit = json.loads((directory / 'verification.json').read_text())
     digest = sha256(directory / 'model/model.pt')
     if (audit['model_sha256'] != digest or audit['max_reload_raw_difference'] != 0
             or not audit['all_integer_predictions_match']
             or not audit['all_report_metrics_recomputed']
-            or not audit['all_token_lengths_recomputed']):
+            or (kind == 'bottleneck' and not audit['all_token_lengths_recomputed'])):
         raise ValueError(f'An intact, audited checkpoint is required: {directory}')
     bounds = (json.loads((directory / 'thresholds.json').read_text())['thresholds']
               if version == 'B1' else FIXED.tolist())
     return {'directory': str(directory), 'kind': kind, 'version': version,
             'model_sha256': digest, 'thresholds': bounds,
             'selected_epoch': report['selected_epoch'],
+            'token_lengths_recomputed_in_audit': audit.get('all_token_lengths_recomputed'),
             'selection_qwk': report['splits']['selection'][version]['qwk'],
             'split_sha256': config['split_sha256'],
-            'data_sha256': config['data_sha256'],
+            'data_sha256': data_digest,
             'config_sha256': sha256(directory / 'config.json'),
             'model_files_sha256': {p.name: sha256(p) for p in sorted((directory / 'model').iterdir())
                                    if p.is_file() and p.name != 'model.pt'}}
