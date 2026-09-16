@@ -1,0 +1,10 @@
+{
+  "rows": 1731,
+  "max_tokens": 1605,
+  "over_512": 459,
+  "over_1024": 13,
+  "over_2048": 0,
+  "test_csv_sha256": "93f828cd13d7d7ec56754fde6d014e56706d78c90fafe57cd5bf3d47b17b695f",
+  "tokenizer_dir": "outputs_deberta_base_2048/model",
+  "labels_used": false
+}
