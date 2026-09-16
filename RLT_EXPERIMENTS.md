@@ -63,6 +63,12 @@
 [逐篇诊断](reports/rlt_frozen_v1/latent_diagnostic.json)、
 [查询参数统计](reports/rlt_frozen_v1/query_diagnostic.json)。
 
+同样的 18 篇训练作文上，联合微调第 5 轮检查点的归一化注意力熵为
+0.999978，latent 两两余弦为 0.997647。这一中间检查点仍表现为近似均匀
+注意力和相似表征，尚不能据此解释性能因果。检查点哈希与逐篇统计见
+[第 5 轮诊断](reports/rlt_joint_v1/epoch5_latent_diagnostic.json)；它不是最终
+选定模型的诊断，也不改变当前训练配置。
+
 ## 最终候选复核工具（尚未执行评估）
 
 候选通过完整审计、选择集超过固定目标且最终模型方案确定后，使用：

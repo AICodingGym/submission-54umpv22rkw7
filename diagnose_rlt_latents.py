@@ -8,10 +8,12 @@ import torch
 import torch.nn.functional as F
 from transformers import AutoTokenizer
 from essay_bottleneck.model import BottleneckRegressor,positions
+from verify_deberta_run import sha256
 
 torch.set_num_threads(2)
 parser=argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--run-dir',type=Path,default=Path('runs/rlt_frozen_v1'))
+parser.add_argument('--output-path',type=Path,help='Optional diagnostic output path')
 args=parser.parse_args()
 root=Path(__file__).resolve().parent
 run=args.run_dir.resolve()
@@ -20,7 +22,10 @@ split=pd.read_csv(root/'splits/deberta_seed42.csv',dtype={'essay_id':str})
 frame=pd.read_csv(root/'train.csv',dtype={'essay_id':str})
 frame=frame[frame.essay_id.isin(split.loc[split.split=='train','essay_id'])].groupby('score',group_keys=False).head(3).reset_index(drop=True)
 assert len(frame)==18
+checkpoint_sha=sha256(run/'model/model.pt')
 model=BottleneckRegressor.load(run/'model','cpu')
+if checkpoint_sha != sha256(run/'model/model.pt'):
+    raise ValueError('Checkpoint changed while loading; rerun on a stable snapshot')
 tokenizer=AutoTokenizer.from_pretrained(run/'model',local_files_only=True)
 rows=[]
 with torch.inference_mode():
@@ -43,8 +48,8 @@ with torch.inference_mode():
             cosine=normalized@normalized.T
             off=~torch.eye(cosine.shape[0],dtype=torch.bool)
             rows.append({'essay_id':essay.essay_id,'score':int(essay.score),'tokens':int(valid.sum()),'mean_normalized_attention_entropy':float(entropy.mean()),'mean_latent_pair_cosine':float(cosine[off].mean()),'min_latent_pair_cosine':float(cosine[off].min())})
-result={'run':str(run),'split':'train','rows':rows,'precision':'CPU FP32','mean_attention_entropy':float(np.mean([r['mean_normalized_attention_entropy'] for r in rows])),'mean_latent_pair_cosine':float(np.mean([r['mean_latent_pair_cosine'] for r in rows])),'interpretation':'Small score-balanced train diagnostic only. Entropy near 1 means attention is near uniform; cosine near 1 means latent vectors are similar. Neither alone proves redundant predictive information or a causal performance limitation.'}
-output=root/'reports'/run.name/'latent_diagnostic.json'
+result={'run':str(run),'checkpoint_sha256':checkpoint_sha,'split':'train','rows':rows,'precision':'CPU FP32','mean_attention_entropy':float(np.mean([r['mean_normalized_attention_entropy'] for r in rows])),'mean_latent_pair_cosine':float(np.mean([r['mean_latent_pair_cosine'] for r in rows])),'interpretation':'Small score-balanced train diagnostic only. Entropy near 1 means attention is near uniform; cosine near 1 means latent vectors are similar. Neither alone proves redundant predictive information or a causal performance limitation.'}
+output=args.output_path or root/'reports'/run.name/'latent_diagnostic.json'
 output.parent.mkdir(parents=True,exist_ok=True)
 output.write_text(json.dumps(result,indent=2)+'\n')
 print(json.dumps({k:v for k,v in result.items() if k!='rows'}))
