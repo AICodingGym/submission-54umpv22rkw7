@@ -62,3 +62,17 @@
 复现：`../.venv/bin/python diagnose_rlt_latents.py --run-dir runs/rlt_frozen_v1`。
 [逐篇诊断](reports/rlt_frozen_v1/latent_diagnostic.json)、
 [查询参数统计](reports/rlt_frozen_v1/query_diagnostic.json)。
+
+## 最终候选复核工具（尚未执行评估）
+
+候选通过完整审计、选择集超过固定目标且最终模型方案确定后，使用：
+
+```bash
+HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 ../.venv/bin/python compare_final_candidate.py \
+  --candidate-run runs/<最终候选> --version <B0或B1> --device cuda
+```
+
+该命令会打开保留验证集。脚本在读取其标签前，将模型权重哈希、模型配置、
+阈值、数据哈希和两个既定基线固定到 `runs/rlt_final_comparison/frozen_manifest.json`。
+同一目录只允许重试完全相同的比较，且不拟合阈值。冻结 RLT 首轮未达到选择集
+目标，已验证脚本会在读取保留验证集前拒绝该候选；没有运行实际保留集评估。
