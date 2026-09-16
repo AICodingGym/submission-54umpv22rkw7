@@ -1,0 +1,10 @@
+{
+  "changed_tensor_counts": {
+    "encoder": 198,
+    "readout": 19,
+    "head": 6,
+    "decoder": 10
+  },
+  "teacher_in_checkpoint": false,
+  "parent": "runs/rlt_warm_norm_v1"
+}

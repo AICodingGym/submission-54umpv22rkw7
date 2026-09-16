@@ -1,0 +1,95 @@
+{
+  "model_size": "base",
+  "source": "/home/chao/test/learning-agency-lab-automated-essay-scoring-2/models/deberta_base_2048_supervised",
+  "init_run": "runs/rlt_warm_norm_v1",
+  "output_dir": "runs/rlt_warm_joint_v1",
+  "epochs": 6,
+  "batch_size": 4,
+  "effective_batch_size": 32,
+  "eval_batch_size": 4,
+  "max_length": 2048,
+  "pooling": "latent",
+  "num_latents": 4,
+  "latent_dim": 256,
+  "num_heads": 4,
+  "dropout": 0.1,
+  "reconstruction_weight": 0.1,
+  "finetune_encoder": true,
+  "normalize_queries": true,
+  "group_microbatches": true,
+  "encoder_lr": 2e-06,
+  "head_lr": 1e-05,
+  "seed": 42,
+  "device": "cuda",
+  "smoke": false,
+  "architecture": {
+    "pooling": "latent",
+    "num_latents": 4,
+    "latent_dim": 256,
+    "num_heads": 4,
+    "dropout": 0.1,
+    "reconstruction_weight": 0.1,
+    "finetune_encoder": true,
+    "normalize_queries": true
+  },
+  "revision": "deberta_base_2048_supervised",
+  "precision": "bf16",
+  "split_sha256": "6a744961c657093ef34c4910660acaeb0f7bbe8a03c156f01415a1be08c8f588",
+  "data_sha256": "ce6b0bd2c7d790a64ad3d2a8e15e3563d90e881c787638caa93504445caa65d0",
+  "torch": "2.11.0+cu128",
+  "final_validation_evaluated": false,
+  "truncation": "right",
+  "padding": "batch_longest",
+  "teacher": "frozen initial encoder",
+  "lengths": {
+    "train": {
+      "rows": 10905,
+      "truncated": 0,
+      "max_tokens": 1778
+    },
+    "selection": {
+      "rows": 1557,
+      "truncated": 0,
+      "max_tokens": 1483
+    },
+    "calibration": {
+      "rows": 1557,
+      "truncated": 0,
+      "max_tokens": 1401
+    }
+  },
+  "initial_bottleneck": {
+    "run": "/home/chao/test/learning-agency-lab-automated-essay-scoring-2/runs/rlt_warm_norm_v1",
+    "model_sha256": "4e54001a10091d00d1170da0a172803f634ac6c9bb35daed86c1efd4559bc25e",
+    "selected_epoch": 9,
+    "optimizer_restored": false,
+    "thresholds_inherited": false,
+    "teacher": "frozen copy of initial warm-start encoder"
+  },
+  "git_commit": "9d3ed755a2054f4cf13c3aa6c201bb8e4c1a0a7b",
+  "code_sha256": {
+    "essay_bottleneck/__init__.py": "d6f2cca2ae3c57ac3b673c7017cb068b9511515316924cea212d56c5d23c0af5",
+    "essay_bottleneck/audit_run.py": "1c188933d6c00b2edef29fd2e7213d0e39f51c6a0afda6d0742ddce97df552b6",
+    "essay_bottleneck/batching.py": "e9d8aa873da73904a8bfd3b652976df2e665b7ae9be51210d2b02b1c74bfee37",
+    "essay_bottleneck/model.py": "4b41e7fac73976b81478ea9e1be4a761f7b0b3513920eaff732328d620717528",
+    "essay_bottleneck/score.py": "90f8d0c22785958e912365e36ce36b0ceb4f730775348ef8d1eb690fb250fd8d",
+    "essay_bottleneck/train.py": "a0e7af73a0389cd2009de416abf8082e13610ded41e7a2cbbc64d01e43be20a1",
+    "essay_bottleneck/verify.py": "ae6989edf573981b5ba1db478d015a49901ebb8fbac32ae0a2a79d4d1857ef94",
+    "essay_bottleneck/verify_lengths.py": "95a240e1fd60f33244f36cf894306c3b70bd1ddcc8caf4efe241ff0279d12d73",
+    "deberta_baseline.py": "b97102b1080ebbbcc5967d02c797ed438b0258f099262f01afc1a908f63c78f4"
+  },
+  "supervised_source": {
+    "source_run": "/home/chao/test/learning-agency-lab-automated-essay-scoring-2/outputs_deberta_base_2048",
+    "source_model_sha256": "6d8a90152fab45d55890527e4ec6fb510e0b778919f38991babeeb19d5f21a51",
+    "source_selected_epoch": 5,
+    "source_max_length": 2048,
+    "split_sha256": "6a744961c657093ef34c4910660acaeb0f7bbe8a03c156f01415a1be08c8f588",
+    "data_sha256": "ce6b0bd2c7d790a64ad3d2a8e15e3563d90e881c787638caa93504445caa65d0",
+    "encoder_tensors_verified": 198,
+    "tokenizer_vocab_verified": true,
+    "encoder_weights_sha256": "821ccb020ef9cb5752ae8248f31e4955eae62db48c94ed7122f3c6615e319106",
+    "initialization": "Supervised train-split encoder; checkpoint selected on selection",
+    "baseline_score_head_exported": false,
+    "final_validation_evaluated": false
+  }
+}

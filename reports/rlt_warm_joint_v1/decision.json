@@ -1,0 +1,11 @@
+{
+  "selected_epoch": 1,
+  "best_version": "B0",
+  "best_selection_qwk": 0.8216686484016431,
+  "target_selection_qwk": 0.8341167069970928,
+  "beats_target": false,
+  "training_and_epoch_evaluation_seconds": 3298.624602587988,
+  "platform_submitted": false,
+  "final_validation_evaluated": false,
+  "next_experiment": "Return to frozen supervised encoder; controlled query-normalization comparison after checking cached encoder features."
+}
