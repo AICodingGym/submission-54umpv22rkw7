@@ -91,4 +91,12 @@ How reliably can a 4B model distinguish source patchwork from original developme
 - 952c47b (4, 1,015 words) contains extensive source-linked benefits and practical objections. Its lower label than some more formulaic responses remains difficult to explain. Preserve uncertainty; do not invent a categorical penalty for length, lowercase starts, or practical counterarguments.
 - 59b254f (4) is highly formulaic but links quoted material to a clear classroom purpose. 954f9af (3) discusses authority and article structure but repeats broad praise. Judge actual substance, not analytical terminology or template presence.
 - 8531c68 (1) develops car necessity while ostensibly opposing driverless technology: multiple examples can support a misread issue. Contrast with c369266 to avoid making topical specificity a simplistic keyword rule.
-- Current coverage: 252/10,905 complete semantic reviews; 10,653 remain. No new model evaluation or score improvement is claimed.
+- Coverage at that update: 252/10,905 complete semantic reviews; 10,653 remained. No new model evaluation or score improvement is claimed.
+
+## Evidence update after batch 15 (270 essays reviewed)
+
+- 6125d49 (4, 301 words) supports concise adequate development. 15b1360 (5) uses informal sarcasm and rhetorical questions with specific source-linked challenges; formal register is not a high-score prerequisite.
+- 552af61 (3) has meaningful causal explanation, while 49080ed (4) is more descriptive. Preserve this uncertain adjacent-grade contrast. Do not invent a missing-conclusion penalty or attribute the difference entirely to factual accuracy.
+- e03613b (1) is fluent and argumentative but strongly source-like in passages repeated across the corpus. The observed distinction is student-owned response versus assembled material, but exact copying has not been independently verified; apparent polish alone is unreliable.
+- 10416ad (5) sustains one central classroom adaptation theme through distinct explanations and scenarios. Count meaningful elaboration, not merely nominal reasons.
+- Current coverage: 270/10,905 full semantic reviews; 10,635 remain. New Qwen evaluation has not started.
