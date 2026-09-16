@@ -1,0 +1,10 @@
+{
+  "source_split": "train",
+  "ids": [
+    "aa52b3b",
+    "610d03b",
+    "7cc82fb",
+    "f260d4e"
+  ],
+  "note": "Already reviewed examples. Exclude these four from diagnostic train metrics; selection contains no example IDs."
+}

@@ -59,3 +59,5 @@ models/
 *.log
 
 rubric_research/batches/
+
+outputs_teacher_*/
