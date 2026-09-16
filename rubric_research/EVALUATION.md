@@ -23,3 +23,9 @@ Training diagnostic: QWK 0.4310, MAE 1.1901 over 342 essays. No predictions of 1
 Shorter rubric plus four already reviewed train examples at scores 1, 2, 4, 6. The goal is to demonstrate the actual school-writing scale and reduce compression. Examples: aa52b3b, 610d03b, 7cc82fb, f260d4e. These four must be excluded from train diagnostic metrics; compare versions on the same remaining 338 IDs. Example choice is manual, not optimized using selection errors. Prompt is 1,572 tokenizer tokens before guard/chat overhead and retains the same essay budget.
 
 Run with `teacher_eval.py --prompt rubric_research/rubrics/v0002_prompt.txt --examples rubric_research/rubrics/v0002_examples.json --output outputs_teacher_v0002` after the first GPU run ends.
+
+## v0001 completed selection result
+
+Full selection 1,557 rows: argmax QWK **0.269514**, MAE **1.156712**; expected fixed-threshold QWK **0.263218**, MAE **1.165703**. Predictions: 1→1, 2→0, 3→310, 4→889, 5→357, 6→0. One essay truncated. Total scoring 448.3 s; peak allocation 7.916 GiB. Worse than old uncalibrated GEPA G1 (QWK 0.324540, MAE 0.773924). The verbose rubric alone did not improve performance. No calibration performed. Selection ID coverage, probability normalization and QWK recomputation checked.
+
+v0002 started after v0001 completed, with prompt prepared from train errors before seeing v0001 selection results.
