@@ -1,5 +1,5 @@
 {
-  "status": "frozen_for_submission",
+  "status": "submitted_below_platform_target",
   "model_dir": "runs/rlt_cached_norm_v1",
   "version": "B0",
   "selected_epoch": 1,
@@ -12,5 +12,7 @@
   "selection_qwk_delta": 8.390771833888255e-05,
   "platform_target": 0.82349,
   "final_validation_evaluated": false,
-  "note": "Selection advantage is only about 0.000084 QWK; no claim of statistically reliable superiority."
+  "note": "Selection advantage is only about 0.000084 QWK; no claim of statistically reliable superiority.",
+  "platform_score": 0.82311,
+  "beats_platform_target": false
 }
