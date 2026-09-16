@@ -117,4 +117,12 @@ How reliably can a 4B model distinguish source patchwork from original developme
 - dac3832 (1) is readable and on topic but repeats one fear. Do not define 1 only as off-topic, copied-looking or incomprehensible work.
 - caf6bec (5) quotes extensively but connects passage progression to purpose. No automatic quotation-ratio ceiling is supported.
 - 3b20650 (6) again separates sentences with blank lines; organization is the progression of reasoning, not whitespace.
-- Current coverage: 306/10,905 full semantic reviews; 10,599 remain. New Qwen evaluation has not started.
+- Coverage at that update: 306/10,905 full semantic reviews; 10,599 remained. New Qwen evaluation has not started.
+
+## Evidence update after batch 18 (324 essays reviewed)
+
+- 7cc82fb (4, 249 words) provides a short seagoing recruitment anchor with specific reader-facing reasons. It reinforces that length and grammatical polish are not necessary conditions for 4.
+- 29d00ed (1) is coherent and names relevant Mars evidence, yet offers minimal explanation. Its boundary against similar 2s remains uncertain; do not claim a deterministic rule.
+- ae7dc92 (5) has substantial repetition and questionable safety assumptions alongside source-linked explanations. Keep as a difficult anchor rather than requiring every high-score reason to be novel or every premise correct.
+- 5091e12 (6) sustains two broad strands through scientific implications and engineering alternatives. Number of main reasons is not the measure of thorough development.
+- Current coverage: 324/10,905 full semantic reviews; 10,581 remain. New Qwen evaluation has not started.
