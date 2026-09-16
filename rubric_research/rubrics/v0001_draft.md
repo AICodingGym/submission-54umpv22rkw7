@@ -108,4 +108,13 @@ How reliably can a 4B model distinguish source patchwork from original developme
 - 0cdf1ff (5) spends substantial space on nonclassroom applications as alternatives to classroom use. This is purposeful comparison rather than automatically off-task content. 6b207f2 (4) also tolerates some drift, reinforcing soft holistic task assessment.
 - d3cc1d2 (2) includes concrete privacy-related reasoning. Presence of an example or how/why explanation alone does not establish 3; exact adjacent-grade distinctions remain uncertain.
 - 2fa5ce8 (4) has one sentence that appears to reverse its stance, while the rest consistently opposes driverless cars. Interpret local slips in the context of the whole response rather than mechanically penalizing a contradiction keyword.
-- Current coverage: 288/10,905 full semantic reviews; 10,617 remain. No new Qwen evaluation yet.
+- Coverage at that update: 288/10,905 full semantic reviews; 10,617 remained. No new Qwen evaluation yet.
+
+## Evidence update after batch 17 (306 essays reviewed)
+
+- af8c1c9 (5) supplies a high seagoing recruitment anchor: specific experiences connect to helping, adventure and friendship for the intended audience, rather than merely retelling Luke's chronology.
+- f260d4e (6, 497 words) offers sustained audience-effect analysis without great length. Rhetoric terminology works because it is explained, not because the words ethos/logos appear.
+- dac3832 (1) is readable and on topic but repeats one fear. Do not define 1 only as off-topic, copied-looking or incomprehensible work.
+- caf6bec (5) quotes extensively but connects passage progression to purpose. No automatic quotation-ratio ceiling is supported.
+- 3b20650 (6) again separates sentences with blank lines; organization is the progression of reasoning, not whitespace.
+- Current coverage: 306/10,905 full semantic reviews; 10,599 remain. New Qwen evaluation has not started.

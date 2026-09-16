@@ -39,6 +39,8 @@ def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--batch',type=int)
     p.add_argument('--section',type=int,choices=[1,2,3],default=1)
+    p.add_argument('--trim-line-ends', action='store_true',
+                   help='Display only: remove trailing whitespace per line; preserve original text and hash checks.')
     args=p.parse_args()
     if args.batch is None:
         print(json.dumps(audit(),indent=2))
@@ -49,6 +51,8 @@ def main():
     for row in selected.itertuples():
         text=train.loc[row.essay_id,'full_text']
         assert hashlib.sha256(text.encode()).hexdigest()==row.text_sha256
+        if args.trim_line_ends:
+            text='\n'.join(line.rstrip() for line in text.splitlines())
         print(f'=== ID {row.essay_id} | score {row.score} | words {len(text.split())} ===\n{text}\n')
 
 
