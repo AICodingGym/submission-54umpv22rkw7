@@ -38,7 +38,7 @@ with torch.inference_mode():
         readout=model.readout
         memory=readout.projection(hidden)
         memory=readout.input_norm(memory+positions(hidden.shape[1],memory.shape[-1],hidden.device))
-        q=readout.queries[None].expand(len(part),-1,-1)
+        q=readout.query_vectors(len(part))
         _,weights=readout.attention(q,memory,memory,key_padding_mask=~mask,need_weights=True,average_attn_weights=False)
         latents=readout(hidden,mask)
         for j,(_,essay) in enumerate(part.iterrows()):

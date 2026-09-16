@@ -88,6 +88,22 @@ HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 ../.venv/bin/python -m essay_bottleneck.
 平均池化对照使用相同形式的 MLP 评分头，但输入维度随表征改变，因此参数量不同；
 也不同于旧基线的线性评分头，报告时不能把收益全部归因于池化方式。
 
+`--normalize-queries` 在 cross-attention 前归一化学习到的查询，并将归一化查询
+用于残差；默认关闭，以兼容旧检查点。`--group-microbatches` 在每次更新的有效
+batch 内按长度排序，再切小批次，减少 padding；每次更新的样本集合和样本权重
+不变，但 dropout 随机数对应及浮点累加次序会变化。它也默认关闭。
+
+`--source` 可以使用 `export_deberta_encoder.py` 导出的监督训练编码器。
+若存在 `supervised_source.json`，训练会校验权重哈希、数据和划分来源，并将其
+纳入配置记录。这属于显式 warm start，不是从原始预训练模型开始的新实验。
+
+```bash
+HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 ../.venv/bin/python -m essay_bottleneck.train \
+  --source models/deberta_base_2048_supervised --model-size base --max-length 2048 \
+  --epochs 10 --normalize-queries --group-microbatches --reconstruction-weight 0.1 \
+  --output-dir runs/rlt_warm_norm_v1
+```
+
 ## 评估与产物
 
 - 固定 train 更新权重；selection 按固定半整数阈值的 QWK 选择最佳 epoch，同分取较早轮。

@@ -1,0 +1,32 @@
+{
+  "architecture_checks": [
+    {
+      "finetune_encoder": false,
+      "normalized_query_gradients": true,
+      "gradient_boundaries": true,
+      "padding_invariant": true,
+      "exact_reload": true
+    },
+    {
+      "finetune_encoder": true,
+      "normalized_query_gradients": true,
+      "gradient_boundaries": true,
+      "padding_invariant": true,
+      "exact_reload": true
+    }
+  ],
+  "effective_batch_members_preserved": true,
+  "empty_and_partial_batches_checked": true,
+  "gpu": {
+    "legacy_joint_selection_rows": 1557,
+    "legacy_reload_max_raw_difference": 0.0,
+    "legacy_integer_scores_match": true,
+    "longest_train_batch_shape": [
+      4,
+      1778
+    ],
+    "longest_train_batch_finite_backward": true,
+    "peak_allocated_gib": 2.807084083557129,
+    "peak_reserved_gib": 3.64453125
+  }
+}

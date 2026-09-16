@@ -25,6 +25,7 @@ class BottleneckConfig:
     dropout: float = 0.1
     reconstruction_weight: float = 0.1
     finetune_encoder: bool = False
+    normalize_queries: bool = False
 
     def validate(self):
         if self.pooling not in {'latent', 'mean'}:
@@ -39,6 +40,8 @@ class BottleneckConfig:
             raise ValueError('reconstruction_weight must be finite and nonnegative')
         if self.pooling == 'mean' and self.reconstruction_weight:
             raise ValueError('mean pooling is a score-only control; set reconstruction_weight=0')
+        if self.pooling == 'mean' and self.normalize_queries:
+            raise ValueError('query normalization requires latent pooling')
 
 
 def positions(length, dimension, device):
@@ -59,6 +62,7 @@ class LatentReadout(nn.Module):
         self.projection = nn.Linear(hidden_size, dim)
         self.input_norm = nn.LayerNorm(dim)
         self.queries = nn.Parameter(torch.randn(config.num_latents, dim) * 0.02)
+        self.query_norm = nn.LayerNorm(dim) if config.normalize_queries else nn.Identity()
         self.attention = nn.MultiheadAttention(dim, config.num_heads,
                                                dropout=config.dropout, batch_first=True)
         self.norm1 = nn.LayerNorm(dim)
@@ -66,10 +70,13 @@ class LatentReadout(nn.Module):
                                  nn.Dropout(config.dropout), nn.Linear(dim * 4, dim))
         self.norm2 = nn.LayerNorm(dim)
 
+    def query_vectors(self, batch_size):
+        return self.query_norm(self.queries)[None].expand(batch_size, -1, -1)
+
     def forward(self, hidden, mask):
         memory = self.projection(hidden)
         memory = self.input_norm(memory + positions(hidden.shape[1], memory.shape[-1], hidden.device))
-        queries = self.queries[None].expand(hidden.shape[0], -1, -1)
+        queries = self.query_vectors(hidden.shape[0])
         readout, _ = self.attention(queries, memory, memory,
                                     key_padding_mask=~mask.bool(), need_weights=False)
         latents = self.norm1(queries + readout)

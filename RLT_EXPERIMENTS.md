@@ -33,11 +33,22 @@
 4. 下一轮：冻结已经监督训练的 2048-token 强基线编码器，训练带查询归一化的
    RLT 瓶颈和重建模块。此方案改变了初始化和查询处理，不能把收益单独归因于
    其中一项。仅在每个有效 batch 内按长度排列小批次以减少 padding，显式记录。
+   K=4、D=256、重建权重 0.1、新模块学习率 1e-4，10 轮；输出目录
+   `runs/rlt_warm_norm_v1/`。编码器冻结，评分头重新初始化，没有复制原评分头。
 
 现有实现的 `essay_bottleneck.verify` 和 `essay_bottleneck.verify_lengths`
 均已通过。它们验证实现正确性，不衡量正式评分质量。日志保存在
 `artifacts/bottleneck_verify_before_training.log` 和
 `artifacts/bottleneck_lengths_before_training.log`。
+
+新选项也已通过冻结/联合两种模式的 CPU 检查：查询与归一化层有梯度、
+编码器和教师梯度边界正确、padding 不改变评分/重建损失、保存重载完全一致；
+空批次、非完整尾批次与完整训练规模的有效 batch 成员均保持不变。
+[新选项检查记录](reports/rlt_querynorm_options_verification.json)。
+原有 `verify`、`verify_lengths` 在新增选项保持默认关闭时也已重跑通过。
+GPU 短试跑通过；旧联合检查点的 1,557 篇选择集在新代码下重载预测差为 0。
+新配置以最长 4 篇训练作文（`4 × 1778`）完成有限值前向/反向，
+分配显存峰值 2.807 GiB、保留峰值 3.645 GiB（此为冻结编码器压力检查）。
 
 ## 已完成结果：同一选择集 1,557 篇
 

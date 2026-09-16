@@ -17,7 +17,7 @@ from transformers import AutoModel, AutoTokenizer, get_linear_schedule_with_warm
 from deberta_baseline import (FIXED, ROOT, fit_thresholds, integer_scores, metrics,
                               prepare_split, write_json)
 from .model import BottleneckConfig, BottleneckRegressor
-from .batching import encode_texts, pad_batch
+from .batching import encode_texts, group_within_effective_batches, pad_batch
 
 
 def parse_args():
@@ -38,6 +38,9 @@ def parse_args():
     parser.add_argument('--dropout', type=float, default=0.1)
     parser.add_argument('--reconstruction-weight', type=float, default=0.1)
     parser.add_argument('--finetune-encoder', action='store_true')
+    parser.add_argument('--normalize-queries', action='store_true')
+    parser.add_argument('--group-microbatches', action='store_true',
+                        help='Sort lengths within each effective batch; keep its sample membership')
     parser.add_argument('--encoder-lr', type=float, default=2e-5)
     parser.add_argument('--head-lr', type=float, default=1e-4)
     parser.add_argument('--seed', type=int, default=42)
@@ -128,6 +131,19 @@ def main():
     config['code_sha256'] = {str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest()
                              for p in sorted(Path(__file__).parent.glob('*.py'))}
     config['code_sha256']['deberta_baseline.py'] = hashlib.sha256((ROOT / 'deberta_baseline.py').read_bytes()).hexdigest()
+    provenance_path = source / 'supervised_source.json'
+    if provenance_path.exists():
+        provenance = json.loads(provenance_path.read_text())
+        for key in ['split_sha256', 'data_sha256']:
+            if provenance[key] != config[key]:
+                raise ValueError('Supervised encoder source uses different data or split')
+        digest = hashlib.sha256()
+        with (source / 'model.safetensors').open('rb') as weights:
+            for block in iter(lambda: weights.read(1024 * 1024), b''):
+                digest.update(block)
+        if digest.hexdigest() != provenance['encoder_weights_sha256']:
+            raise ValueError('Supervised encoder weights differ from export provenance')
+        config['supervised_source'] = provenance
     output.mkdir(parents=True, exist_ok=False)
     write_json(output / 'config.json', config)
     print(json.dumps(config), flush=True)
@@ -153,6 +169,9 @@ def main():
         model.train()
         start = time.monotonic()
         order = np.random.default_rng(args.seed + epoch).permutation(len(data['train']))
+        if args.group_microbatches:
+            order = group_within_effective_batches(order, [len(ids) for ids in tokens['train']],
+                                                  args.effective_batch_size)
         sums = dict(loss=0., score_loss=0., reconstruction_loss=0.)
         optimizer.zero_grad(set_to_none=True)
         for batch in range(batches):
