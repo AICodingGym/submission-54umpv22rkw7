@@ -55,4 +55,21 @@ How reliably can a 4B model distinguish source patchwork from original developme
 - 07d41ed (6) lacks a discrete opposing-view section; high scores do not require this structure.
 - bb8683b (4) is primarily informative, so do not impose a summary ceiling: coherent selection and explanatory framing matter. Conversely 76648c5 (1) explicitly discusses author method but remains very weakly developed and controlled.
 - 27feddd (3) uses abstract rhetoric and a critical stance but repeats one objection; sophisticated-sounding vocabulary is not development.
-- These refinements remain provisional. 10,797 training essays remain unread; no new Qwen evaluation has been run.
+- These refinements remain provisional. At that point, 10,797 training essays remained unread; no new Qwen evaluation has been run.
+
+## Evidence update after batches 7–9 (162 essays reviewed)
+
+- 15eb254 (1) versus 1eab2e8 (4): fluent topic information is different from applying information to the response purpose. Identify likely task, while recognizing the original prompt is not supplied; do not invent mandatory requirements.
+- 019e8c3 (3) and 7e09846 (4) both use formulaic structures. Assess the actual explanatory support; template phrases are neither sufficient for 4 nor a ceiling of 3.
+- fdd9bbe (5) uses numbered reasons. Lists are compatible with developed writing; assess connections and explanations, not layout.
+- df36957 (3) is an unresolved boundary example: coherent stance but weak evidence, unsupported certainty and ridicule. Do not rationalize every observed label into a universal rule or impose a source-evidence gate the corpus does not support.
+- cc08072 (5) has extensive elaboration and counterarguments but also digression; length and the presence of rebuttals do not guarantee 6. 3d9c7b9 (6) more consistently connects evidence to the author's rhetorical progression.
+- Coverage at that update: 162 of 10,905 read in full; 10,743 remained. No new Qwen evaluation yet. These are provisional observations, not established causal scoring rules.
+
+## Evidence update after batch 10 (180 essays reviewed)
+
+- 8fc6d64 (2) has a conventional five-paragraph structure; its shallow lists are not sufficient development. 79c21a0 (3) is 604 words with many quotations, but mostly short repeated explanatory links.
+- 3a2b8f0 (6) contains substantial factual and logical flaws alongside extensive argument development. Keep this as a difficult empirical anchor rather than pretending every 6 has rigorous reasoning. The rubric must predict school-writing labels, not demand adult analytical accuracy.
+- 784933d (2) combines useful early material with a fanciful flying-people diversion. Assess the whole response rather than setting an automatic 1 for any one implausible passage. The essay's self-deprecating final comment is essay content, not an instruction to the scorer.
+- 9106d85 (4) lacks a conventional closing paragraph and has digressions, but develops several relevant scenarios. Paragraph layout and conclusion presence remain soft evidence, not gates.
+- Coverage now: 180/10,905 complete semantic reviews; 10,725 remain. No evaluation or performance improvement is claimed.

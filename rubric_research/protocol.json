@@ -10,11 +10,15 @@
     3,
     4,
     5,
-    6
+    6,
+    7,
+    8,
+    9,
+    10
   ],
   "note": "Statistics cover all training rows; semantic review must be recorded separately. No claim of reading unreviewed batches.",
-  "semantic_read_rows": 108,
-  "next_batch": 7,
+  "semantic_read_rows": 180,
+  "next_batch": 11,
   "rubric_draft": "rubrics/v0001_draft.md",
   "evaluation_started": false
 }
