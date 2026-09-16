@@ -48,6 +48,8 @@ outputs/
 outputs_lightgbm/
 outputs_tuned/
 outputs_qwen/
+outputs_lora/
+outputs_lora_smoke/
 artifacts/
 models/
 *.log

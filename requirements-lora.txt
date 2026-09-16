@@ -1,0 +1,2 @@
+-r requirements-qwen.txt
+peft==0.21.0

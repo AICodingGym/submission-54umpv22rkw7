@@ -161,3 +161,39 @@ Hardware inspection outside the sandbox confirmed an RTX 3080 with 20 GiB
 VRAM and a working NVIDIA driver. The initial GPU detection failed because
 the sandbox hides GPU devices. GPU experiments require approved device access
 and a CUDA-enabled PyTorch installation; the pilot used CPU PyTorch.
+
+## Qwen3-1.7B LoRA fine-tuning
+
+Install CUDA PyTorch first, then the LoRA requirements:
+
+```bash
+uv pip install --python ../.venv/bin/python torch==2.11.0 --index-url https://download.pytorch.org/whl/cu128
+uv pip install --python ../.venv/bin/python -r requirements-lora.txt
+HF_HUB_OFFLINE=1 ../.venv/bin/python finetune_qwen.py --smoke --epochs 1
+HF_HUB_OFFLINE=1 ../.venv/bin/python finetune_qwen.py --batch-size 8 --accumulation 2
+```
+
+Run with GPU access (the workspace sandbox hides NVIDIA devices). Training
+uses BF16, gradient checkpointing, rank-8 LoRA on query/value projections,
+learning rate 1e-4 and effective batch size 16. Only 1,605,632 parameters are
+trainable. The objective is six-class cross entropy on the score-digit logits
+at the answer position; it does not train free-form explanations. Predictions
+are rounded expectations over the six classes without additional calibration.
+
+The original 12,460-row training split is divided into 11,214 fitting examples
+and 1,246 inner validation examples (stratified, seed 45). Two epochs are run;
+the adapter with higher inner QWK is reloaded for evaluation on the original
+3,116-row outer holdout and test prediction. The final adapter remains trained
+on 11,214 examples; it is not refitted on the full labeled dataset.
+
+Inputs are capped at 1,024 tokens with head/tail retention, preserving the
+instructions and answer position. The configured length truncates 365 fitting,
+36 inner-validation, 110 outer-validation and 59 test essays. Longer context
+is a potential later experiment. The prompt and experimental rubric match
+the zero-shot pilot; the model learns the task's scoring scale from labels.
+
+`outputs_lora/` stores configuration, split IDs, progress, per-epoch adapters,
+the selected `adapter/`, training history, validation predictions, metrics and
+`submission.csv`. `outputs_lora_smoke/` is separate and contains only the small
+end-to-end smoke check. Adapters require the original base-model revision and
+the same prompt/tokenization/scoring procedure used by `finetune_qwen.py`.
