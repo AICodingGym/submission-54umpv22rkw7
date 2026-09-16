@@ -1,0 +1,17 @@
+{
+  "training_rows": 10905,
+  "batches": 606,
+  "batch_size": 18,
+  "batch_seed": 52,
+  "split_sha256": "6a744961c657093ef34c4910660acaeb0f7bbe8a03c156f01415a1be08c8f588",
+  "semantic_read_completed_batches": [
+    1,
+    2,
+    3
+  ],
+  "note": "Statistics cover all training rows; semantic review must be recorded separately. No claim of reading unreviewed batches.",
+  "semantic_read_rows": 54,
+  "next_batch": 4,
+  "rubric_draft": "rubrics/v0001_draft.md",
+  "evaluation_started": false
+}

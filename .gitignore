@@ -57,3 +57,5 @@ outputs_gepa_smoke/
 artifacts/
 models/
 *.log
+
+rubric_research/batches/
