@@ -1,0 +1,16 @@
+{
+  "outputs_teacher_v0001": {
+    "rows": 338,
+    "spearman": 0.7193798607465313,
+    "train_5fold_isotonic_qwk": 0.6560175833700943,
+    "train_5fold_isotonic_mae": 0.9230769230769231,
+    "note": "Exploratory cross-fitted train-only scale diagnostic. Reviewed corpus is score-balanced and used for prompt development. Not independent validation; no calibration/final partition used."
+  },
+  "outputs_teacher_v0002": {
+    "rows": 338,
+    "spearman": 0.6794930628700794,
+    "train_5fold_isotonic_qwk": 0.6319014640805589,
+    "train_5fold_isotonic_mae": 0.9408284023668639,
+    "note": "Exploratory cross-fitted train-only scale diagnostic. Reviewed corpus is score-balanced and used for prompt development. Not independent validation; no calibration/final partition used."
+  }
+}

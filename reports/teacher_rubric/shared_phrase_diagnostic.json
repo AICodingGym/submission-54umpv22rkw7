@@ -1,0 +1,15 @@
+{
+  "training_rows": 10905,
+  "ngram_words": 8,
+  "min_document_frequency": 10,
+  "phrase_count": 6424,
+  "median_fraction_by_score": {
+    "1": 0.11932208874327549,
+    "2": 0.0587484993997599,
+    "3": 0.06415206981086541,
+    "4": 0.07535641547861507,
+    "5": 0.08909574468085106,
+    "6": 0.06949152542372881
+  },
+  "note": "All fixed train only. No labels used in phrase extraction. Repeated phrasing may be legitimate quotation, common language or source use; not a plagiarism detector or a score rule."
+}

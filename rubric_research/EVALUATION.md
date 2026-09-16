@@ -37,3 +37,9 @@ On the same 338 non-demonstration training essays, v0001 QWK is 0.434128, MAE 1.
 Prepared v0003 reuses the v0001 rubric with A–F category codes in place of numeric grades. A maps to 1 and F to 6; probabilities and argmax are mapped identically. This tests output-code sensitivity without changing model weights, the six grading levels, input limits or nonthinking inference. It will first score reviewed train only using `--letters --train-only`, after the active GPU evaluation finishes. No claim that this change improves quality until measured.
 
 `verify_teacher.py` independently checks completed-run prompt/data/split fingerprints, partition membership, demonstration exclusion, original labels, probability normalization, decoded scores, expected values and recomputed QWK/MAE/confusion matrices. It also reports both versions on common diagnostic train IDs.
+
+## Train-only scale and shared-phrase diagnostics
+
+Across the same 338 training rows, Spearman correlation is 0.71938 (v0001) and 0.67949 (v0002). Five-fold out-of-fold isotonic remapping gives QWK 0.65602 and 0.63190 respectively. This is exploratory scale diagnosis on a balanced set already used to author prompts, not independent validation and not use of the reserved calibration split. Both ranking errors and score-scale errors remain.
+
+A separate eight-word phrase-frequency audit uses all 10,905 fixed train essays, without labels for extraction. Phrases appearing in at least ten documents cover about 89.2% of e03613b and 51.4% of 8cad5af, both human 1/predicted 5. But 85bf4eb (human 2/predicted 5) has zero such coverage. Median shared coverage by grade is not monotonic. Therefore phrase overlap may help identify source-like material, but is not a general scoring rule or evidence of plagiarism. This computational audit does not change the semantic reading count (342).
