@@ -1,5 +1,29 @@
 # DeBERTa-v3-small 监督评分 baseline
 
+## DeBERTa-v3-base 长训练对照
+
+训练脚本支持 `--model-size base`、任意正整数 `--epochs` 和独立的
+`--output-dir`。small 的默认配置保留。base 使用相同的固定划分、
+512-token 输入、平均池化回归头、有效 batch 32 和最佳 B0 QWK 选择规则，
+已完成 10 轮训练，最佳为第 5 轮，完整产物保存到 `outputs_deberta_base/`。
+同一选择集 B0/B1 QWK 为 0.814285 / 0.814573，详见
+[base 结果与逐轮比较](DEBERTA_BASE_RESULTS.md)。
+学习率衰减按 10 轮总步数计算，因此其第 4 轮并不等价于一个独立的 4 轮实验。
+
+```bash
+../.venv/bin/python download_deberta.py --model-size base --revision 8ccc9b6f36199bec6961081d44eb72fb3f7353f3
+HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 ../.venv/bin/python deberta_baseline.py --model-size base --epochs 10 --smoke
+HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 ../.venv/bin/python deberta_baseline.py --model-size base --epochs 10
+HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 ../.venv/bin/python verify_deberta_run.py --run-dir outputs_deberta_base
+../.venv/bin/python score_deberta.py --model-dir outputs_deberta_base --device cuda --file essay.txt
+```
+
+重跑时通过 `--output-dir` 指定新目录；已有实验不会被覆盖。核验程序重算
+三个开发集合的指标，检查划分与标签，独立重载全部选择集预测，并保存
+`verification.json`、环境版本和权重哈希。最终验证集继续保留。
+
+## 原 small 基线
+
 作文原文 → DeBERTa-v3-small → attention mask 平均池化 → 线性回归头。
 编码器和回归头一起训练，目标是 FP32 MSE；B0 使用固定阈值
 `1.5, 2.5, 3.5, 4.5, 5.5` 转为 1–6 分，阈值相等时进入较高分。

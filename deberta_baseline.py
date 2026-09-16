@@ -141,13 +141,15 @@ def fit_thresholds(y, raw):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--epochs', type=int, default=4)
+    parser.add_argument('--model-size', choices=['small', 'base'], default='small')
+    parser.add_argument('--output-dir', type=Path)
     parser.add_argument('--batch-size', type=int, choices=[2, 4], default=4)
     parser.add_argument('--eval-batch-size', type=int, default=4)
     parser.add_argument('--smoke', action='store_true')
     parser.add_argument('--prepare-only', action='store_true')
     args = parser.parse_args()
-    if not 1 <= args.epochs <= 4 or args.eval_batch_size < 1:
-        parser.error('epochs must be 1..4 and eval batch size positive')
+    if args.epochs < 1 or args.eval_batch_size < 1:
+        parser.error('epochs and eval batch size must be positive')
     torch.set_num_threads(8)
     random.seed(42)
     np.random.seed(42)
@@ -161,11 +163,13 @@ def main():
         return
     if not torch.cuda.is_available():
         raise RuntimeError('CUDA GPU access required')
-    output = ROOT / ('outputs_deberta_smoke' if args.smoke else 'outputs_deberta')
-    output.mkdir(exist_ok=True)
+    suffix = '' if args.model_size == 'small' else f'_{args.model_size}'
+    output = args.output_dir or ROOT / f'outputs_deberta{suffix}{"_smoke" if args.smoke else ""}'
+    output = output.resolve()
+    output.mkdir(parents=True, exist_ok=True)
     if (output / 'config.json').exists():
         raise ValueError(f'{output} already contains a run; use a fresh output directory')
-    snapshot = Path((ROOT / 'models/deberta_snapshot.txt').read_text().strip())
+    snapshot = Path((ROOT / f'models/deberta{suffix}_snapshot.txt').read_text().strip())
     if not snapshot.is_absolute():
         snapshot = ROOT / snapshot
     tokenizer = AutoTokenizer.from_pretrained(snapshot, local_files_only=True)
@@ -181,7 +185,8 @@ def main():
         data[name] = part
     bf16 = torch.cuda.is_bf16_supported()
     accumulation = 32 // args.batch_size
-    config = {**vars(args), 'seed': 42, 'model': 'microsoft/deberta-v3-small', 'revision': snapshot.name,
+    config = {**vars(args), 'output_dir': str(output), 'seed': 42,
+              'model': f'microsoft/deberta-v3-{args.model_size}', 'revision': snapshot.name,
               'max_length': 512, 'truncation': 'right', 'gradient_accumulation': accumulation,
               'gradient_checkpointing': True, 'dynamic_padding': True, 'precision': 'bf16' if bf16 else 'fp32',
               'encoder_lr': 2e-5, 'head_lr': 1e-4, 'weight_decay': .01, 'warmup_ratio': .1,

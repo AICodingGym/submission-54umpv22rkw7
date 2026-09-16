@@ -1,0 +1,10 @@
+{
+  "prediction_rows_audited": 14019,
+  "selection_reload_rows": 1557,
+  "max_reload_raw_difference": 0.0,
+  "all_integer_predictions_match": true,
+  "all_report_metrics_recomputed": true,
+  "reserved_final_rows": 1557,
+  "final_validation_evaluated": false,
+  "model_sha256": "980f20c2bf44e9dadcd9008849368819f795dc666a1c7bfe5dc18b2af2982eb6"
+}

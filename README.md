@@ -1,5 +1,11 @@
 # Essay scoring baseline
 
+新增 DeBERTa-v3-base 10 轮训练结果：同一 DeBERTa 选择集上，最佳第 5 轮
+B0/B1 QWK 为 0.8143 / 0.8146；原 small 为 0.7910 / 0.8010。
+第 6–10 轮未进一步改善。模型使用 `score_deberta.py --model-dir outputs_deberta_base`
+加载，详见 [base 结果、逐轮指标和使用方式](DEBERTA_BASE_RESULTS.md)。
+这些是开发集比较；下述 LightGBM 使用不同划分，不能直接横向比较数字。
+
 ## 使用评分系统
 
 现有 `outputs_tuned/model.joblib` 已在全部 15,576 篇标注作文上重新训练。
