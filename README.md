@@ -120,3 +120,44 @@ scores = calibrate(raw, bundle["center"], bundle["scale"], bundle["offset"])
 The model is refitted on all labeled essays, retaining the calibration chosen
 without using the holdout labels. Earlier submissions remain in their own
 output directories.
+
+## Qwen3-1.7B zero-shot pilot
+
+`download_qwen.py` downloads the official model to ignored `models/`.
+`evaluate_qwen.py` evaluates 96 essays sampled with stratification (seed 44)
+from the existing holdout. It uses experimental scoring guidance, not the
+official rubric text, disables thinking and normalizes the next-token
+probabilities over the six score digits. Expected scores are rounded to 1–6;
+argmax scores are also reported. No fine-tuning or score calibration is used.
+
+Install the baseline requirements and `requirements-qwen.txt`. For CPU-only
+execution, install the CPU PyTorch wheel from its official CPU index first.
+The recorded environment used torch 2.14.0+cpu and Transformers 4.57.6.
+
+```bash
+../.venv/bin/python download_qwen.py
+HF_HUB_OFFLINE=1 ../.venv/bin/python evaluate_qwen.py
+```
+
+The recorded model revision is `70d244cc86ccca08cf5af4e1e306ecf908b1ad5e`.
+The downloader resolves the current upstream revision; the evaluator records
+the exact downloaded revision. Artifacts are stored in `outputs_qwen/`.
+
+| Method | QWK on the same 96 essays |
+| --- | ---: |
+| Qwen expected score, rounded | 0.117277 |
+| Qwen argmax score | 0.124447 |
+| TF-IDF + Ridge | 0.734106 |
+| LightGBM | 0.748231 |
+| Calibrated LightGBM | 0.744633 |
+
+CPU BF16 inference took 43.4 seconds (excluding model loading). Qwen assigned
+4 essays a score of 3, 56 a score of 4 and 36 a score of 5, indicating a strong
+upward scoring bias with this prompt. This small zero-shot pilot does not
+measure fine-tuned performance and is not comparable to full-holdout scores.
+It produces evaluation artifacts, not a test-set submission.
+
+Hardware inspection outside the sandbox confirmed an RTX 3080 with 20 GiB
+VRAM and a working NVIDIA driver. The initial GPU detection failed because
+the sandbox hides GPU devices. GPU experiments require approved device access
+and a CUDA-enabled PyTorch installation; the pilot used CPU PyTorch.
