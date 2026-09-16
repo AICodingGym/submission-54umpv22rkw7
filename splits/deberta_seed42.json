@@ -1,0 +1,51 @@
+{
+  "data_sha256": "ce6b0bd2c7d790a64ad3d2a8e15e3563d90e881c787638caa93504445caa65d0",
+  "seed": 42,
+  "duplicate_rule": "connected components: normalized exact match or binary word-trigram cosine >= 0.95",
+  "groups": 15574,
+  "counts": {
+    "train": 10905,
+    "selection": 1557,
+    "calibration": 1557,
+    "final_validation": 1557
+  },
+  "score_counts": {
+    "1": {
+      "calibration": 112,
+      "final_validation": 112,
+      "selection": 112,
+      "train": 788
+    },
+    "2": {
+      "calibration": 425,
+      "final_validation": 425,
+      "selection": 425,
+      "train": 2974
+    },
+    "3": {
+      "calibration": 563,
+      "final_validation": 563,
+      "selection": 563,
+      "train": 3940
+    },
+    "4": {
+      "calibration": 356,
+      "final_validation": 356,
+      "selection": 356,
+      "train": 2495
+    },
+    "5": {
+      "calibration": 87,
+      "final_validation": 88,
+      "selection": 88,
+      "train": 613
+    },
+    "6": {
+      "calibration": 14,
+      "final_validation": 13,
+      "selection": 13,
+      "train": 95
+    }
+  },
+  "historical_exposure": "Earlier repository experiments used all labels; reserved only for this new experiment."
+}

@@ -1,0 +1,12 @@
+{
+  "thresholds": [
+    1.8046875,
+    2.56325,
+    3.4146249999999974,
+    4.375,
+    4.78125
+  ],
+  "fit_split": "calibration",
+  "method": "deterministic coordinate QWK search",
+  "selected_epoch": 4
+}

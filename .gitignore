@@ -50,6 +50,8 @@ outputs_tuned/
 outputs_qwen/
 outputs_lora/
 outputs_lora_smoke/
+outputs_deberta/
+outputs_deberta_smoke/
 artifacts/
 models/
 *.log
