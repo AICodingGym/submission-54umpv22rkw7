@@ -43,3 +43,7 @@ Prepared v0003 reuses the v0001 rubric with A–F category codes in place of num
 Across the same 338 training rows, Spearman correlation is 0.71938 (v0001) and 0.67949 (v0002). Five-fold out-of-fold isotonic remapping gives QWK 0.65602 and 0.63190 respectively. This is exploratory scale diagnosis on a balanced set already used to author prompts, not independent validation and not use of the reserved calibration split. Both ranking errors and score-scale errors remain.
 
 A separate eight-word phrase-frequency audit uses all 10,905 fixed train essays, without labels for extraction. Phrases appearing in at least ten documents cover about 89.2% of e03613b and 51.4% of 8cad5af, both human 1/predicted 5. But 85bf4eb (human 2/predicted 5) has zero such coverage. Median shared coverage by grade is not monotonic. Therefore phrase overlap may help identify source-like material, but is not a general scoring rule or evidence of plagiarism. This computational audit does not change the semantic reading count (342).
+
+## v0002 completed selection result
+
+Full selection argmax QWK **0.233015**, MAE **1.342325**; expected fixed QWK **0.229156**, MAE **1.346821**. Predictions were 2:6, 3:237, 4:698, 5:616, with no 1 or 6. Four demonstrations worsened both ranking/scale diagnostics and full-selection results; this variant is rejected. Full artifact verification passed. v0003 train-only A–F check launched serially after v0002 ended.

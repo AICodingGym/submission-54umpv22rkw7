@@ -1,0 +1,27 @@
+{
+  "model": "Qwen/Qwen3-4B",
+  "revision": "1cfa9a7208912126459214e8b04321603b3df60c",
+  "prompt_sha256": "3741c8ccb3a9b590400ed335a80597675090015e53a980fb50aaa3b998fd4e2d",
+  "split_sha256": "6a744961c657093ef34c4910660acaeb0f7bbe8a03c156f01415a1be08c8f588",
+  "data_sha256": "ce6b0bd2c7d790a64ad3d2a8e15e3563d90e881c787638caa93504445caa65d0",
+  "teacher": "main assistant",
+  "reflection": false,
+  "weights_frozen": true,
+  "semantic_review_rows": 342,
+  "diagnostic_train_rows": 338,
+  "example_ids": [
+    "aa52b3b",
+    "610d03b",
+    "7cc82fb",
+    "f260d4e"
+  ],
+  "full_training_rows": 10905,
+  "thinking": false,
+  "precision": "BF16",
+  "batch_size": 2,
+  "essay_tokens": 2048,
+  "context_tokens": 4096,
+  "seed": 42,
+  "calibration_used": false,
+  "final_validation_evaluated": false
+}

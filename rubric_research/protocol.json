@@ -30,10 +30,11 @@
   "next_batch": 20,
   "rubric_draft": "rubrics/v0001_draft.md",
   "evaluation_started": true,
-  "active_evaluation": "outputs_teacher_v0002",
+  "active_evaluation": "outputs_teacher_v0003_train",
   "frozen_trial_prompt": "rubrics/v0001_prompt.txt",
   "review_pause_reason": "User updated objective: evaluate once consecutive batches no longer add scoring dimensions. Batches 14\u201319 mainly refine counterexamples to existing dimensions; resume targeted review after initial evaluation.",
   "completed_evaluations": [
-    "outputs_teacher_v0001"
+    "outputs_teacher_v0001",
+    "outputs_teacher_v0002"
   ]
 }
