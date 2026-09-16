@@ -1,0 +1,25 @@
+{
+  "gpu_bf16_checked": true,
+  "train_token_lengths": [
+    164,
+    333,
+    484,
+    1778
+  ],
+  "same_batch_max_score_difference": 0.0,
+  "same_batch_loss_difference": 0.0,
+  "same_batch_max_gradient_difference": 0.0,
+  "encoder_skipped_with_cache": true,
+  "trainable_encoder_cache_rejected": true,
+  "cross_batch_max_score_difference": 0.015625,
+  "cache": {
+    "rows": 4,
+    "tokens": 2759,
+    "dtype": "float32",
+    "storage": "CPU RAM, run-local",
+    "bytes": 8475648,
+    "seconds": 0.4219991400022991,
+    "encoder_precision": "bf16"
+  },
+  "note": "Training cache is CPU float32. BF16 encoding with different padding shapes may differ numerically; both normalization controls will use the same cache construction. Selection/calibration inference remains uncached."
+}

@@ -132,7 +132,7 @@ class BottleneckRegressor(nn.Module):
             self.teacher.eval()
         return self
 
-    def forward(self, input_ids, attention_mask, labels=None, **encoder_inputs):
+    def forward(self, input_ids, attention_mask, labels=None, encoded_hidden=None, **encoder_inputs):
         if attention_mask.ndim != 2 or not attention_mask.bool().any(dim=1).all():
             raise ValueError('Each essay needs at least one unmasked token')
         encoder_config = self.encoder.config
@@ -142,7 +142,15 @@ class BottleneckRegressor(nn.Module):
             raise ValueError('This encoder uses a fixed absolute position table; choose an explicit '
                              'max length or an encoder supporting longer input')
         inputs = dict(input_ids=input_ids, attention_mask=attention_mask, **encoder_inputs)
-        if self.config.finetune_encoder:
+        if encoded_hidden is not None:
+            if self.config.finetune_encoder:
+                raise ValueError('Cached features cannot bypass a trainable encoder')
+            if (encoded_hidden.shape != (*input_ids.shape, encoder_config.hidden_size)
+                    or encoded_hidden.device != input_ids.device or encoded_hidden.requires_grad
+                    or not encoded_hidden.is_floating_point()):
+                raise ValueError('Invalid frozen encoder feature batch')
+            hidden = encoded_hidden.float()
+        elif self.config.finetune_encoder:
             hidden = self.encoder(**inputs).last_hidden_state.float()
         else:
             with torch.no_grad():

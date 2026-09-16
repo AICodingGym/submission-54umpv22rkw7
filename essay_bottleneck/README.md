@@ -109,6 +109,12 @@ HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 ../.venv/bin/python -m essay_bottleneck.
 教师在恢复初始学生编码器之后复制并冻结；优化器、调度和阈值都重新建立。
 这不是恢复中断的训练状态。
 
+冻结编码器时可加 `--cache-frozen-features`，只为 train 建立 CPU float32 表征缓存，
+不缓存 selection/calibration，也不能用于联合微调。当前完整 train 约需 13.5 GiB
+内存；创建前检查可用内存。配置记录缓存行数、token 数、字节数、构建时间和
+逐篇表征哈希。不同 padding 形状的 BF16 编码可能存在舍入差异，因此缓存与
+非缓存训练不保证逐位复现；比较架构时双方应使用相同缓存构建方式。
+
 ```bash
 HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 ../.venv/bin/python -m essay_bottleneck.train \
   --source models/deberta_base_2048_supervised --init-run runs/rlt_warm_norm_v1 \

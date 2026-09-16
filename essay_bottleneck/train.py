@@ -18,6 +18,7 @@ from deberta_baseline import (FIXED, ROOT, fit_thresholds, integer_scores, metri
                               prepare_split, write_json)
 from .model import BottleneckConfig, BottleneckRegressor
 from .batching import encode_texts, group_within_effective_batches, pad_batch
+from .features import cache_encoder_features, pad_cached_features
 
 
 def parse_args():
@@ -43,6 +44,8 @@ def parse_args():
     parser.add_argument('--normalize-queries', action='store_true')
     parser.add_argument('--group-microbatches', action='store_true',
                         help='Sort lengths within each effective batch; keep its sample membership')
+    parser.add_argument('--cache-frozen-features', action='store_true',
+                        help='Cache train-only frozen encoder features in CPU RAM')
     parser.add_argument('--encoder-lr', type=float, default=2e-5)
     parser.add_argument('--head-lr', type=float, default=1e-4)
     parser.add_argument('--seed', type=int, default=42)
@@ -58,6 +61,8 @@ def parse_args():
         parser.error('learning rates must be finite and positive')
     if args.init_run and not args.finetune_encoder:
         parser.error('--init-run currently requires --finetune-encoder')
+    if args.cache_frozen_features and args.finetune_encoder:
+        parser.error('--cache-frozen-features requires a frozen encoder')
     return args
 
 
@@ -215,6 +220,14 @@ def main():
             raise ValueError('Nonfinite predictions')
         return raw
 
+    cached_features = None
+    if args.cache_frozen_features:
+        cached_features, config['feature_cache'] = cache_encoder_features(
+            model.encoder, tokenizer, tokens['train'], device, bf16, args.eval_batch_size,
+            output / 'cache_progress.json')
+        write_json(output / 'config.json', config)
+        print(json.dumps({'feature_cache': config['feature_cache']}), flush=True)
+
     best, best_epoch, history = -np.inf, None, []
     for epoch in range(epochs):
         model.train()
@@ -228,8 +241,10 @@ def main():
         for batch in range(batches):
             indices = order[batch * args.batch_size:(batch + 1) * args.batch_size]
             labels = torch.tensor(data['train'].score.to_numpy()[indices], dtype=torch.float32, device=device)
+            encoded = (pad_cached_features(cached_features, indices, device)
+                       if cached_features is not None else None)
             with torch.autocast(device.type, dtype=torch.bfloat16, enabled=bf16):
-                result = model(**inputs('train', indices), labels=labels)
+                result = model(**inputs('train', indices), labels=labels, encoded_hidden=encoded)
             if not torch.isfinite(result['loss']):
                 raise ValueError('Nonfinite training loss')
             window_start = batch // accumulation * args.effective_batch_size
@@ -261,7 +276,7 @@ def main():
     if best_epoch is None:
         raise ValueError('No valid selection QWK; no checkpoint selected')
     # Drop training-only teacher/optimizer before restoring the selected student.
-    del result, optimizer, scheduler, encoder_params, task_params, groups, encoder, model
+    del result, optimizer, scheduler, encoder_params, task_params, groups, encoder, model, cached_features, encoded
     if device.type == 'cuda':
         torch.cuda.empty_cache()
     model = BottleneckRegressor.load(output / 'model', device)
