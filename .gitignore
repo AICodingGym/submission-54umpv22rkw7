@@ -52,6 +52,8 @@ outputs_lora/
 outputs_lora_smoke/
 outputs_deberta/
 outputs_deberta_smoke/
+outputs_gepa/
+outputs_gepa_smoke/
 artifacts/
 models/
 *.log

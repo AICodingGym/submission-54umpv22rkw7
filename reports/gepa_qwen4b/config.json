@@ -1,0 +1,17 @@
+{
+  "model": "Qwen/Qwen3-4B",
+  "revision": "1cfa9a7208912126459214e8b04321603b3df60c",
+  "seed": 42,
+  "smoke": false,
+  "proposal_budget": 20,
+  "gepa_version": "0.1.4",
+  "scoring": "constrained argmax over score digits; conditional expectation for G2 calibration",
+  "reflection_model": "same local Qwen3-4B, greedy, thinking disabled",
+  "batch_size": 2,
+  "precision": "BF16",
+  "essay_token_limit": 2048,
+  "input_token_limit": 4096,
+  "selection_strategy": "current_best; single grouped selection QWK objective",
+  "final_validation_evaluated": false,
+  "split_sha256": "6a744961c657093ef34c4910660acaeb0f7bbe8a03c156f01415a1be08c8f588"
+}

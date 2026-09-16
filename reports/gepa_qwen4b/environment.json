@@ -1,0 +1,19 @@
+{
+  "packages": {
+    "gepa": "0.1.4",
+    "torch": "2.11.0+cu128",
+    "transformers": "4.57.6",
+    "numpy": "2.4.6",
+    "pandas": "3.0.5",
+    "scikit-learn": "1.9.1",
+    "huggingface-hub": "0.36.2",
+    "tokenizers": "0.22.2"
+  },
+  "revision": "1cfa9a7208912126459214e8b04321603b3df60c",
+  "script_sha256": "83416d6f1ab3682b8c9fcb8c81c82436975fc47a77bd8c343f6f1e9188ec081b",
+  "weights": {
+    "model-00001-of-00003.safetensors": "328a91d3122359d5547f9d79521205bc0a46e1f79a792dfe650e99fc2d651223",
+    "model-00002-of-00003.safetensors": "6cd087b316306a68c562436b5492edbcf6e16c6dba3a1308279caa5a58e21ca5",
+    "model-00003-of-00003.safetensors": "e4bf436957184f4eeb86a80e9db394503f1f56446b2e6b7edeac5b81470f4ca1"
+  }
+}
