@@ -1,0 +1,11 @@
+{
+  "selected_epoch": 5,
+  "best_version": "B1",
+  "best_selection_qwk": 0.8179836671278513,
+  "target_selection_qwk": 0.8341167069970928,
+  "beats_target": false,
+  "training_and_epoch_evaluation_seconds": 7476.510520386008,
+  "platform_submitted": false,
+  "final_validation_evaluated": false,
+  "next_experiment": "Normalized latent queries on a frozen supervised 2048-token baseline encoder; explicit warm start, not raw pretrained initialization."
+}

@@ -1,0 +1,7 @@
+{
+  "encoder_tensors": 198,
+  "changed_encoder_tensors": 198,
+  "deployment_contains_teacher": false,
+  "source": "/home/chao/test/learning-agency-lab-automated-essay-scoring-2/models/hub/models--microsoft--deberta-v3-base/snapshots/8ccc9b6f36199bec6961081d44eb72fb3f7353f3",
+  "model_sha256": "c93b7ebd2a1cd6abf2bc246face8c56b6ee4b20577db135d6c7abec5ba18c0b6"
+}
