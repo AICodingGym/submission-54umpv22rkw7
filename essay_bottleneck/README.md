@@ -104,6 +104,19 @@ HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 ../.venv/bin/python -m essay_bottleneck.
   --output-dir runs/rlt_warm_norm_v1
 ```
 
+对已完整审计的瓶颈实验，可用 `--init-run` 继承全部学生权重，再联合微调。
+此选项要求 `--finetune-encoder`，并校验来源、数据、划分、架构和模型哈希。
+教师在恢复初始学生编码器之后复制并冻结；优化器、调度和阈值都重新建立。
+这不是恢复中断的训练状态。
+
+```bash
+HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 ../.venv/bin/python -m essay_bottleneck.train \
+  --source models/deberta_base_2048_supervised --init-run runs/rlt_warm_norm_v1 \
+  --model-size base --max-length 2048 --epochs 6 --normalize-queries \
+  --group-microbatches --reconstruction-weight 0.1 --finetune-encoder \
+  --encoder-lr 2e-6 --head-lr 1e-5 --output-dir runs/rlt_warm_joint_v1
+```
+
 ## 评估与产物
 
 - 固定 train 更新权重；selection 按固定半整数阈值的 QWK 选择最佳 epoch，同分取较早轮。

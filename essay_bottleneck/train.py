@@ -24,6 +24,8 @@ def parse_args():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--model-size', choices=['small', 'base'], default='base')
     parser.add_argument('--source', type=Path, help='Local pretrained encoder/tokenizer override')
+    parser.add_argument('--init-run', type=Path,
+                        help='Audited bottleneck weights for a new joint-training run; fresh optimizer')
     parser.add_argument('--output-dir', type=Path, required=True, help='Must not already exist')
     parser.add_argument('--epochs', type=int, default=10)
     parser.add_argument('--batch-size', type=int, default=4)
@@ -54,7 +56,41 @@ def parse_args():
         parser.error('explicit max length must be >= 2 and effective batch must be a multiple of batch size')
     if any(not math.isfinite(lr) or lr <= 0 for lr in [args.encoder_lr, args.head_lr]):
         parser.error('learning rates must be finite and positive')
+    if args.init_run and not args.finetune_encoder:
+        parser.error('--init-run currently requires --finetune-encoder')
     return args
+
+
+def load_initial_state(directory, architecture, source, split_path):
+    """Validate a completed parent run; thresholds and optimizer are never inherited."""
+    directory = directory.resolve()
+    config = json.loads((directory / 'config.json').read_text())
+    report = json.loads((directory / 'report.json').read_text())
+    audit = json.loads((directory / 'verification.json').read_text())
+    previous = BottleneckConfig(**json.loads((directory / 'model/bottleneck.json').read_text()))
+    for name, value in asdict(architecture).items():
+        if name != 'finetune_encoder' and getattr(previous, name) != value:
+            raise ValueError(f'Warm-start architecture differs: {name}')
+    if (config['smoke'] or report['smoke'] or report['final_validation_evaluated']
+            or Path(config['source']).resolve() != source.resolve()
+            or config['split_sha256'] != hashlib.sha256(split_path.read_bytes()).hexdigest()
+            or config['data_sha256'] != hashlib.sha256((ROOT / 'train.csv').read_bytes()).hexdigest()):
+        raise ValueError('Warm start requires a full parent run with matching source, data and split')
+    checkpoint = directory / 'model/model.pt'
+    digest = hashlib.sha256()
+    with checkpoint.open('rb') as weights:
+        for block in iter(lambda: weights.read(1024 * 1024), b''):
+            digest.update(block)
+    if (digest.hexdigest() != audit['model_sha256'] or audit['max_reload_raw_difference'] != 0
+            or not audit['all_integer_predictions_match'] or not audit['all_report_metrics_recomputed']):
+        raise ValueError('Parent checkpoint does not match a successful audit')
+    state = torch.load(checkpoint, map_location='cpu', weights_only=True)
+    if any(name.startswith('teacher.') for name in state):
+        raise ValueError('Expected a deployment checkpoint without teacher weights')
+    provenance = {'run': str(directory), 'model_sha256': digest.hexdigest(),
+                  'selected_epoch': report['selected_epoch'], 'optimizer_restored': False,
+                  'thresholds_inherited': False, 'teacher': 'frozen copy of initial warm-start encoder'}
+    return state, provenance
 
 
 def main():
@@ -99,8 +135,21 @@ def main():
         tokens[name], lengths[name], truncated[name] = encode_texts(
             tokenizer, part.full_text.tolist(), args.max_length)
     bf16 = device.type == 'cuda' and torch.cuda.is_bf16_supported()
+    initial_state, initial_provenance = (load_initial_state(args.init_run, architecture, source, split_path)
+                                         if args.init_run else (None, None))
     encoder = AutoModel.from_pretrained(source, local_files_only=True)
-    model = BottleneckRegressor(encoder, architecture).to(device)
+    if initial_state is not None:
+        encoder.load_state_dict({key.removeprefix('encoder.'): value
+                                 for key, value in initial_state.items() if key.startswith('encoder.')})
+    # Construct the fixed teacher after the student's initial encoder is restored.
+    model = BottleneckRegressor(encoder, architecture)
+    if initial_state is not None:
+        restored = model.load_state_dict(initial_state, strict=False)
+        teacher_keys = {key for key in model.state_dict() if key.startswith('teacher.')}
+        if set(restored.missing_keys) != teacher_keys or restored.unexpected_keys:
+            raise ValueError(f'Incomplete student warm start: {restored}')
+        del initial_state
+    model = model.to(device)
     if args.finetune_encoder:
         model.encoder.gradient_checkpointing_enable(gradient_checkpointing_kwargs={'use_reentrant': False})
     encoder_params = [p for p in model.encoder.parameters() if p.requires_grad]
@@ -126,6 +175,8 @@ def main():
                   teacher='frozen initial encoder' if architecture.reconstruction_weight else None,
                   lengths={name: {'rows': len(v), 'truncated': int(truncated[name].sum()),
                                   'max_tokens': int(v.max())} for name, v in lengths.items()})
+    if initial_provenance is not None:
+        config['initial_bottleneck'] = initial_provenance
     commit = subprocess.run(['git', 'rev-parse', 'HEAD'], cwd=ROOT, capture_output=True, text=True)
     config['git_commit'] = commit.stdout.strip() if commit.returncode == 0 else None
     config['code_sha256'] = {str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest()

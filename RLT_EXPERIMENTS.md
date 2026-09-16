@@ -39,6 +39,9 @@
 5. 下一轮：从上述完整最佳检查点初始化编码器、查询、评分头及重建模块，
    联合微调 6 轮，编码器学习率 2e-6、新模块 1e-5；教师固定为本轮初始编码器。
    保留 K=4、D=256、查询归一化、重建权重 0.1 和有效 batch 内长度排列。
+   输出 `runs/rlt_warm_joint_v1/`；使用新优化器和调度，不继承校准阈值。
+   完整权重初始化 GPU 短试跑通过，在零学习率预热一步后，全部学生张量与父模型
+   完全一致；不匹配架构会被拒绝。[初始化检查](reports/rlt_full_warm_start_verification.json)。
 
 现有实现的 `essay_bottleneck.verify` 和 `essay_bottleneck.verify_lengths`
 均已通过。它们验证实现正确性，不衡量正式评分质量。日志保存在

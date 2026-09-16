@@ -1,0 +1,10 @@
+{
+  "gpu_smoke_passed": true,
+  "initial_student_tensors_verified": 233,
+  "student_tensors_identical_after_zero_lr_smoke": true,
+  "teacher_excluded_from_deployment": true,
+  "mismatched_query_architecture_rejected": true,
+  "optimizer_restored": false,
+  "thresholds_inherited": false,
+  "note": "Smoke has one optimizer step with zero initial warmup LR; tensor identity verifies full student restoration, not training quality."
+}
