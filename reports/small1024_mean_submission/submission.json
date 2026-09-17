@@ -19,5 +19,11 @@
   },
   "sample_id_order_verified": true,
   "threshold_mapping_verified": true,
-  "status": "prepared"
+  "status": "submitted",
+  "platform_score": 0.83049,
+  "metric": "quadratic_weighted_kappa",
+  "results_url": "https://aicodinggym.com/challenges/mle/learning-agency-lab-automated-essay-scoring-2",
+  "platform_code_branch": "learning-agency-lab-automated-essay-scoring-2",
+  "attention_B1_platform_score": 0.83054,
+  "attention_minus_mean_platform_qwk": 5e-05
 }
