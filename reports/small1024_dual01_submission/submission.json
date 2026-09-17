@@ -37,5 +37,9 @@
   },
   "sample_id_order_verified": true,
   "threshold_mapping_verified": true,
-  "status": "prepared"
+  "status": "submitted",
+  "platform_score": 0.83087,
+  "metric": "quadratic_weighted_kappa",
+  "results_url": "https://aicodinggym.com/challenges/mle/learning-agency-lab-automated-essay-scoring-2",
+  "platform_code_branch": "learning-agency-lab-automated-essay-scoring-2"
 }
