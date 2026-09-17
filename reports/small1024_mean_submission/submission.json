@@ -1,0 +1,23 @@
+{
+  "model": "microsoft/deberta-v3-small",
+  "max_length": 1024,
+  "pooling": "mean",
+  "encoder_frozen": true,
+  "run_dir": "runs/small1024_pooling_v1/frozen_mean",
+  "selected_epoch": 5,
+  "version": "B1",
+  "rows": 1731,
+  "submission_file": "reports/small1024_mean_submission/submission.csv",
+  "submission_sha256": "27188675ce7f95a40a3162f33d02ed5293b80c6c2e9bb322c57bf3f161ad78eb",
+  "score_counts": {
+    "1": 166,
+    "2": 442,
+    "3": 637,
+    "4": 368,
+    "5": 99,
+    "6": 19
+  },
+  "sample_id_order_verified": true,
+  "threshold_mapping_verified": true,
+  "status": "prepared"
+}
