@@ -95,16 +95,45 @@ def prepare_split(frame, path):
 
 
 class EssayRegressor(torch.nn.Module):
-    def __init__(self, source, pretrained=True):
+    def __init__(self, source, pretrained=True, pooling=None):
         super().__init__()
         self.encoder = (AutoModel.from_pretrained(source, local_files_only=True) if pretrained
                         else AutoModel.from_config(AutoConfig.from_pretrained(source, local_files_only=True)))
         self.head = torch.nn.Linear(self.encoder.config.hidden_size, 1)
+        self.pooling = pooling or getattr(self.encoder.config, 'essay_pooling', 'mean')
+        if self.pooling not in {'mean', 'attention'}:
+            raise ValueError(f'Unknown pooling: {self.pooling}')
+        self.encoder.config.essay_pooling = self.pooling
+        self.encoder_frozen = False
+        if self.pooling == 'attention':
+            # Zero logits start from exactly mean pooling, without changing the
+            # random stream used for the common head or training dropout.
+            with torch.random.fork_rng(devices=[]):
+                self.attention = torch.nn.Linear(self.encoder.config.hidden_size, 1, bias=False)
+                torch.nn.init.zeros_(self.attention.weight)
+
+    def freeze_encoder(self):
+        self.encoder_frozen = True
+        self.encoder.requires_grad_(False)
+        self.encoder.eval()
+
+    def train(self, mode=True):
+        super().train(mode)
+        if self.encoder_frozen:
+            self.encoder.eval()
+        return self
 
     def forward(self, **inputs):
-        hidden = self.encoder(**inputs).last_hidden_state.float()
+        with torch.set_grad_enabled(torch.is_grad_enabled() and not self.encoder_frozen):
+            hidden = self.encoder(**inputs).last_hidden_state.float()
         mask = inputs['attention_mask'].unsqueeze(-1).float()
-        pooled = (hidden * mask).sum(1) / mask.sum(1).clamp_min(1)
+        if self.pooling == 'attention':
+            logits = self.attention(hidden).float().masked_fill(mask == 0, -1e9)
+            weights = logits.softmax(dim=1) * mask
+            weights = weights / weights.sum(1, keepdim=True).clamp_min(1e-9)
+            pooled = (hidden * weights).sum(1)
+        else:
+            pooled = (hidden * mask).sum(1) / mask.sum(1).clamp_min(1)
         return self.head(pooled).squeeze(-1).float()
 
     @classmethod
@@ -148,13 +177,18 @@ def main():
     parser.add_argument('--eval-batch-size', type=int, default=4)
     parser.add_argument('--smoke', action='store_true')
     parser.add_argument('--prepare-only', action='store_true')
+    parser.add_argument('--pooling', choices=['mean', 'attention'], default='mean')
+    parser.add_argument('--encoder-checkpoint', type=Path,
+                        help='Completed baseline run; copy its encoder and freshly initialize the scoring head')
+    parser.add_argument('--freeze-encoder', action='store_true')
+    parser.add_argument('--seed', type=int, default=42)
     args = parser.parse_args()
     if args.epochs < 1 or args.eval_batch_size < 1 or args.max_length < 2:
         parser.error('epochs and eval batch size must be positive; max length must be at least 2')
     torch.set_num_threads(8)
-    random.seed(42)
-    np.random.seed(42)
-    torch.manual_seed(42)
+    random.seed(args.seed)
+    np.random.seed(args.seed)
+    torch.manual_seed(args.seed)
     frame = pd.read_csv(ROOT / 'train.csv', dtype={'essay_id': str})
     if frame.essay_id.duplicated().any() or frame.full_text.isna().any() or not frame.score.isin(range(1, 7)).all():
         raise ValueError('Invalid training data')
@@ -189,11 +223,28 @@ def main():
         data[name] = part
     bf16 = torch.cuda.is_bf16_supported()
     accumulation = 32 // args.batch_size
-    config = {**vars(args), 'output_dir': str(output), 'seed': 42,
+    source_checkpoint = None
+    source_hash = None
+    if args.encoder_checkpoint:
+        source_run = args.encoder_checkpoint.resolve()
+        source_config = json.loads((source_run / 'config.json').read_text())
+        if (source_config['model'] != f'microsoft/deberta-v3-{args.model_size}'
+                or source_config['max_length'] != args.max_length
+                or source_config['split_sha256'] != hashlib.sha256((ROOT / 'splits/deberta_seed42.csv').read_bytes()).hexdigest()
+                or source_config['smoke']):
+            raise ValueError('Encoder source must be a complete run with matching model, length and split')
+        if not (source_run / 'report.json').exists():
+            raise ValueError('Encoder source training is incomplete')
+        source_checkpoint = source_run / 'model' / 'model.pt'
+        with source_checkpoint.open('rb') as stream:
+            source_hash = hashlib.file_digest(stream, 'sha256').hexdigest()
+    config = {**vars(args), 'output_dir': str(output),
+              'encoder_checkpoint': str(args.encoder_checkpoint.resolve()) if args.encoder_checkpoint else None,
+              'encoder_checkpoint_sha256': source_hash,
               'model': f'microsoft/deberta-v3-{args.model_size}', 'revision': snapshot.name,
               'max_length': args.max_length, 'truncation': 'right', 'gradient_accumulation': accumulation,
-              'gradient_checkpointing': True, 'dynamic_padding': True, 'precision': 'bf16' if bf16 else 'fp32',
-              'encoder_lr': 2e-5, 'head_lr': 1e-4, 'weight_decay': .01, 'warmup_ratio': .1,
+              'gradient_checkpointing': not args.freeze_encoder, 'dynamic_padding': True, 'precision': 'bf16' if bf16 else 'fp32',
+              'encoder_lr': 0. if args.freeze_encoder else 2e-5, 'head_lr': 1e-4, 'weight_decay': .01, 'warmup_ratio': .1,
               'loss': 'FP32 MSE', 'gpu': torch.cuda.get_device_name(), 'torch': torch.__version__,
               'split_sha256': hashlib.sha256((ROOT / 'splits/deberta_seed42.csv').read_bytes()).hexdigest(),
               'lengths': {k: {'rows': len(v), 'truncated': int((v > args.max_length).sum()),
@@ -201,10 +252,21 @@ def main():
                               'max_tokens': int(v.max())} for k, v in lengths.items()}}
     write_json(output / 'config.json', config)
     print(json.dumps(config), flush=True)
-    model = EssayRegressor(snapshot).cuda()
-    model.encoder.gradient_checkpointing_enable(gradient_checkpointing_kwargs={'use_reentrant': False})
-    optimizer = torch.optim.AdamW([{'params': model.encoder.parameters(), 'lr': 2e-5},
-                                  {'params': model.head.parameters(), 'lr': 1e-4}], weight_decay=.01)
+    model = EssayRegressor(snapshot, pooling=args.pooling)
+    if source_checkpoint:
+        source_state = torch.load(source_checkpoint, map_location='cpu', weights_only=True)
+        model.encoder.load_state_dict({k.removeprefix('encoder.'): v for k, v in source_state.items()
+                                       if k.startswith('encoder.')}, strict=True)
+        del source_state
+    if args.freeze_encoder:
+        model.freeze_encoder()
+    else:
+        model.encoder.gradient_checkpointing_enable(gradient_checkpointing_kwargs={'use_reentrant': False})
+    model.cuda()
+    groups = [{'params': [p for n, p in model.named_parameters() if not n.startswith('encoder.')], 'lr': 1e-4}]
+    if not args.freeze_encoder:
+        groups.insert(0, {'params': model.encoder.parameters(), 'lr': 2e-5})
+    optimizer = torch.optim.AdamW(groups, weight_decay=.01)
     batches = math.ceil(len(data['train']) / args.batch_size)
     epochs = 1 if args.smoke else args.epochs
     total_steps = math.ceil(batches / accumulation) * epochs
@@ -234,7 +296,7 @@ def main():
     for epoch in range(epochs):
         model.train()
         start = time.monotonic()
-        order = np.random.default_rng(42 + epoch).permutation(len(data['train']))
+        order = np.random.default_rng(args.seed + epoch).permutation(len(data['train']))
         losses = []
         optimizer.zero_grad(set_to_none=True)
         for batch in range(batches):
