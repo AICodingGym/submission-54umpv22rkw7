@@ -1,0 +1,8 @@
+{
+  "status": "failed_before_training",
+  "reason": "CUDA out of memory while transferring encoder; two other training processes held 18.89 GiB in total",
+  "run_directory_created": false,
+  "training_steps": 0,
+  "log": "artifacts/rlt_source2048_k1_v1_initial_oom.log",
+  "retry_plan": "After an existing GPU training process finishes; same configuration and seed"
+}

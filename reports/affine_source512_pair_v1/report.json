@@ -1,0 +1,265 @@
+{
+  "models": {
+    "rlt_source512_k4_v1": {
+      "source_dir": "/home/chao/test/learning-agency-lab-automated-essay-scoring-2/runs/rlt_source512_k4_v1",
+      "model_sha256": "53cb055c28429cb660bfa4d67e8fbd07cc561edd7a96dc116ebc1035b39e02c2",
+      "fit_split": "calibration",
+      "source_calibration_sha256": "552d9854eb4b069ef985c87774cfb9f4c49d76e35915d5af1e740a3d8494225f",
+      "calibration": {
+        "slope": 1.0699999999999998,
+        "offset": -0.28,
+        "thresholds": [
+          1.663551401869159,
+          2.598130841121496,
+          3.5327102803738324,
+          4.467289719626169,
+          5.4018691588785055
+        ],
+        "calibration_qwk": 0.810912312950254
+      },
+      "calibration_metrics": {
+        "rows": 1557,
+        "qwk": 0.810912312950254,
+        "mae": 0.3827874116891458,
+        "continuous_mae": 0.44641136801541426,
+        "confusion_matrix": [
+          [
+            79,
+            30,
+            3,
+            0,
+            0,
+            0
+          ],
+          [
+            57,
+            273,
+            85,
+            10,
+            0,
+            0
+          ],
+          [
+            2,
+            105,
+            361,
+            93,
+            2,
+            0
+          ],
+          [
+            2,
+            7,
+            82,
+            226,
+            39,
+            0
+          ],
+          [
+            0,
+            0,
+            2,
+            34,
+            47,
+            4
+          ],
+          [
+            0,
+            0,
+            0,
+            1,
+            7,
+            6
+          ]
+        ]
+      },
+      "selection_metrics": {
+        "rows": 1557,
+        "qwk": 0.8245899029896797,
+        "mae": 0.3737957610789981,
+        "continuous_mae": 0.43209346901091844,
+        "confusion_matrix": [
+          [
+            76,
+            32,
+            4,
+            0,
+            0,
+            0
+          ],
+          [
+            58,
+            292,
+            73,
+            2,
+            0,
+            0
+          ],
+          [
+            2,
+            120,
+            352,
+            84,
+            5,
+            0
+          ],
+          [
+            0,
+            3,
+            83,
+            226,
+            44,
+            0
+          ],
+          [
+            0,
+            0,
+            2,
+            34,
+            44,
+            8
+          ],
+          [
+            0,
+            0,
+            0,
+            1,
+            8,
+            4
+          ]
+        ]
+      }
+    },
+    "rlt_source512_k1_v1": {
+      "source_dir": "/home/chao/test/learning-agency-lab-automated-essay-scoring-2/runs/rlt_source512_k1_v1",
+      "model_sha256": "83012716e4ffb7dee8b7ce2ccd6519dc3cc760d79cb7232ba4f6a4cb59769629",
+      "fit_split": "calibration",
+      "source_calibration_sha256": "9f5d7101bdd13f77e984de7f77c722306faef28d87908c9791b5bab882e31fa9",
+      "calibration": {
+        "slope": 1.06,
+        "offset": -0.13,
+        "thresholds": [
+          1.5377358490566035,
+          2.481132075471698,
+          3.424528301886792,
+          4.367924528301886,
+          5.311320754716981
+        ],
+        "calibration_qwk": 0.8132177895471596
+      },
+      "calibration_metrics": {
+        "rows": 1557,
+        "qwk": 0.8132177895471596,
+        "mae": 0.37315350032113037,
+        "continuous_mae": 0.44328034682080925,
+        "confusion_matrix": [
+          [
+            69,
+            40,
+            3,
+            0,
+            0,
+            0
+          ],
+          [
+            45,
+            274,
+            93,
+            13,
+            0,
+            0
+          ],
+          [
+            1,
+            84,
+            370,
+            106,
+            2,
+            0
+          ],
+          [
+            2,
+            5,
+            73,
+            236,
+            40,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            30,
+            52,
+            5
+          ],
+          [
+            0,
+            0,
+            0,
+            2,
+            7,
+            5
+          ]
+        ]
+      },
+      "selection_metrics": {
+        "rows": 1557,
+        "qwk": 0.8291367337817361,
+        "mae": 0.36095054592164416,
+        "continuous_mae": 0.4256231936416185,
+        "confusion_matrix": [
+          [
+            73,
+            35,
+            4,
+            0,
+            0,
+            0
+          ],
+          [
+            47,
+            295,
+            79,
+            4,
+            0,
+            0
+          ],
+          [
+            2,
+            95,
+            367,
+            92,
+            7,
+            0
+          ],
+          [
+            0,
+            2,
+            77,
+            225,
+            52,
+            0
+          ],
+          [
+            0,
+            0,
+            2,
+            27,
+            52,
+            7
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            9,
+            4
+          ]
+        ]
+      }
+    }
+  },
+  "final_validation_evaluated": false
+}

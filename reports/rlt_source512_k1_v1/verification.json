@@ -1,0 +1,25 @@
+{
+  "prediction_rows_audited": 3114,
+  "selection_reload_rows": 1557,
+  "max_reload_raw_difference": 0.0,
+  "all_integer_predictions_match": true,
+  "all_report_metrics_recomputed": true,
+  "all_token_lengths_recomputed": true,
+  "length_coverage": {
+    "train": {
+      "rows": 10905,
+      "truncated": 0
+    },
+    "selection": {
+      "rows": 1557,
+      "truncated": 0
+    },
+    "calibration": {
+      "rows": 1557,
+      "truncated": 0
+    }
+  },
+  "frozen_encoder_unchanged": true,
+  "final_validation_evaluated": false,
+  "model_sha256": "83012716e4ffb7dee8b7ce2ccd6519dc3cc760d79cb7232ba4f6a4cb59769629"
+}
