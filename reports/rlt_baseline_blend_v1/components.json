@@ -1,0 +1,66 @@
+{
+  "kind": "baseline_rlt_equal_blend",
+  "single_model": false,
+  "components": [
+    {
+      "directory": "/home/chao/test/learning-agency-lab-automated-essay-scoring-2/outputs_deberta_base_2048",
+      "kind": "baseline",
+      "version": "B0",
+      "model_sha256": "6d8a90152fab45d55890527e4ec6fb510e0b778919f38991babeeb19d5f21a51",
+      "thresholds": [
+        1.5,
+        2.5,
+        3.5,
+        4.5,
+        5.5
+      ],
+      "selected_epoch": 5,
+      "token_lengths_recomputed_in_audit": true,
+      "selection_qwk": 0.8341167069970928,
+      "split_sha256": "6a744961c657093ef34c4910660acaeb0f7bbe8a03c156f01415a1be08c8f588",
+      "data_sha256": "ce6b0bd2c7d790a64ad3d2a8e15e3563d90e881c787638caa93504445caa65d0",
+      "config_sha256": "c92c59422a4a4535fa42282f2c7da1c83b9bf28e35836cb72871351b3e501ca6",
+      "model_files_sha256": {
+        "added_tokens.json": "dc046d04c9b0ada7ae6f1dc89c465801799acdf0c9a6aab8c15a1b2d5ca4e91f",
+        "config.json": "c259a7ab8f9beafb2ffe1e1da728def16f7404b506b4410f8781874090f14263",
+        "special_tokens_map.json": "9463f61e1b109a8eb4688b829260d7c6b1e6dff04c98ff7269bb89e2b92369b9",
+        "spm.model": "c679fbf93643d19aab7ee10c0b99e460bdbc02fedf34b92b05af343b4af586fd",
+        "tokenizer.json": "e20d231751cee93a542d5e8f0a8685d6484be2f2a672726f3d4a8aab20048a25",
+        "tokenizer_config.json": "e6c4c771911c211618a2d46488dc7e9e499f051773cd4ff4faeca6fe55fdf569"
+      },
+      "weight": 0.5
+    },
+    {
+      "directory": "/home/chao/test/learning-agency-lab-automated-essay-scoring-2/runs/rlt_cached_norm_v1",
+      "kind": "bottleneck",
+      "version": "B0",
+      "model_sha256": "2106da2676b4ea51cc8ef16ff1a111cc46b1f8bc20301c166e23234e707b14d5",
+      "thresholds": [
+        1.5,
+        2.5,
+        3.5,
+        4.5,
+        5.5
+      ],
+      "selected_epoch": 1,
+      "token_lengths_recomputed_in_audit": true,
+      "selection_qwk": 0.8342006147154317,
+      "split_sha256": "6a744961c657093ef34c4910660acaeb0f7bbe8a03c156f01415a1be08c8f588",
+      "data_sha256": "ce6b0bd2c7d790a64ad3d2a8e15e3563d90e881c787638caa93504445caa65d0",
+      "config_sha256": "d2b2516e4d35325a395d495b298658c88ad6d792520cbb84f80cfe0e6534be47",
+      "model_files_sha256": {
+        "added_tokens.json": "dc046d04c9b0ada7ae6f1dc89c465801799acdf0c9a6aab8c15a1b2d5ca4e91f",
+        "bottleneck.json": "27708c9d81eea7ca3c1a81b0ca06a89f513142218563a22f42d10347ee58e18f",
+        "config.json": "99630390681ac0d487502b127958005075d947936bf8681432a7b9717b19e64b",
+        "special_tokens_map.json": "b2f1b2f15f29a6b6d9d6ea4eca1675d2c231a71477f151d48f79cc83a625ba21",
+        "spm.model": "c679fbf93643d19aab7ee10c0b99e460bdbc02fedf34b92b05af343b4af586fd",
+        "tokenizer.json": "7fa272d658e06c9c30d800926bae282c70b0aadaf376063bc873e230306c0313",
+        "tokenizer_config.json": "5062a4a2dbea6d1438ad99489277b03aae0f915feebb94e798ebcb54269ba8ba"
+      },
+      "weight": 0.5
+    }
+  ],
+  "fit_weights": false,
+  "preparation_code_sha256": "27fdaada00ac522761ff7ecd93fd2f73f06b6729095885e749ddfa2f8edddbdf",
+  "final_validation_evaluated": false
+}

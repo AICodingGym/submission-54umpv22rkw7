@@ -333,7 +333,8 @@ def main():
         raw = calibration if name == 'calibration' else predict(name)
         y = data[name].score.to_numpy()
         report['splits'][name] = {'B0': metrics(y, raw, FIXED), 'B1': metrics(y, raw, thresholds)}
-        data[name][['essay_id', 'score']].assign(raw_prediction=raw, B0=integer_scores(raw),
+        # Preserve the exact float32 value in decimal CSV at fitted threshold boundaries.
+        data[name][['essay_id', 'score']].assign(raw_prediction=raw.astype(np.float64), B0=integer_scores(raw),
             B1=integer_scores(raw, thresholds), token_length=lengths[name],
             truncated=truncated[name]).to_csv(output / f'{name}_predictions.csv', index=False)
     write_json(output / 'report.json', report)

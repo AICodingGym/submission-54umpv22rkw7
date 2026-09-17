@@ -1,20 +1,29 @@
 {
-  "status": "submitted_below_platform_target",
-  "model_dir": "runs/rlt_ema095_affine_v1",
-  "version": "B1",
-  "calibration_method": "affine",
-  "selected_epoch": 1,
-  "model_sha256": "bd319a187b3704e8795b9229dbc42c98731756c25dfff5056862526b45c250bc",
+  "status": "audited_ready_for_submission",
+  "kind": "baseline_rlt_equal_blend",
+  "single_model": false,
+  "model_dir": "runs/rlt_baseline_blend_v1",
+  "version": "B0",
+  "components": [
+    {
+      "model_dir": "/home/chao/test/learning-agency-lab-automated-essay-scoring-2/outputs_deberta_base_2048",
+      "weight": 0.5,
+      "model_sha256": "6d8a90152fab45d55890527e4ec6fb510e0b778919f38991babeeb19d5f21a51"
+    },
+    {
+      "model_dir": "/home/chao/test/learning-agency-lab-automated-essay-scoring-2/runs/rlt_cached_norm_v1",
+      "weight": 0.5,
+      "model_sha256": "2106da2676b4ea51cc8ef16ff1a111cc46b1f8bc20301c166e23234e707b14d5"
+    }
+  ],
   "selection": {
-    "qwk": 0.8342494364142687,
-    "mae": 0.3468208092485549
+    "qwk": 0.8371808356510371,
+    "mae": 0.33397559409120103
   },
   "selection_target": 0.8341167069970928,
-  "selection_qwk_delta": 0.00013272941717590303,
+  "selection_qwk_delta": 0.0030641286539442314,
   "platform_target": 0.82349,
   "final_validation_evaluated": false,
-  "previous_candidate": "runs/rlt_cached_norm_v1",
-  "note": "Very small selection advantage after multiple development experiments; no claim of statistically reliable superiority.",
-  "platform_score": 0.82109,
-  "beats_platform_target": false
+  "previous_candidate": "runs/rlt_ema095_affine_v1",
+  "note": "Explicit 50/50 baseline + RLT fusion; not evidence that a standalone RLT model beats the baseline."
 }

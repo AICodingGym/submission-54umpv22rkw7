@@ -76,7 +76,7 @@ def main():
         texts = [args.file.read_text(encoding='utf-8') if args.file else args.text]
     raw, scores = BottleneckScorer(args.model_dir, args.device, args.version).predict(texts, args.batch_size)
     if args.csv:
-        print(frame[['essay_id']].assign(raw_prediction=raw, score=scores).to_csv(index=False), end='')
+        print(frame[['essay_id']].assign(raw_prediction=raw.astype(np.float64), score=scores).to_csv(index=False), end='')
     else:
         print(json.dumps({'raw_prediction': float(raw[0]), 'score': int(scores[0]), 'version': args.version}))
 

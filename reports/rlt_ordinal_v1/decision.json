@@ -1,0 +1,6 @@
+{
+  "beats_fixed_selection_target_B0_or_B1": false,
+  "platform_submitted": false,
+  "final_validation_evaluated": false,
+  "csv_precision_fix": "reports/rlt_ordinal_csv_precision_fix.json"
+}

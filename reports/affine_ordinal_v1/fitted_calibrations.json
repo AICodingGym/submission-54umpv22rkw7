@@ -1,0 +1,81 @@
+{
+  "method": "Affine score calibration; slope 0.7..1.4 step 0.005, offset -1..1 step 0.005",
+  "tie_break": "Smallest mean squared threshold displacement from half integers",
+  "code_sha256": "2371b00037be020af93fb0b1051964fede2cf5677cefdb5f330670d6e79c8a98",
+  "models": {
+    "rlt_ordinal_v1": {
+      "source_dir": "/home/chao/test/learning-agency-lab-automated-essay-scoring-2/runs/rlt_ordinal_v1",
+      "model_sha256": "e30750c8155d1affc1bc427102390b6af25519eada3e4b41114735e356999912",
+      "fit_split": "calibration",
+      "source_calibration_sha256": "d3154a88d67843a85db17b3d9e10071a332b226a2d638ca7b19c33a7ea9b2306",
+      "calibration": {
+        "slope": 1.025,
+        "offset": -0.14500000000000002,
+        "thresholds": [
+          1.604878048780488,
+          2.580487804878049,
+          3.5560975609756103,
+          4.53170731707317,
+          5.507317073170732
+        ],
+        "calibration_qwk": 0.8227289175165342
+      },
+      "calibration_metrics": {
+        "rows": 1557,
+        "qwk": 0.8227289175165342,
+        "mae": 0.3596660244059088,
+        "continuous_mae": 0.4312166048305955,
+        "confusion_matrix": [
+          [
+            67,
+            44,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            43,
+            307,
+            70,
+            5,
+            0,
+            0
+          ],
+          [
+            1,
+            133,
+            361,
+            66,
+            2,
+            0
+          ],
+          [
+            0,
+            10,
+            96,
+            218,
+            32,
+            0
+          ],
+          [
+            0,
+            0,
+            1,
+            27,
+            57,
+            2
+          ],
+          [
+            0,
+            0,
+            1,
+            0,
+            4,
+            9
+          ]
+        ]
+      }
+    }
+  }
+}

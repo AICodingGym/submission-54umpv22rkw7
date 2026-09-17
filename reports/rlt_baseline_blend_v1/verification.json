@@ -1,0 +1,30 @@
+{
+  "kind": "baseline_rlt_equal_blend",
+  "single_model": false,
+  "components_sha256": "652b00b05e829d9d4a958653b0d2beef78727ae461bb2164bd3f9e3a60071c90",
+  "thresholds_sha256": "73815adde4ee9a35d1a3c34e295c0974346841af290188f99cff053456e839b2",
+  "all_report_metrics_recomputed": true,
+  "all_integer_predictions_match": true,
+  "selection_reload_rows": 1557,
+  "component_max_reload_differences": [
+    0.0,
+    0.0
+  ],
+  "max_reload_raw_difference": 0.0,
+  "final_validation_evaluated": false,
+  "inference_code_sha256": {
+    "score_rlt_blend.py": "6f810cb509b646b7f4b437b5c5983081674aad33c03d8702826f06907eb17ab0",
+    "score_deberta.py": "300b123d1df130251feef04a29dce7ec670b721618edcdc39b0f893c34d490ae",
+    "deberta_baseline.py": "b97102b1080ebbbcc5967d02c797ed438b0258f099262f01afc1a908f63c78f4",
+    "essay_bottleneck/__init__.py": "d6f2cca2ae3c57ac3b673c7017cb068b9511515316924cea212d56c5d23c0af5",
+    "essay_bottleneck/audit_run.py": "1c188933d6c00b2edef29fd2e7213d0e39f51c6a0afda6d0742ddce97df552b6",
+    "essay_bottleneck/averaging.py": "2fc8422dbd079f945800c5304036523682b23b677605f14a30cd215d410b6bec",
+    "essay_bottleneck/batching.py": "e9d8aa873da73904a8bfd3b652976df2e665b7ae9be51210d2b02b1c74bfee37",
+    "essay_bottleneck/features.py": "8dc7b3a17e29343e9adafdffe64ee28255e97741c457b5c6470fcd52bfe1c39c",
+    "essay_bottleneck/model.py": "49ac8eef607a6bfe6faaf0269ccf1d4ccd7bbb60d8a22e2d5676de45518aeea1",
+    "essay_bottleneck/score.py": "4e45288484b10cb48a965078a4a9ca985a128d953277332f14c6a98525cdf715",
+    "essay_bottleneck/train.py": "767fec81bffa4879f3baa290b01296d16393f89c14067faad200a839a1ab071d",
+    "essay_bottleneck/verify.py": "ae6989edf573981b5ba1db478d015a49901ebb8fbac32ae0a2a79d4d1857ef94",
+    "essay_bottleneck/verify_lengths.py": "95a240e1fd60f33244f36cf894306c3b70bd1ddcc8caf4efe241ff0279d12d73"
+  }
+}

@@ -14,6 +14,7 @@ import torch
 from deberta_baseline import FIXED, ROOT, integer_scores, metrics, prepare_split, write_json
 from essay_bottleneck.score import BottleneckScorer
 from score_deberta import DebertaScorer
+from score_rlt_blend import BlendScorer
 from verify_deberta_run import sha256
 
 
@@ -44,15 +45,42 @@ def freeze_entry(directory, version, kind):
                                    if p.is_file() and p.name != 'model.pt'}}
 
 
+def freeze_blend_entry(directory, version):
+    directory = directory.resolve()
+    audit = json.loads((directory / 'verification.json').read_text())
+    if (audit['components_sha256'] != sha256(directory / 'components.json')
+            or audit['thresholds_sha256'] != sha256(directory / 'thresholds.json')
+            or audit['max_reload_raw_difference'] != 0
+            or any(audit['component_max_reload_differences'])
+            or not audit['all_report_metrics_recomputed']
+            or not audit['all_integer_predictions_match']):
+        raise ValueError('Expected an intact audited blend')
+    for filename, digest in audit['inference_code_sha256'].items():
+        if sha256(ROOT / filename) != digest:
+            raise ValueError(f'Blend inference code changed: {filename}')
+    scorer = BlendScorer(directory, 'cpu', version)  # Validates hashes without loading model weights.
+    report = json.loads((directory / 'report.json').read_text())
+    return {'directory': str(directory), 'kind': 'blend', 'single_model': False,
+            'version': version, 'thresholds': scorer.thresholds.tolist(),
+            'components': scorer.entries, 'components_sha256': audit['components_sha256'],
+            'thresholds_sha256': audit['thresholds_sha256'],
+            'selection_qwk': report['splits']['selection'][version]['qwk'],
+            'split_sha256': scorer.entries[0]['split_sha256'],
+            'data_sha256': scorer.entries[0]['data_sha256']}
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--candidate-run', type=Path, required=True)
     parser.add_argument('--version', choices=['B0', 'B1'], required=True)
+    parser.add_argument('--candidate-kind', choices=['bottleneck', 'blend'], default='bottleneck')
     parser.add_argument('--device', choices=['cpu', 'cuda'], default='cuda')
     args = parser.parse_args()
     torch.set_num_threads(4)
     benchmarks = json.loads((ROOT / 'reports/strong_baseline.json').read_text())
-    entries = {'candidate': freeze_entry(args.candidate_run, args.version, 'bottleneck')}
+    entries = {'candidate': (freeze_blend_entry(args.candidate_run, args.version)
+                            if args.candidate_kind == 'blend' else
+                            freeze_entry(args.candidate_run, args.version, 'bottleneck'))}
     if entries['candidate']['selection_qwk'] <= benchmarks['rlt_target_selection_qwk']:
         raise ValueError('Candidate must first surpass the fixed selection benchmark')
     for name in ['selection_benchmark', 'platform_benchmark']:
@@ -61,6 +89,10 @@ def main():
         if entry['model_sha256'] != reference['model_sha256']:
             raise ValueError(f'Benchmark checkpoint changed: {name}')
         entries[name] = entry
+    if args.candidate_kind == 'blend':
+        # Report the RLT component independently so fusion cannot be mistaken for a single-model gain.
+        component = next(e for e in entries['candidate']['components'] if e['kind'] == 'bottleneck')
+        entries['rlt_component'] = freeze_entry(Path(component['directory']), 'B0', 'bottleneck')
     split_digest = sha256(ROOT / 'splits/deberta_seed42.csv')
     data_digest = sha256(ROOT / 'train.csv')
     for entry in entries.values():
@@ -89,10 +121,12 @@ def main():
             if (not np.array_equal(predictions.essay_id, frame.essay_id)
                     or not np.array_equal(predictions.score, frame.score)):
                 raise ValueError('Stored final predictions have mismatched rows')
-            raw = predictions.raw_prediction.to_numpy(dtype=np.float32)
+            dtype = np.float64 if entry['kind'] == 'blend' else np.float32
+            raw = predictions.raw_prediction.to_numpy(dtype=dtype)
             scores = predictions.prediction.to_numpy()
         else:
-            scorer_class = BottleneckScorer if entry['kind'] == 'bottleneck' else DebertaScorer
+            scorer_class = {'bottleneck': BottleneckScorer, 'baseline': DebertaScorer,
+                            'blend': BlendScorer}[entry['kind']]
             scorer = scorer_class(entry['directory'], args.device, entry['version'])
             raw, scores = scorer.predict(frame.full_text.tolist(), batch_size=4)
             frame[['essay_id', 'score']].assign(raw_prediction=raw, prediction=scores).to_csv(

@@ -1,0 +1,25 @@
+{
+  "cause": "Float32 CSV formatting shortened decimal values at fitted threshold boundaries",
+  "repair": "Restore the original float32 values and serialize as float64; no weight, threshold, integer prediction or reported metric change",
+  "changes": [
+    {
+      "split": "selection",
+      "before_sha256": "6aadf1d4c4ef0f9a3a9c7974027291cdcc330b16055901e4020fa51fe030d08c",
+      "after_sha256": "db9374ec486b8729c67dea5367098b674ed5d00a643ea7e7405ce5934e68d8e3",
+      "backup": "artifacts/rlt_ordinal_v1_selection_before_precision_fix.csv",
+      "float32_values_unchanged": true,
+      "max_decimal_correction": 2.3803710913483656e-07
+    },
+    {
+      "split": "calibration",
+      "before_sha256": "952960c38678aa97d55ece5e24bd4010a94950c4ff74d47308e07280c17c8c00",
+      "after_sha256": "d3154a88d67843a85db17b3d9e10071a332b226a2d638ca7b19c33a7ea9b2306",
+      "backup": "artifacts/rlt_ordinal_v1_calibration_before_precision_fix.csv",
+      "float32_values_unchanged": true,
+      "max_decimal_correction": 2.3086547873418795e-07
+    }
+  ],
+  "new_scoring_cli_rows_verified": 1557,
+  "new_scoring_cli_integer_predictions_match": true,
+  "full_model_reload_difference": 0.0
+}
