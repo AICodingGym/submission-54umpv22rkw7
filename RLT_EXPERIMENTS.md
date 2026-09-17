@@ -99,6 +99,9 @@
     输出 `runs/rlt_source512_k4_v1/`、`runs/rlt_source512_k1_v1/`。
     [导出核验](reports/deberta_base/supervised_encoder_export.json)、
     [单 latent 配置检查](reports/rlt_single_latent_verification.json)。
+14. 512 来源的早期轮次中 K=1 高于 K=4（非最终结论），因此预先增加来源对照：
+    `runs/rlt_source2048_k1_v1/` 使用 2048 基线编码器和 K=1，其余配置与第 13 项一致。
+    该组既能与 512 来源 K=1 比较，也能与既有 2048 来源 K=4 比较；数据划分不变。
 
 现有实现的 `essay_bottleneck.verify` 和 `essay_bottleneck.verify_lengths`
 均已通过。它们验证实现正确性，不衡量正式评分质量。日志保存在
