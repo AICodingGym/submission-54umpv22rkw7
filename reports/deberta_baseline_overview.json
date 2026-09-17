@@ -1,0 +1,448 @@
+{
+  "scope": "Completed pure DeBERTa baselines; excludes RLT and fusion",
+  "baselines": [
+    {
+      "model": "microsoft/deberta-v3-small",
+      "run_dir": "outputs_deberta",
+      "max_length": 512,
+      "dynamic_padding": true,
+      "trained_epochs": 4,
+      "selected_epoch": 4,
+      "architecture": "encoder + masked mean pooling + linear scalar head",
+      "training_loss": "MSE",
+      "encoder_finetuned": true,
+      "selection": {
+        "B0": {
+          "rows": 1557,
+          "qwk": 0.7910438413628004,
+          "mae": 0.37122671804752727,
+          "continuous_mae": 0.44840338826179504,
+          "confusion_matrix": [
+            [
+              45,
+              56,
+              11,
+              0,
+              0,
+              0
+            ],
+            [
+              15,
+              305,
+              101,
+              4,
+              0,
+              0
+            ],
+            [
+              0,
+              83,
+              407,
+              72,
+              1,
+              0
+            ],
+            [
+              0,
+              2,
+              103,
+              219,
+              32,
+              0
+            ],
+            [
+              0,
+              0,
+              4,
+              55,
+              29,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              4,
+              9,
+              0
+            ]
+          ]
+        },
+        "B1": {
+          "rows": 1557,
+          "qwk": 0.8010235216933917,
+          "mae": 0.40012845215157355,
+          "continuous_mae": 0.44840338826179504,
+          "confusion_matrix": [
+            [
+              73,
+              30,
+              9,
+              0,
+              0,
+              0
+            ],
+            [
+              60,
+              279,
+              82,
+              4,
+              0,
+              0
+            ],
+            [
+              1,
+              104,
+              367,
+              89,
+              1,
+              1
+            ],
+            [
+              0,
+              3,
+              87,
+              219,
+              33,
+              14
+            ],
+            [
+              0,
+              0,
+              2,
+              49,
+              29,
+              8
+            ],
+            [
+              0,
+              0,
+              0,
+              3,
+              4,
+              6
+            ]
+          ]
+        }
+      },
+      "split_sha256": "6a744961c657093ef34c4910660acaeb0f7bbe8a03c156f01415a1be08c8f588",
+      "model_sha256": "aa2957fa77d0af0ccf40e45c384db5e0feb10f9ed029781fc3e10a3025b8f556",
+      "source_report": "reports/deberta_baseline/report.json",
+      "platform_submission": null
+    },
+    {
+      "model": "microsoft/deberta-v3-base",
+      "run_dir": "outputs_deberta_base",
+      "max_length": 512,
+      "dynamic_padding": true,
+      "trained_epochs": 10,
+      "selected_epoch": 5,
+      "architecture": "encoder + masked mean pooling + linear scalar head",
+      "training_loss": "MSE",
+      "encoder_finetuned": true,
+      "selection": {
+        "B0": {
+          "rows": 1557,
+          "qwk": 0.81428514807047,
+          "mae": 0.37443802183686575,
+          "continuous_mae": 0.45342355966567993,
+          "confusion_matrix": [
+            [
+              50,
+              54,
+              7,
+              1,
+              0,
+              0
+            ],
+            [
+              19,
+              295,
+              108,
+              3,
+              0,
+              0
+            ],
+            [
+              1,
+              52,
+              392,
+              107,
+              11,
+              0
+            ],
+            [
+              0,
+              0,
+              62,
+              216,
+              75,
+              3
+            ],
+            [
+              0,
+              0,
+              1,
+              35,
+              44,
+              8
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              8,
+              5
+            ]
+          ]
+        },
+        "B1": {
+          "rows": 1557,
+          "qwk": 0.8145734751719427,
+          "mae": 0.39627488760436735,
+          "continuous_mae": 0.45342355966567993,
+          "confusion_matrix": [
+            [
+              80,
+              25,
+              7,
+              0,
+              0,
+              0
+            ],
+            [
+              64,
+              272,
+              87,
+              2,
+              0,
+              0
+            ],
+            [
+              2,
+              88,
+              400,
+              61,
+              12,
+              0
+            ],
+            [
+              0,
+              0,
+              112,
+              158,
+              84,
+              2
+            ],
+            [
+              0,
+              0,
+              2,
+              28,
+              55,
+              3
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              11,
+              2
+            ]
+          ]
+        }
+      },
+      "split_sha256": "6a744961c657093ef34c4910660acaeb0f7bbe8a03c156f01415a1be08c8f588",
+      "model_sha256": "980f20c2bf44e9dadcd9008849368819f795dc666a1c7bfe5dc18b2af2982eb6",
+      "source_report": "reports/deberta_base/report.json",
+      "platform_submission": {
+        "model": "microsoft/deberta-v3-base",
+        "selected_epoch": 5,
+        "version": "B1",
+        "rows": 1731,
+        "submission_file": "outputs_deberta_base/submission.csv",
+        "submission_sha256": "63174111700c15f5c5c0145ced64ecd5e2bce707a95d3c9701fd0abd74d0fd78",
+        "score_counts": {
+          "1": 183,
+          "2": 448,
+          "3": 665,
+          "4": 269,
+          "5": 158,
+          "6": 8
+        },
+        "sample_id_order_verified": true,
+        "threshold_mapping_verified": true,
+        "status": "submitted",
+        "platform_score": 0.82349,
+        "metric": "quadratic_weighted_kappa",
+        "results_url": "https://aicodinggym.com/challenges/mle/learning-agency-lab-automated-essay-scoring-2",
+        "platform_code_branch": "learning-agency-lab-automated-essay-scoring-2"
+      }
+    },
+    {
+      "model": "microsoft/deberta-v3-base",
+      "run_dir": "outputs_deberta_base_2048",
+      "max_length": 2048,
+      "dynamic_padding": true,
+      "trained_epochs": 10,
+      "selected_epoch": 5,
+      "architecture": "encoder + masked mean pooling + linear scalar head",
+      "training_loss": "MSE",
+      "encoder_finetuned": true,
+      "selection": {
+        "B0": {
+          "rows": 1557,
+          "qwk": 0.8341167069970928,
+          "mae": 0.340398201669878,
+          "continuous_mae": 0.42729657888412476,
+          "confusion_matrix": [
+            [
+              70,
+              37,
+              5,
+              0,
+              0,
+              0
+            ],
+            [
+              41,
+              306,
+              75,
+              3,
+              0,
+              0
+            ],
+            [
+              1,
+              97,
+              383,
+              79,
+              3,
+              0
+            ],
+            [
+              0,
+              3,
+              90,
+              224,
+              39,
+              0
+            ],
+            [
+              0,
+              0,
+              2,
+              28,
+              56,
+              2
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              8,
+              5
+            ]
+          ]
+        },
+        "B1": {
+          "rows": 1557,
+          "qwk": 0.8311430649297625,
+          "mae": 0.3686576750160565,
+          "continuous_mae": 0.42729657888412476,
+          "confusion_matrix": [
+            [
+              81,
+              27,
+              4,
+              0,
+              0,
+              0
+            ],
+            [
+              77,
+              274,
+              71,
+              3,
+              0,
+              0
+            ],
+            [
+              4,
+              106,
+              372,
+              78,
+              3,
+              0
+            ],
+            [
+              0,
+              3,
+              91,
+              223,
+              39,
+              0
+            ],
+            [
+              0,
+              0,
+              2,
+              28,
+              45,
+              13
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              6,
+              7
+            ]
+          ]
+        }
+      },
+      "split_sha256": "6a744961c657093ef34c4910660acaeb0f7bbe8a03c156f01415a1be08c8f588",
+      "model_sha256": "6d8a90152fab45d55890527e4ec6fb510e0b778919f38991babeeb19d5f21a51",
+      "source_report": "reports/deberta_base_2048/report.json",
+      "platform_submission": {
+        "model": "microsoft/deberta-v3-base",
+        "max_length": 2048,
+        "selected_epoch": 5,
+        "version": "B0",
+        "rows": 1731,
+        "submission_file": "outputs_deberta_base_2048/submission.csv",
+        "submission_sha256": "50df86e2e1e8916247a9af4dfa294a87fd3723c9d4d232bef206ba1e7393abe2",
+        "score_counts": {
+          "1": 126,
+          "2": 517,
+          "3": 600,
+          "4": 368,
+          "5": 108,
+          "6": 12
+        },
+        "sample_id_order_verified": true,
+        "threshold_mapping_verified": true,
+        "status": "submitted",
+        "platform_score": 0.8203,
+        "metric": "quadratic_weighted_kappa",
+        "submitted_at_utc": "2026-09-16T19:16:10.494643+00:00",
+        "results_url": "https://aicodinggym.com/challenges/mle/learning-agency-lab-automated-essay-scoring-2",
+        "platform_code_branch": "learning-agency-lab-automated-essay-scoring-2"
+      }
+    }
+  ],
+  "B0": "Fixed half-integer thresholds on continuous regression predictions",
+  "B1": "Post-hoc thresholds fitted on calibration; not an ordinal training objective",
+  "final_validation_already_evaluated": true,
+  "final_validation_reference": "reports/rlt_final_comparison/report.json",
+  "proposed_pure_deberta_head_comparisons": [
+    "linear_mse",
+    "linear_huber",
+    "shared_score_ordered_bce"
+  ],
+  "proposed_comparisons_status": "not implemented or trained in pure DeBERTa"
+}
