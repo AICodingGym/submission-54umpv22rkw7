@@ -1,0 +1,14 @@
+{
+  "packages": {
+    "torch": "2.11.0+cu128",
+    "transformers": "4.57.6",
+    "numpy": "2.4.6",
+    "pandas": "3.0.5",
+    "scikit-learn": "1.9.1",
+    "sentencepiece": "0.2.1",
+    "tokenizers": "0.22.2"
+  },
+  "gpu": "NVIDIA GeForce RTX 3080",
+  "source_revision": "deberta_base_2048_supervised",
+  "model_parameters": 185675265
+}

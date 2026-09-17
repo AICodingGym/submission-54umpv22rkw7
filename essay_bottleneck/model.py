@@ -26,10 +26,13 @@ class BottleneckConfig:
     reconstruction_weight: float = 0.1
     finetune_encoder: bool = False
     normalize_queries: bool = False
+    score_objective: str = 'mse'
 
     def validate(self):
         if self.pooling not in {'latent', 'mean'}:
             raise ValueError('pooling must be latent or mean')
+        if self.score_objective not in {'mse', 'ordinal_bce'}:
+            raise ValueError('score_objective must be mse or ordinal_bce')
         if min(self.num_latents, self.latent_dim, self.num_heads) < 1:
             raise ValueError('latent counts and dimensions must be positive')
         if self.latent_dim % self.num_heads or self.latent_dim % 2:
@@ -120,9 +123,19 @@ class BottleneckRegressor(nn.Module):
             score_dim = hidden
         self.head = nn.Sequential(nn.LayerNorm(score_dim), nn.Linear(score_dim, config.latent_dim),
                                   nn.GELU(), nn.Dropout(config.dropout), nn.Linear(config.latent_dim, 1))
+        # Four positive gaps define five ordered cutpoints; centering avoids a redundant intercept.
+        self.ordinal_gaps = (nn.Parameter(torch.full((4,), math.log(math.expm1(1.))))
+                             if config.score_objective == 'ordinal_bce' else None)
         self.decoder = (ReconstructionDecoder(hidden, config)
                         if config.reconstruction_weight else None)
         self.train(for_training)
+
+    def ordinal_cutpoints(self):
+        if self.ordinal_gaps is None:
+            raise ValueError('Ordinal cutpoints require ordinal_bce')
+        gaps = F.softplus(self.ordinal_gaps.float()) + 1e-4
+        points = torch.cat((gaps.new_zeros(1), gaps.cumsum(0)))
+        return points - points.mean()
 
     def train(self, mode=True):
         super().train(mode)
@@ -164,18 +177,35 @@ class BottleneckRegressor(nn.Module):
         else:
             mask = attention_mask.unsqueeze(-1).float()
             representation = (hidden * mask).sum(1) / mask.sum(1)
-        scores = self.head(representation).squeeze(-1).float()
+        head_scores = self.head(representation).squeeze(-1).float()
+        ordinal_logits = None
+        if self.config.score_objective == 'ordinal_bce':
+            ordinal_logits = head_scores[:, None] - self.ordinal_cutpoints()[None]
+            scores = 1 + ordinal_logits.sigmoid().sum(-1)
+        else:
+            scores = head_scores
         result = {'scores': scores}
+        if ordinal_logits is not None:
+            result['ordinal_logits'] = ordinal_logits
         if labels is None:
             return result  # Inference never invokes the teacher or decoder.
         if labels.shape != scores.shape:
             raise ValueError('Expected one label per essay')
-        if score_weights is None:
-            score_loss = F.mse_loss(scores, labels.float())
-        else:
+        if score_weights is not None:
             if (score_weights.shape != scores.shape or score_weights.device != scores.device
                     or not torch.isfinite(score_weights).all() or (score_weights <= 0).any()):
                 raise ValueError('Expected one finite positive score weight per essay')
+        if ordinal_logits is not None:
+            if (not torch.isfinite(labels).all() or (labels < 1).any() or (labels > 6).any()
+                    or (labels != labels.round()).any()):
+                raise ValueError('Ordinal scoring requires integer grades in 1..6')
+            targets = (labels[:, None] > torch.arange(1, 6, device=labels.device)[None]).float()
+            per_essay = F.binary_cross_entropy_with_logits(ordinal_logits, targets,
+                                                           reduction='none').mean(-1)
+            score_loss = (per_essay if score_weights is None else per_essay * score_weights.float()).mean()
+        elif score_weights is None:
+            score_loss = F.mse_loss(scores, labels.float())
+        else:
             # Global train-average normalization happens before batching, not inside each microbatch.
             score_loss = (score_weights.float() * (scores - labels.float()).square()).mean()
         reconstruction_loss = scores.new_zeros(())

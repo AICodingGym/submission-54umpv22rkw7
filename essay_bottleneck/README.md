@@ -128,6 +128,13 @@ HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 ../.venv/bin/python -m essay_bottleneck.
 训练参数，冻结编码器不参与平均。最终产物仍是普通单模型，无需额外推理分支。
 配置记录评估权重类型，训练曲线记录累计 EMA 更新次数；不提供 EMA 续训状态。
 
+`--score-objective ordinal_bce` 将评分改为共享一个标量的五个有序二分类判断，
+标签是作文分数是否高于 1、2、3、4、5。四个 `softplus` 正间距生成五个居中的
+递增内部阈值，初始间距约为 1；二分类 logits 是共享标量减去各内部阈值。
+连续分数为 `1 + sum(sigmoid(logits))`，范围为 1–6。每篇先平均五项 BCE，
+再按既有逐篇权重平均；重建损失不变。内部阈值只由 train 学习，与训练后仅在
+calibration 拟合的 B1 分档阈值不同。默认 `mse` 保留旧评分头行为与检查点兼容。
+
 ```bash
 HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 ../.venv/bin/python -m essay_bottleneck.train \
   --source models/deberta_base_2048_supervised --init-run runs/rlt_warm_norm_v1 \

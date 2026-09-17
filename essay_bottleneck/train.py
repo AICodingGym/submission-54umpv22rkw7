@@ -42,6 +42,7 @@ def parse_args():
     parser.add_argument('--num-heads', type=int, default=4)
     parser.add_argument('--dropout', type=float, default=0.1)
     parser.add_argument('--reconstruction-weight', type=float, default=0.1)
+    parser.add_argument('--score-objective', choices=['mse', 'ordinal_bce'], default='mse')
     parser.add_argument('--finetune-encoder', action='store_true')
     parser.add_argument('--normalize-queries', action='store_true')
     parser.add_argument('--group-microbatches', action='store_true',
@@ -49,7 +50,7 @@ def parse_args():
     parser.add_argument('--cache-frozen-features', action='store_true',
                         help='Cache train-only frozen encoder features in CPU RAM')
     parser.add_argument('--class-weight-power', type=float, default=0.,
-                        help='Inverse train class-frequency power for score MSE; 0 disables weighting')
+                        help='Inverse train class-frequency power for scoring loss; 0 disables weighting')
     parser.add_argument('--ema-decay', type=float, default=0.,
                         help='Trainable-parameter EMA for evaluation and export; 0 disables it')
     parser.add_argument('--encoder-lr', type=float, default=2e-5)

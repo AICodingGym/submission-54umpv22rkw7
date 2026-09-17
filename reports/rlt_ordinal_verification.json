@@ -1,0 +1,35 @@
+{
+  "synthetic_cpu_checks": [
+    {
+      "finetune_encoder": false,
+      "weighted_bce_matches_manual": true,
+      "cutpoints_ordered": true,
+      "threshold_probabilities_monotone": true,
+      "scores_in_1_to_6": true,
+      "cutpoint_gradients_finite_nonzero": true,
+      "encoder_teacher_gradient_boundaries": true,
+      "padding_invariant": true,
+      "save_reload_exact": true,
+      "invalid_grades_rejected": true
+    },
+    {
+      "finetune_encoder": true,
+      "weighted_bce_matches_manual": true,
+      "cutpoints_ordered": true,
+      "threshold_probabilities_monotone": true,
+      "scores_in_1_to_6": true,
+      "cutpoint_gradients_finite_nonzero": true,
+      "encoder_teacher_gradient_boundaries": true,
+      "padding_invariant": true,
+      "save_reload_exact": true,
+      "invalid_grades_rejected": true
+    }
+  ],
+  "gpu_smoke": "passed",
+  "gpu_optimizer_updates": 3,
+  "ordinal_gaps_updated": true,
+  "selected_metrics_match_reloaded_export": true,
+  "existing_model_verifier": "passed",
+  "existing_length_verifier": "passed",
+  "final_validation_evaluated": false
+}

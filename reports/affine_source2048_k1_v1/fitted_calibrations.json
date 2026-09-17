@@ -1,0 +1,81 @@
+{
+  "method": "Affine score calibration; slope 0.7..1.4 step 0.005, offset -1..1 step 0.005",
+  "tie_break": "Smallest mean squared threshold displacement from half integers",
+  "code_sha256": "2371b00037be020af93fb0b1051964fede2cf5677cefdb5f330670d6e79c8a98",
+  "models": {
+    "rlt_source2048_k1_v1": {
+      "source_dir": "/home/chao/test/learning-agency-lab-automated-essay-scoring-2/runs/rlt_source2048_k1_v1",
+      "model_sha256": "f3d929989df948b74694bbb337e8b19abb939b480fdf10429cf81ece06b56eba",
+      "fit_split": "calibration",
+      "source_calibration_sha256": "47c14c3775922ff028f58941ba93fcfed661ef9d74f999329382791cae801d25",
+      "calibration": {
+        "slope": 1.045,
+        "offset": -0.11499999999999999,
+        "thresholds": [
+          1.5454545454545456,
+          2.502392344497608,
+          3.4593301435406705,
+          4.416267942583732,
+          5.373205741626795
+        ],
+        "calibration_qwk": 0.8244108498774454
+      },
+      "calibration_metrics": {
+        "rows": 1557,
+        "qwk": 0.8244108498774453,
+        "mae": 0.35260115606936415,
+        "continuous_mae": 0.43203325706486834,
+        "confusion_matrix": [
+          [
+            75,
+            36,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            48,
+            286,
+            86,
+            5,
+            0,
+            0
+          ],
+          [
+            2,
+            116,
+            372,
+            71,
+            2,
+            0
+          ],
+          [
+            1,
+            8,
+            90,
+            234,
+            23,
+            0
+          ],
+          [
+            0,
+            0,
+            1,
+            29,
+            55,
+            2
+          ],
+          [
+            0,
+            0,
+            1,
+            0,
+            4,
+            9
+          ]
+        ]
+      }
+    }
+  }
+}

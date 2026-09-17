@@ -1,0 +1,11 @@
+{
+  "thresholds": [
+    1.58625,
+    2.349375,
+    3.46875,
+    4.4375,
+    5.114249999999998
+  ],
+  "fit_split": "calibration",
+  "selected_epoch": 4
+}
