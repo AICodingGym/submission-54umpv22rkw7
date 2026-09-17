@@ -1,0 +1,137 @@
+{
+  "model": "dual_01 epoch 4",
+  "sample_rows": 32,
+  "seeds": [
+    42,
+    17,
+    2026
+  ],
+  "eval_max_difference": 0.0,
+  "dropout_modules": [
+    {
+      "name": "encoder.embeddings.dropout",
+      "type": "Dropout",
+      "p": 0.1
+    },
+    {
+      "name": "encoder.encoder.layer.0.attention.self.pos_dropout",
+      "type": "Dropout",
+      "p": 0.1
+    },
+    {
+      "name": "encoder.encoder.layer.0.attention.self.dropout",
+      "type": "Dropout",
+      "p": 0.1
+    },
+    {
+      "name": "encoder.encoder.layer.0.attention.output.dropout",
+      "type": "Dropout",
+      "p": 0.1
+    },
+    {
+      "name": "encoder.encoder.layer.0.output.dropout",
+      "type": "Dropout",
+      "p": 0.1
+    },
+    {
+      "name": "encoder.encoder.layer.1.attention.self.pos_dropout",
+      "type": "Dropout",
+      "p": 0.1
+    },
+    {
+      "name": "encoder.encoder.layer.1.attention.self.dropout",
+      "type": "Dropout",
+      "p": 0.1
+    },
+    {
+      "name": "encoder.encoder.layer.1.attention.output.dropout",
+      "type": "Dropout",
+      "p": 0.1
+    },
+    {
+      "name": "encoder.encoder.layer.1.output.dropout",
+      "type": "Dropout",
+      "p": 0.1
+    },
+    {
+      "name": "encoder.encoder.layer.2.attention.self.pos_dropout",
+      "type": "Dropout",
+      "p": 0.1
+    },
+    {
+      "name": "encoder.encoder.layer.2.attention.self.dropout",
+      "type": "Dropout",
+      "p": 0.1
+    },
+    {
+      "name": "encoder.encoder.layer.2.attention.output.dropout",
+      "type": "Dropout",
+      "p": 0.1
+    },
+    {
+      "name": "encoder.encoder.layer.2.output.dropout",
+      "type": "Dropout",
+      "p": 0.1
+    },
+    {
+      "name": "encoder.encoder.layer.3.attention.self.pos_dropout",
+      "type": "Dropout",
+      "p": 0.1
+    },
+    {
+      "name": "encoder.encoder.layer.3.attention.self.dropout",
+      "type": "Dropout",
+      "p": 0.1
+    },
+    {
+      "name": "encoder.encoder.layer.3.attention.output.dropout",
+      "type": "Dropout",
+      "p": 0.1
+    },
+    {
+      "name": "encoder.encoder.layer.3.output.dropout",
+      "type": "Dropout",
+      "p": 0.1
+    },
+    {
+      "name": "encoder.encoder.layer.4.attention.self.pos_dropout",
+      "type": "Dropout",
+      "p": 0.1
+    },
+    {
+      "name": "encoder.encoder.layer.4.attention.self.dropout",
+      "type": "Dropout",
+      "p": 0.1
+    },
+    {
+      "name": "encoder.encoder.layer.4.attention.output.dropout",
+      "type": "Dropout",
+      "p": 0.1
+    },
+    {
+      "name": "encoder.encoder.layer.4.output.dropout",
+      "type": "Dropout",
+      "p": 0.1
+    },
+    {
+      "name": "encoder.encoder.layer.5.attention.self.pos_dropout",
+      "type": "Dropout",
+      "p": 0.1
+    },
+    {
+      "name": "encoder.encoder.layer.5.attention.self.dropout",
+      "type": "Dropout",
+      "p": 0.1
+    },
+    {
+      "name": "encoder.encoder.layer.5.attention.output.dropout",
+      "type": "Dropout",
+      "p": 0.1
+    },
+    {
+      "name": "encoder.encoder.layer.5.output.dropout",
+      "type": "Dropout",
+      "p": 0.1
+    }
+  ]
+}

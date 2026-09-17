@@ -1,0 +1,11 @@
+{
+  "thresholds": [
+    1.4791666666666667,
+    2.3346666666666667,
+    3.34375,
+    4.302083333333333,
+    4.7938333333333345
+  ],
+  "fit_split": "calibration",
+  "prediction": "mean of three seeded dropout regression outputs"
+}

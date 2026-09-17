@@ -1,0 +1,11 @@
+{
+  "model_sha256": "1c5f9bfe7815af6dbf8e3e1c3e6243b21a424ddaec0ea75b060f2dc85f75339d",
+  "seeds": [
+    42,
+    17,
+    2026
+  ],
+  "batch_size": 4,
+  "dropout_p": 0.1,
+  "source": "runs/small1024_dualhead_v1/dual_01_interim_submission"
+}
