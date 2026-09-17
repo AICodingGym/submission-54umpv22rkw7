@@ -1,5 +1,5 @@
 {
-  "status": "ready",
+  "status": "submitted",
   "kind": "baseline_rlt_weighted_blend",
   "single_model": false,
   "file": "runs/rlt_baseline512_blend075_v1/submission.csv",
@@ -15,7 +15,13 @@
     "5": 110,
     "6": 9
   },
-  "final_validation_evaluated": false,
+  "final_validation_evaluated": true,
   "platform_target": 0.82349,
-  "fresh_test_predictions_equal_saved_component_blend": true
+  "fresh_test_predictions_equal_saved_component_blend": true,
+  "platform_score": 0.82452,
+  "platform_delta_vs_best": 0.0010299999999999754,
+  "beats_platform_target": true,
+  "submission_log": "artifacts/rlt_baseline512_blend075_v1_submit.log",
+  "results_url": "https://aicodinggym.com/challenges/mle/learning-agency-lab-automated-essay-scoring-2",
+  "final_comparison": "reports/rlt_final_comparison/report.json"
 }

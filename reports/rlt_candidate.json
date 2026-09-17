@@ -1,5 +1,5 @@
 {
-  "status": "audited_ready_for_submission",
+  "status": "completed_and_submitted",
   "kind": "baseline_rlt_weighted_blend",
   "single_model": false,
   "model_dir": "runs/rlt_baseline512_blend075_v1",
@@ -23,7 +23,67 @@
   "selection_target": 0.8341167069970928,
   "selection_qwk_delta": 0.0010017198604727051,
   "platform_target": 0.82349,
-  "final_validation_evaluated": false,
+  "final_validation_evaluated": true,
   "previous_candidate": "runs/rlt_baseline_blend_v1",
-  "note": "Explicit 25% 512-token baseline + 75% full-text RLT fusion; not a standalone RLT result."
+  "note": "Explicit 25% 512-token baseline + 75% full-text RLT fusion; not a standalone RLT result.",
+  "platform_score": 0.82452,
+  "beats_platform_target": true,
+  "final_validation": {
+    "rows": 1557,
+    "qwk": 0.8151591671563934,
+    "mae": 0.37315350032113037,
+    "continuous_mae": 0.4376085069444444,
+    "confusion_matrix": [
+      [
+        78,
+        27,
+        7,
+        0,
+        0,
+        0
+      ],
+      [
+        45,
+        312,
+        65,
+        3,
+        0,
+        0
+      ],
+      [
+        9,
+        115,
+        352,
+        83,
+        3,
+        1
+      ],
+      [
+        0,
+        2,
+        107,
+        206,
+        41,
+        0
+      ],
+      [
+        0,
+        0,
+        2,
+        28,
+        55,
+        3
+      ],
+      [
+        0,
+        0,
+        0,
+        2,
+        8,
+        3
+      ]
+    ]
+  },
+  "final_comparison": "reports/rlt_final_comparison/report.json",
+  "standalone_rlt_beats_old_platform_best": false
 }

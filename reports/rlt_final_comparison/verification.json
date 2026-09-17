@@ -1,0 +1,19 @@
+{
+  "rows_per_model": 1557,
+  "models": [
+    "candidate",
+    "selection_benchmark",
+    "platform_benchmark",
+    "rlt_component"
+  ],
+  "stored_metrics_recomputed": true,
+  "all_integer_predictions_match": true,
+  "manifest_sha256": "7976f2420711e571346a0800a593964e17564aaea7d7f1950d4391ab64c81cd2",
+  "prediction_files_sha256": {
+    "candidate_predictions.csv": "159f6f9853bb291926a18178d62a2fdd8288ab2ae61a8c57f11a0c9a58d0c95c",
+    "selection_benchmark_predictions.csv": "7e9b5da7b6686ff79b345a2aa76d656721b6895e480ca5432c8713cd81e7d692",
+    "platform_benchmark_predictions.csv": "0e0e33afb2977f1ab29d13cb4aebf88fc9b1f94c1773124aa39b235c6ce9cdb8",
+    "rlt_component_predictions.csv": "95fc967372a81caa05cf7b1a4221ba588be8c735d32bc5eed4fde340f719fa4c"
+  },
+  "model_or_threshold_fitting_on_final_validation": false
+}
