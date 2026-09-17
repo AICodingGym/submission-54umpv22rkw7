@@ -1,0 +1,156 @@
+{
+  "generated_at_utc": "2026-09-17T06:05:04.611198+00:00",
+  "split_sha256": "6a744961c657093ef34c4910660acaeb0f7bbe8a03c156f01415a1be08c8f588",
+  "data_sha256": "ce6b0bd2c7d790a64ad3d2a8e15e3563d90e881c787638caa93504445caa65d0",
+  "primary_evaluation_split": "selection",
+  "final_validation_predictions_used": false,
+  "normalization": "Each true-score row sums to 100%; counts also shown in individual figures.",
+  "models": [
+    {
+      "id": "small512",
+      "label": "small-512 · 原始回归",
+      "run_dir": "outputs_deberta",
+      "selected_epoch": 4,
+      "prediction_files": {
+        "selection": {
+          "rows": 1557,
+          "sha256": "ffabd43a11b848b3aa885efff0b08590f38683682b2704a7ab29a1515d35d155"
+        },
+        "train": {
+          "rows": 10905,
+          "sha256": "5d86cb01f26febd3a1bb7ff3bc0b6c3861dc29c0e2cd69d7d1234419acb843cd"
+        }
+      }
+    },
+    {
+      "id": "base512",
+      "label": "base-512 · 原始回归",
+      "run_dir": "outputs_deberta_base",
+      "selected_epoch": 5,
+      "prediction_files": {
+        "selection": {
+          "rows": 1557,
+          "sha256": "2dff16229c17a9b9f5296d9d12262d661e285af14846aec6470e323d89e30703"
+        },
+        "train": {
+          "rows": 10905,
+          "sha256": "21ad6933af5a02acf79aab6497ed2996f83b40652b606e18c49160201e879cd4"
+        }
+      }
+    },
+    {
+      "id": "base2048",
+      "label": "base-2048 · 原始回归",
+      "run_dir": "outputs_deberta_base_2048",
+      "selected_epoch": 5,
+      "prediction_files": {
+        "selection": {
+          "rows": 1557,
+          "sha256": "e502e7159054b5505900776711fc9db1f06531c7a7fcc467cf98ebea7a6c04a3"
+        },
+        "train": {
+          "rows": 10905,
+          "sha256": "c652f3eea8b83139b7a3a9c9be09369ee66227d11da9061f04cfb94df002f095"
+        }
+      }
+    },
+    {
+      "id": "small1024_baseline",
+      "label": "small-1024 · 首轮回归",
+      "run_dir": "runs/small1024_pooling_v1/baseline",
+      "selected_epoch": 6,
+      "prediction_files": {
+        "selection": {
+          "rows": 1557,
+          "sha256": "531bac4449f3ee8a6f6cca2ba374f823cb9cad7dc900abc8d3dec77b2210717a"
+        },
+        "train": {
+          "rows": 10905,
+          "sha256": "6ae0f33849b597bd28317b263623fbcaf2fde9535ca45430a230a615ed6a1ad3"
+        }
+      }
+    },
+    {
+      "id": "small1024_frozen_mean",
+      "label": "small-1024 · 冻结 mean",
+      "run_dir": "runs/small1024_pooling_v1/frozen_mean",
+      "selected_epoch": 5,
+      "prediction_files": {
+        "selection": {
+          "rows": 1557,
+          "sha256": "fb1e9a8fd9d63b7a01e6e6e67b94dda087516164394a06c2da517ca5e58cf5ab"
+        },
+        "train": {
+          "rows": 10905,
+          "sha256": "2fc8f1e653532642ec7f5cec781de2306dba14b9f33ec8398c612e752f9710d7"
+        }
+      }
+    },
+    {
+      "id": "small1024_frozen_attention",
+      "label": "small-1024 · 冻结 attention",
+      "run_dir": "runs/small1024_pooling_v1/frozen_attention",
+      "selected_epoch": 2,
+      "prediction_files": {
+        "selection": {
+          "rows": 1557,
+          "sha256": "e9b3651c701f46f5f2dcfedbfb2c751293cfbf1db0171b1b74383cf562c59b1a"
+        },
+        "train": {
+          "rows": 10905,
+          "sha256": "cb1f2fff568131b38db1b0a52503405d0a398b7afb9dbe2ff10ae56db69cbe8a"
+        }
+      }
+    },
+    {
+      "id": "small1024_regression_control",
+      "label": "small-1024 · 本轮回归对照",
+      "run_dir": "runs/small1024_dualhead_v1/regression",
+      "selected_epoch": 5,
+      "prediction_files": {
+        "selection": {
+          "rows": 1557,
+          "sha256": "ad25a1492f476ab93cdce5bd35f2102c5201df623cc5e2c9a82a9d4f1ccca90f"
+        },
+        "train": {
+          "rows": 10905,
+          "sha256": "c6b87a383808852b804858b9b89c849cea13f84bda9e808c0afdd8ecaf9d48e6"
+        }
+      }
+    },
+    {
+      "id": "small1024_dual01",
+      "label": "small-1024 · 双头 λ=0.1（回归输出）",
+      "run_dir": "runs/small1024_dualhead_v1/dual_01",
+      "selected_epoch": 4,
+      "prediction_files": {
+        "selection": {
+          "rows": 1557,
+          "sha256": "9a100693862c0b9d95d69f7f53dd87e01e35369562283a305e134b13fb8c6c90"
+        },
+        "train": {
+          "rows": 10905,
+          "sha256": "364e61f7e564020b7b1159324d30f83e73c87581b391a75f756691cf0629b7d7"
+        }
+      }
+    }
+  ],
+  "train_counts": {
+    "all_labeled": {
+      "1": 1124,
+      "2": 4249,
+      "3": 5629,
+      "4": 3563,
+      "5": 876,
+      "6": 135
+    },
+    "train": {
+      "1": 788,
+      "2": 2974,
+      "3": 3940,
+      "4": 2495,
+      "5": 613,
+      "6": 95
+    }
+  }
+}
