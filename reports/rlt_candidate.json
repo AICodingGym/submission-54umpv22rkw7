@@ -1,31 +1,29 @@
 {
-  "status": "submitted_below_platform_target",
-  "kind": "baseline_rlt_equal_blend",
+  "status": "audited_ready_for_submission",
+  "kind": "baseline_rlt_weighted_blend",
   "single_model": false,
-  "model_dir": "runs/rlt_baseline_blend_v1",
-  "version": "B0",
+  "model_dir": "runs/rlt_baseline512_blend075_v1",
+  "version": "affine",
   "components": [
     {
-      "model_dir": "/home/chao/test/learning-agency-lab-automated-essay-scoring-2/outputs_deberta_base_2048",
-      "weight": 0.5,
-      "model_sha256": "6d8a90152fab45d55890527e4ec6fb510e0b778919f38991babeeb19d5f21a51"
+      "model_dir": "/home/chao/test/learning-agency-lab-automated-essay-scoring-2/outputs_deberta_base",
+      "weight": 0.25,
+      "model_sha256": "980f20c2bf44e9dadcd9008849368819f795dc666a1c7bfe5dc18b2af2982eb6"
     },
     {
       "model_dir": "/home/chao/test/learning-agency-lab-automated-essay-scoring-2/runs/rlt_cached_norm_v1",
-      "weight": 0.5,
+      "weight": 0.75,
       "model_sha256": "2106da2676b4ea51cc8ef16ff1a111cc46b1f8bc20301c166e23234e707b14d5"
     }
   ],
   "selection": {
-    "qwk": 0.8371808356510371,
-    "mae": 0.33397559409120103
+    "qwk": 0.8351184268575655,
+    "mae": 0.3416827231856134
   },
   "selection_target": 0.8341167069970928,
-  "selection_qwk_delta": 0.0030641286539442314,
+  "selection_qwk_delta": 0.0010017198604727051,
   "platform_target": 0.82349,
   "final_validation_evaluated": false,
-  "previous_candidate": "runs/rlt_ema095_affine_v1",
-  "note": "Explicit 50/50 baseline + RLT fusion; not evidence that a standalone RLT model beats the baseline.",
-  "platform_score": 0.82176,
-  "beats_platform_target": false
+  "previous_candidate": "runs/rlt_baseline_blend_v1",
+  "note": "Explicit 25% 512-token baseline + 75% full-text RLT fusion; not a standalone RLT result."
 }

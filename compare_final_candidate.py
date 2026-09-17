@@ -72,10 +72,12 @@ def freeze_blend_entry(directory, version):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--candidate-run', type=Path, required=True)
-    parser.add_argument('--version', choices=['B0', 'B1'], required=True)
+    parser.add_argument('--version', choices=['B0', 'B1', 'affine'], required=True)
     parser.add_argument('--candidate-kind', choices=['bottleneck', 'blend'], default='bottleneck')
     parser.add_argument('--device', choices=['cpu', 'cuda'], default='cuda')
     args = parser.parse_args()
+    if args.version == 'affine' and args.candidate_kind != 'blend':
+        parser.error('Standalone affine candidates must be packaged as B1 first')
     torch.set_num_threads(4)
     benchmarks = json.loads((ROOT / 'reports/strong_baseline.json').read_text())
     entries = {'candidate': (freeze_blend_entry(args.candidate_run, args.version)

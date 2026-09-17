@@ -1,6 +1,7 @@
-"""Prespecified 50/50 blend of a frozen baseline and RLT; not a single-model result."""
+"""Prespecified weighted blend of a frozen baseline and RLT; not a single-model result."""
 import argparse
 import json
+import math
 from pathlib import Path
 
 import numpy as np
@@ -17,7 +18,10 @@ def main():
     parser.add_argument('--baseline-run', type=Path, required=True)
     parser.add_argument('--rlt-run', type=Path, required=True)
     parser.add_argument('--output-dir', type=Path, required=True)
+    parser.add_argument('--rlt-weight', type=float, default=0.5)
     args = parser.parse_args()
+    if not math.isfinite(args.rlt_weight) or not 0 < args.rlt_weight < 1:
+        parser.error('--rlt-weight must be finite and strictly between 0 and 1')
     output = args.output_dir.resolve()
     if output.exists():
         raise ValueError('Refusing to overwrite a blend experiment')
@@ -25,9 +29,9 @@ def main():
                freeze_entry(args.rlt_run, 'B0', 'bottleneck')]
     if any(entries[0][key] != entries[1][key] for key in ['split_sha256', 'data_sha256']):
         raise ValueError('Blend components use different data or splits')
-    for entry in entries:
-        entry['weight'] = 0.5
-    manifest = {'kind': 'baseline_rlt_equal_blend', 'single_model': False,
+    entries[0]['weight'], entries[1]['weight'] = 1 - args.rlt_weight, args.rlt_weight
+    kind = 'baseline_rlt_equal_blend' if args.rlt_weight == 0.5 else 'baseline_rlt_weighted_blend'
+    manifest = {'kind': kind, 'single_model': False,
                 'components': entries, 'fit_weights': False,
                 'preparation_code_sha256': sha256(Path(__file__)),
                 'final_validation_evaluated': False}
@@ -50,8 +54,8 @@ def main():
         other = frames[1].loc[frames[0].index]
         if not np.array_equal(frames[0].score, other.score):
             raise ValueError('Labels differ between components')
-        raw = (frames[0].raw_prediction.to_numpy(dtype=np.float64)
-               + other.raw_prediction.to_numpy(dtype=np.float64)) / 2
+        raw = (entries[0]['weight'] * frames[0].raw_prediction.to_numpy(dtype=np.float64)
+               + entries[1]['weight'] * other.raw_prediction.to_numpy(dtype=np.float64))
         return frames[0][['score']].assign(raw_prediction=raw).reset_index()
 
     calibration = blend('calibration')

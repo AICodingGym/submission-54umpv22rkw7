@@ -133,6 +133,15 @@
 17. 下一融合对照仍固定 50/50，仅把基线组件替换为 `outputs_deberta_base` 的
     512-token 模型，RLT 组件继续使用全文 `rlt_cached_norm_v1`。
     输出 `runs/rlt_baseline512_blend_v1/`，仍先在 calibration 拟合分档方案，再评估 selection。
+    本地 B0 / B1 / 仿射 QWK 为 0.831461 / 0.828890 / 0.833038，未达到固定目标，
+    未提交平台；因此没有额外执行 GPU 重载审计。
+18. 再预设 RLT 权重 0.75、512 基线权重 0.25；权重仍不拟合，阈值仅在 calibration
+    拟合。输出 `runs/rlt_baseline512_blend075_v1/`，B0 / B1 / 仿射 QWK 为
+    0.832472 / 0.826898 / **0.835118**；选择仿射方案，MAE **0.341683**。
+    此候选超过原固定选择集目标，但不超过此前 2048 基线融合的选择集结果；
+    后者的平台成绩未达目标，因此保留所有结果，继续分别检查两套标准。
+    `prepare_rlt_blend.py --rlt-weight 0.75` 固定权重，`score_rlt_blend.py --version affine`
+    使用冻结分档方案。它仍是基线与 RLT 融合，不作为单模型胜出的证据。
 
 现有实现的 `essay_bottleneck.verify` 和 `essay_bottleneck.verify_lengths`
 均已通过。它们验证实现正确性，不衡量正式评分质量。日志保存在

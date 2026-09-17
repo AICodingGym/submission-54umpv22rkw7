@@ -19,10 +19,14 @@ class BlendScorer:
         self.device = device
         self.manifest = json.loads((self.directory / 'components.json').read_text())
         self.entries = self.manifest['components']
-        if (self.manifest['kind'] != 'baseline_rlt_equal_blend' or len(self.entries) != 2
+        if (self.manifest['kind'] not in {'baseline_rlt_equal_blend', 'baseline_rlt_weighted_blend'}
+                or len(self.entries) != 2
                 or [entry['kind'] for entry in self.entries] != ['baseline', 'bottleneck']
-                or any(entry['weight'] != 0.5 for entry in self.entries)):
-            raise ValueError('Expected the prespecified 50/50 baseline/RLT blend')
+                or any(not np.isfinite(entry['weight']) or not 0 < entry['weight'] < 1 for entry in self.entries)
+                or not np.isclose(sum(entry['weight'] for entry in self.entries), 1., atol=1e-12, rtol=0)
+                or (self.manifest['kind'] == 'baseline_rlt_equal_blend'
+                    and any(entry['weight'] != 0.5 for entry in self.entries))):
+            raise ValueError('Expected a valid prespecified baseline/RLT blend')
         bounds = json.loads((self.directory / 'thresholds.json').read_text())['versions']
         self.thresholds = np.asarray(bounds[version], dtype=np.float64)
         if (self.thresholds.shape != (5,) or not np.isfinite(self.thresholds).all()
@@ -48,7 +52,7 @@ class BlendScorer:
             del scorer
             if self.device == 'cuda':
                 torch.cuda.empty_cache()
-        raw = (self.component_predictions[0] + self.component_predictions[1]) / 2
+        raw = sum(entry['weight'] * values for entry, values in zip(self.entries, self.component_predictions))
         if not np.isfinite(raw).all():
             raise ValueError('Nonfinite blend predictions')
         return raw, integer_scores(raw, self.thresholds)
@@ -74,7 +78,8 @@ def audit(directory, device):
         parts = [pd.read_csv(Path(e['directory']) / f'{name}_predictions.csv', dtype={'essay_id': str})
                  .set_index('essay_id').loc[frame.essay_id].raw_prediction.to_numpy(dtype=np.float64)
                  for e in scorer.entries]
-        if not np.array_equal(frame.raw_prediction, (parts[0] + parts[1]) / 2):
+        expected = sum(entry['weight'] * values for entry, values in zip(scorer.entries, parts))
+        if not np.array_equal(frame.raw_prediction, expected):
             raise ValueError('Stored predictions differ from the fixed blend')
         for version, bounds in thresholds.items():
             if not np.array_equal(frame[version], integer_scores(frame.raw_prediction.to_numpy(), bounds)):
@@ -96,7 +101,7 @@ def audit(directory, device):
         raise ValueError('Reloaded blend predictions changed')
     code = [ROOT / f for f in ['score_rlt_blend.py', 'score_deberta.py', 'deberta_baseline.py']]
     code += sorted((ROOT / 'essay_bottleneck').glob('*.py'))
-    verification = {'kind': 'baseline_rlt_equal_blend', 'single_model': False,
+    verification = {'kind': scorer.manifest['kind'], 'single_model': False,
                     'components_sha256': sha256(directory / 'components.json'),
                     'thresholds_sha256': sha256(directory / 'thresholds.json'),
                     'all_report_metrics_recomputed': True, 'all_integer_predictions_match': True,

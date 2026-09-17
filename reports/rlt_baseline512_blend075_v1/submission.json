@@ -1,0 +1,21 @@
+{
+  "status": "ready",
+  "kind": "baseline_rlt_weighted_blend",
+  "single_model": false,
+  "file": "runs/rlt_baseline512_blend075_v1/submission.csv",
+  "rows": 1731,
+  "sha256": "df8dfb9fef3694356a4e92ee92eaf59334a37bdeeea9e983e46e5bd8e5b64fc3",
+  "components_sha256": "f7bc331695d18d13ee864e0c341dfdb0e0ee18b91db205e1a10281b320284038",
+  "version": "affine",
+  "score_counts": {
+    "1": 142,
+    "2": 540,
+    "3": 584,
+    "4": 346,
+    "5": 110,
+    "6": 9
+  },
+  "final_validation_evaluated": false,
+  "platform_target": 0.82349,
+  "fresh_test_predictions_equal_saved_component_blend": true
+}
