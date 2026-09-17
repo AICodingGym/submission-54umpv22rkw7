@@ -1,0 +1,23 @@
+{
+  "model": "microsoft/deberta-v3-small",
+  "max_length": 1024,
+  "pooling": "attention",
+  "encoder_frozen": true,
+  "run_dir": "runs/small1024_pooling_v1/frozen_attention",
+  "selected_epoch": 2,
+  "version": "B1",
+  "rows": 1731,
+  "submission_file": "reports/small1024_attention_submission/submission.csv",
+  "submission_sha256": "384dd0aa74f2af3f4b347bb6147916142c5a02569ca2de3e43ca9638ea0affff",
+  "score_counts": {
+    "1": 169,
+    "2": 435,
+    "3": 649,
+    "4": 364,
+    "5": 95,
+    "6": 19
+  },
+  "sample_id_order_verified": true,
+  "threshold_mapping_verified": true,
+  "status": "prepared"
+}
