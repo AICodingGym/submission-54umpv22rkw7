@@ -121,6 +121,13 @@ HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 ../.venv/bin/python -m essay_bottleneck.
 权重按全体训练样本归一化，不能在每个小批次内重新除以权重和，
 以保持梯度累积的样本权重一致。配置保存频数和实际使用的六个权重。
 
+`--ema-decay 0.95` 可启用训练参数的指数滑动平均，默认 `0` 关闭。
+目前仅允许冻结编码器的实验；影子权重从初始任务参数复制，每次优化器更新后
+执行 `EMA = decay × EMA + (1-decay) × 当前参数`，不做偏差校正。
+训练仍使用优化器参数，逐轮评估和最佳检查点导出使用 EMA 参数；评估结束会恢复
+训练参数，冻结编码器不参与平均。最终产物仍是普通单模型，无需额外推理分支。
+配置记录评估权重类型，训练曲线记录累计 EMA 更新次数；不提供 EMA 续训状态。
+
 ```bash
 HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 ../.venv/bin/python -m essay_bottleneck.train \
   --source models/deberta_base_2048_supervised --init-run runs/rlt_warm_norm_v1 \

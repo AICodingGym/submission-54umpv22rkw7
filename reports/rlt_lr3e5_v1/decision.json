@@ -1,0 +1,8 @@
+{
+  "beats_fixed_selection_target": true,
+  "platform_submitted": false,
+  "final_validation_evaluated": false,
+  "qualifying_version": "affine",
+  "affine_selection_qwk": 0.834181746749442,
+  "reason_not_selected": "Below existing RLT candidate selection QWK 0.8342006147154317"
+}

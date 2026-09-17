@@ -6,6 +6,7 @@ import math
 import random
 import subprocess
 import time
+from contextlib import nullcontext
 from dataclasses import asdict
 from pathlib import Path
 
@@ -19,6 +20,7 @@ from deberta_baseline import (FIXED, ROOT, fit_thresholds, integer_scores, metri
 from .model import BottleneckConfig, BottleneckRegressor
 from .batching import encode_texts, group_within_effective_batches, pad_batch
 from .features import cache_encoder_features, pad_cached_features
+from .averaging import ParameterEMA
 
 
 def parse_args():
@@ -48,6 +50,8 @@ def parse_args():
                         help='Cache train-only frozen encoder features in CPU RAM')
     parser.add_argument('--class-weight-power', type=float, default=0.,
                         help='Inverse train class-frequency power for score MSE; 0 disables weighting')
+    parser.add_argument('--ema-decay', type=float, default=0.,
+                        help='Trainable-parameter EMA for evaluation and export; 0 disables it')
     parser.add_argument('--encoder-lr', type=float, default=2e-5)
     parser.add_argument('--head-lr', type=float, default=1e-4)
     parser.add_argument('--seed', type=int, default=42)
@@ -67,6 +71,10 @@ def parse_args():
         parser.error('--cache-frozen-features requires a frozen encoder')
     if not math.isfinite(args.class_weight_power) or not 0 <= args.class_weight_power <= 1:
         parser.error('--class-weight-power must be finite and in [0, 1]')
+    if not math.isfinite(args.ema_decay) or not 0 <= args.ema_decay < 1:
+        parser.error('--ema-decay must be finite and in [0, 1)')
+    if args.ema_decay and args.finetune_encoder:
+        parser.error('--ema-decay currently requires a frozen encoder')
     return args
 
 
@@ -199,6 +207,7 @@ def main():
                   padding='batch_longest',
                   teacher='frozen initial encoder' if architecture.reconstruction_weight else None,
                   class_weights=class_weights.tolist(), train_class_counts=class_counts.tolist(),
+                  evaluation_weights='ema' if args.ema_decay else 'optimizer',
                   lengths={name: {'rows': len(v), 'truncated': int(truncated[name].sum()),
                                   'max_tokens': int(v.max())} for name, v in lengths.items()})
     if initial_provenance is not None:
@@ -251,6 +260,7 @@ def main():
 
     score_weight_table = (torch.tensor(class_weights, dtype=torch.float32, device=device)
                           if args.class_weight_power else None)
+    ema = ParameterEMA(model, args.ema_decay) if args.ema_decay else None
     best, best_epoch, history = -np.inf, None, []
     for epoch in range(epochs):
         model.train()
@@ -281,6 +291,8 @@ def main():
             if (batch + 1) % accumulation == 0 or batch + 1 == batches:
                 torch.nn.utils.clip_grad_norm_(task_params + encoder_params, 1., error_if_nonfinite=True)
                 optimizer.step()
+                if ema is not None:
+                    ema.update()
                 scheduler.step()
                 optimizer.zero_grad(set_to_none=True)
             if batch % 50 == 0 or batch + 1 == batches:
@@ -289,20 +301,23 @@ def main():
                             **{key: result[key].detach().item() for key in sums}}
                 write_json(output / 'progress.json', progress)
                 print(json.dumps(progress), flush=True)
-        raw = predict('selection')
-        selection = metrics(data['selection'].score.to_numpy(), raw, FIXED)
+        with ema.apply() if ema is not None else nullcontext():
+            raw = predict('selection')
+            selection = metrics(data['selection'].score.to_numpy(), raw, FIXED)
+            if selection['qwk'] is not None and selection['qwk'] > best:
+                best, best_epoch = selection['qwk'], epoch + 1
+                model.save(output / 'model')
+                tokenizer.save_pretrained(output / 'model')
         history.append({'epoch': epoch + 1, 'seconds': time.monotonic() - start,
                         **{key: value / len(order) for key, value in sums.items()}, 'selection': selection})
-        if selection['qwk'] is not None and selection['qwk'] > best:
-            best, best_epoch = selection['qwk'], epoch + 1
-            model.save(output / 'model')
-            tokenizer.save_pretrained(output / 'model')
+        if ema is not None:
+            history[-1]['ema_updates'] = ema.updates
         write_json(output / 'history.json', history)
         print(json.dumps(history[-1]), flush=True)
     if best_epoch is None:
         raise ValueError('No valid selection QWK; no checkpoint selected')
     # Drop training-only teacher/optimizer before restoring the selected student.
-    del result, optimizer, scheduler, encoder_params, task_params, groups, encoder, model, cached_features, encoded
+    del result, optimizer, scheduler, encoder_params, task_params, groups, encoder, model, cached_features, encoded, ema
     if device.type == 'cuda':
         torch.cuda.empty_cache()
     model = BottleneckRegressor.load(output / 'model', device)

@@ -1,0 +1,15 @@
+{
+  "two_step_average_exact": true,
+  "frozen_parameter_unchanged": true,
+  "optimizer_parameter_identity_preserved": true,
+  "exception_restores_training_weights": true,
+  "updates_during_application_rejected": true,
+  "invalid_decays_rejected": true,
+  "export_reloads_averaged_weights": true,
+  "gpu_smoke": "passed",
+  "gpu_optimizer_and_ema_updates": 3,
+  "selected_ema_metrics_match_reloaded_export": true,
+  "existing_model_verifier": "passed",
+  "existing_length_verifier": "passed",
+  "final_validation_evaluated": false
+}
