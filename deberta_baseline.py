@@ -94,8 +94,28 @@ def prepare_split(frame, path):
     return frame.merge(split, on='essay_id', validate='one_to_one')
 
 
+class OrdinalHead(torch.nn.Module):
+    """Proportional-odds head with strictly increasing learned cutpoints."""
+    def __init__(self, hidden_size):
+        super().__init__()
+        self.score = torch.nn.Linear(hidden_size, 1, bias=False)
+        self.first_cutpoint = torch.nn.Parameter(torch.tensor(-2.))
+        self.raw_gaps = torch.nn.Parameter(torch.full((4,), math.log(math.expm1(1. - 1e-4))))
+
+    def cutpoints(self):
+        gaps = torch.nn.functional.softplus(self.raw_gaps.float()) + 1e-4
+        return self.first_cutpoint.float() + torch.cat([gaps.new_zeros(1), gaps.cumsum(0)])
+
+    def forward(self, pooled):
+        return self.score(pooled).float() - self.cutpoints()[None, :]
+
+
+def ordinal_targets(labels):
+    return (labels[:, None] > torch.arange(1, 6, device=labels.device)[None, :]).float()
+
+
 class EssayRegressor(torch.nn.Module):
-    def __init__(self, source, pretrained=True, pooling=None):
+    def __init__(self, source, pretrained=True, pooling=None, ordinal_aux=None):
         super().__init__()
         self.encoder = (AutoModel.from_pretrained(source, local_files_only=True) if pretrained
                         else AutoModel.from_config(AutoConfig.from_pretrained(source, local_files_only=True)))
@@ -111,6 +131,13 @@ class EssayRegressor(torch.nn.Module):
             with torch.random.fork_rng(devices=[]):
                 self.attention = torch.nn.Linear(self.encoder.config.hidden_size, 1, bias=False)
                 torch.nn.init.zeros_(self.attention.weight)
+        self.ordinal_aux = (getattr(self.encoder.config, 'essay_ordinal_aux', False)
+                            if ordinal_aux is None else ordinal_aux)
+        self.encoder.config.essay_ordinal_aux = self.ordinal_aux
+        if self.ordinal_aux:
+            # Preserve the shared encoder/head initialization and dropout RNG.
+            with torch.random.fork_rng(devices=[]):
+                self.ordinal_head = OrdinalHead(self.encoder.config.hidden_size)
 
     def freeze_encoder(self):
         self.encoder_frozen = True
@@ -123,7 +150,7 @@ class EssayRegressor(torch.nn.Module):
             self.encoder.eval()
         return self
 
-    def forward(self, **inputs):
+    def forward(self, return_ordinal=False, **inputs):
         with torch.set_grad_enabled(torch.is_grad_enabled() and not self.encoder_frozen):
             hidden = self.encoder(**inputs).last_hidden_state.float()
         mask = inputs['attention_mask'].unsqueeze(-1).float()
@@ -134,7 +161,12 @@ class EssayRegressor(torch.nn.Module):
             pooled = (hidden * weights).sum(1)
         else:
             pooled = (hidden * mask).sum(1) / mask.sum(1).clamp_min(1)
-        return self.head(pooled).squeeze(-1).float()
+        raw = self.head(pooled).squeeze(-1).float()
+        if return_ordinal:
+            if not self.ordinal_aux:
+                raise ValueError('This checkpoint has no ordinal auxiliary head')
+            return raw, self.ordinal_head(pooled)
+        return raw
 
     @classmethod
     def load(cls, directory, device='cpu'):
@@ -182,9 +214,15 @@ def main():
                         help='Completed baseline run; copy its encoder and freshly initialize the scoring head')
     parser.add_argument('--freeze-encoder', action='store_true')
     parser.add_argument('--seed', type=int, default=42)
+    parser.add_argument('--ordinal-weight', type=float, default=0.,
+                        help='Auxiliary cumulative BCE weight; zero keeps regression-only architecture')
     args = parser.parse_args()
     if args.epochs < 1 or args.eval_batch_size < 1 or args.max_length < 2:
         parser.error('epochs and eval batch size must be positive; max length must be at least 2')
+    if not math.isfinite(args.ordinal_weight) or args.ordinal_weight < 0:
+        parser.error('ordinal weight must be finite and nonnegative')
+    if args.ordinal_weight and args.freeze_encoder:
+        parser.error('Auxiliary ordinal experiments require a trainable shared encoder')
     torch.set_num_threads(8)
     random.seed(args.seed)
     np.random.seed(args.seed)
@@ -245,19 +283,35 @@ def main():
               'max_length': args.max_length, 'truncation': 'right', 'gradient_accumulation': accumulation,
               'gradient_checkpointing': not args.freeze_encoder, 'dynamic_padding': True, 'precision': 'bf16' if bf16 else 'fp32',
               'encoder_lr': 0. if args.freeze_encoder else 2e-5, 'head_lr': 1e-4, 'weight_decay': .01, 'warmup_ratio': .1,
-              'loss': 'FP32 MSE', 'gpu': torch.cuda.get_device_name(), 'torch': torch.__version__,
+              'loss': 'FP32 MSE + ordinal_weight * mean cumulative BCE' if args.ordinal_weight else 'FP32 MSE',
+              'prediction_head': 'regression', 'selection_metric': 'regression B0 QWK',
+              'training_script_sha256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+              'gpu': torch.cuda.get_device_name(), 'torch': torch.__version__,
               'split_sha256': hashlib.sha256((ROOT / 'splits/deberta_seed42.csv').read_bytes()).hexdigest(),
               'lengths': {k: {'rows': len(v), 'truncated': int((v > args.max_length).sum()),
                               'truncated_fraction': float((v > args.max_length).mean()),
                               'max_tokens': int(v.max())} for k, v in lengths.items()}}
     write_json(output / 'config.json', config)
     print(json.dumps(config), flush=True)
-    model = EssayRegressor(snapshot, pooling=args.pooling)
+    model = EssayRegressor(snapshot, pooling=args.pooling, ordinal_aux=args.ordinal_weight > 0)
     if source_checkpoint:
         source_state = torch.load(source_checkpoint, map_location='cpu', weights_only=True)
         model.encoder.load_state_dict({k.removeprefix('encoder.'): v for k, v in source_state.items()
                                        if k.startswith('encoder.')}, strict=True)
         del source_state
+    def parameter_hash(prefix):
+        digest = hashlib.sha256()
+        for name, parameter in model.named_parameters():
+            if name.startswith(prefix):
+                digest.update(name.encode())
+                digest.update(parameter.detach().contiguous().numpy().tobytes())
+        return digest.hexdigest()
+
+    write_json(output / 'initialization.json', {
+        'encoder_sha256': parameter_hash('encoder.'), 'regression_head_sha256': parameter_hash('head.'),
+        'ordinal_head_sha256': parameter_hash('ordinal_head.') if model.ordinal_aux else None,
+        'cpu_rng_sha256': hashlib.sha256(torch.get_rng_state().numpy().tobytes()).hexdigest(),
+        'ordinal_cutpoints': model.ordinal_head.cutpoints().detach().tolist() if model.ordinal_aux else None})
     if args.freeze_encoder:
         model.freeze_encoder()
     else:
@@ -279,17 +333,35 @@ def main():
         model.eval()
         order = np.argsort([len(t) for t in tokens[name]])
         raw = np.empty(len(order), dtype=np.float32)
+        ordinal_logits = np.empty((len(order), 5), dtype=np.float32) if model.ordinal_aux else None
         torch.cuda.synchronize()
         start = time.monotonic()
         with torch.inference_mode():
             for offset in range(0, len(order), args.eval_batch_size):
                 indices = order[offset:offset + args.eval_batch_size]
                 with torch.autocast('cuda', dtype=torch.bfloat16, enabled=bf16):
-                    raw[indices] = model(**inputs(name, indices)).cpu().numpy()
+                    if model.ordinal_aux:
+                        regression, logits = model(return_ordinal=True, **inputs(name, indices))
+                        raw[indices] = regression.cpu().numpy()
+                        ordinal_logits[indices] = logits.cpu().numpy()
+                    else:
+                        raw[indices] = model(**inputs(name, indices)).cpu().numpy()
         torch.cuda.synchronize()
         if not np.isfinite(raw).all():
             raise ValueError('Nonfinite predictions')
-        return raw, time.monotonic() - start
+        if ordinal_logits is not None and not np.isfinite(ordinal_logits).all():
+            raise ValueError('Nonfinite ordinal predictions')
+        return raw, time.monotonic() - start, ordinal_logits
+
+    def ordinal_diagnostics(name, logits):
+        if logits is None:
+            return None
+        values = torch.from_numpy(logits)
+        expected = (1 + values.sigmoid().sum(1)).numpy()
+        labels = torch.tensor(data[name].score.to_numpy(), dtype=torch.float32)
+        return {'B0': metrics(labels.numpy(), expected, FIXED),
+                'bce': float(torch.nn.functional.binary_cross_entropy_with_logits(values, ordinal_targets(labels))),
+                'cutpoints': model.ordinal_head.cutpoints().detach().cpu().tolist()}
 
     best, history = -np.inf, []
     torch.cuda.reset_peak_memory_stats()
@@ -298,19 +370,28 @@ def main():
         start = time.monotonic()
         order = np.random.default_rng(args.seed + epoch).permutation(len(data['train']))
         losses = []
+        mse_losses, ordinal_losses = [], []
         optimizer.zero_grad(set_to_none=True)
         for batch in range(batches):
             indices = order[batch * args.batch_size:(batch + 1) * args.batch_size]
             labels = torch.tensor(data['train'].score.to_numpy()[indices], device='cuda', dtype=torch.float32)
             with torch.autocast('cuda', dtype=torch.bfloat16, enabled=bf16):
-                raw = model(**inputs('train', indices))
-            loss = torch.nn.functional.mse_loss(raw.float(), labels)
+                if model.ordinal_aux:
+                    raw, ordinal_logits = model(return_ordinal=True, **inputs('train', indices))
+                else:
+                    raw = model(**inputs('train', indices))
+            mse_loss = torch.nn.functional.mse_loss(raw.float(), labels)
+            ordinal_loss = (torch.nn.functional.binary_cross_entropy_with_logits(
+                ordinal_logits.float(), ordinal_targets(labels)) if model.ordinal_aux else mse_loss.new_zeros(()))
+            loss = mse_loss + args.ordinal_weight * ordinal_loss if model.ordinal_aux else mse_loss
             if not torch.isfinite(loss):
                 raise ValueError('Nonfinite loss')
             window_start = (batch // accumulation) * accumulation * args.batch_size
             window_samples = min(32, len(order) - window_start)
             (loss * len(indices) / window_samples).backward()
             losses.append(float(loss.detach()))
+            mse_losses.append(float(mse_loss.detach()))
+            ordinal_losses.append(float(ordinal_loss.detach()))
             if (batch + 1) % accumulation == 0 or batch + 1 == batches:
                 torch.nn.utils.clip_grad_norm_(model.parameters(), 1., error_if_nonfinite=True)
                 optimizer.step()
@@ -319,15 +400,20 @@ def main():
             if batch % 100 == 0 or batch + 1 == batches:
                 progress = {'epoch': epoch + 1, 'batch': batch + 1, 'batches': batches,
                             'loss': float(np.mean(losses[-100:])), 'seconds': time.monotonic() - start,
+                            'mse': float(np.mean(mse_losses[-100:])),
+                            'ordinal_bce': float(np.mean(ordinal_losses[-100:])),
+                            'weighted_ordinal_bce': args.ordinal_weight * float(np.mean(ordinal_losses[-100:])),
                             'peak_allocated_gib': torch.cuda.max_memory_allocated() / 2**30,
                             'peak_reserved_gib': torch.cuda.max_memory_reserved() / 2**30}
                 write_json(output / 'progress.json', progress)
                 print(json.dumps(progress), flush=True)
         torch.cuda.synchronize()
         train_seconds = time.monotonic() - start
-        raw, elapsed = predict('selection')
+        raw, elapsed, ordinal_logits = predict('selection')
         score = metrics(data['selection'].score, raw, FIXED)
-        history.append({'epoch': epoch + 1, 'train_mse': float(np.mean(losses)), 'train_seconds': train_seconds,
+        history.append({'epoch': epoch + 1, 'train_mse': float(np.mean(mse_losses)),
+                        'train_ordinal_bce': float(np.mean(ordinal_losses)), 'train_loss': float(np.mean(losses)),
+                        'selection_ordinal': ordinal_diagnostics('selection', ordinal_logits), 'train_seconds': train_seconds,
                         'selection_seconds': elapsed, 'selection': score,
                         'estimated_remaining_seconds': (epochs - epoch - 1) * (train_seconds + elapsed)})
         if score['qwk'] > best:
@@ -342,7 +428,7 @@ def main():
     del optimizer, scheduler, model
     torch.cuda.empty_cache()
     model = EssayRegressor.load(output / 'model', 'cuda')
-    calibration, calibration_time = predict('calibration')
+    calibration, calibration_time, calibration_ordinal = predict('calibration')
     thresholds = fit_thresholds(data['calibration'].score.to_numpy(), calibration)
     write_json(output / 'thresholds.json', {'thresholds': thresholds.tolist(), 'fit_split': 'calibration',
                                            'method': 'deterministic coordinate QWK search', 'selected_epoch': best_epoch})
@@ -350,7 +436,8 @@ def main():
               'peak_allocated_gib': torch.cuda.max_memory_allocated() / 2**30,
               'peak_reserved_gib': torch.cuda.max_memory_reserved() / 2**30, 'splits': {}}
     for name in ['train', 'selection', 'calibration']:
-        raw, elapsed = (calibration, calibration_time) if name == 'calibration' else predict(name)
+        raw, elapsed, ordinal_logits = ((calibration, calibration_time, calibration_ordinal)
+                                       if name == 'calibration' else predict(name))
         y = data[name].score.to_numpy()
         truncated = lengths[name] > args.max_length
         report['splits'][name] = {'B0': metrics(y, raw, FIXED), 'B1': metrics(y, raw, thresholds),
@@ -359,8 +446,14 @@ def main():
             'untruncated_B0': metrics(y[~truncated], raw[~truncated], FIXED),
             'untruncated_B1': metrics(y[~truncated], raw[~truncated], thresholds),
             'inference_seconds': elapsed, 'seconds_per_essay': elapsed / len(raw)}
-        data[name][['essay_id', 'score']].assign(raw_prediction=raw, B0=integer_scores(raw),
-            B1=integer_scores(raw, thresholds), token_length=lengths[name], truncated=truncated).to_csv(output / f'{name}_predictions.csv', index=False)
+        predictions = data[name][['essay_id', 'score']].assign(raw_prediction=raw, B0=integer_scores(raw),
+            B1=integer_scores(raw, thresholds), token_length=lengths[name], truncated=truncated)
+        if ordinal_logits is not None:
+            report['splits'][name]['ordinal'] = ordinal_diagnostics(name, ordinal_logits)
+            for k in range(5):
+                predictions[f'ordinal_logit_gt_{k + 1}'] = ordinal_logits[:, k]
+            predictions['ordinal_expected'] = (1 + torch.from_numpy(ordinal_logits).sigmoid().sum(1)).numpy()
+        predictions.to_csv(output / f'{name}_predictions.csv', index=False)
     write_json(output / 'report.json', report)
     print(json.dumps(report), flush=True)
 

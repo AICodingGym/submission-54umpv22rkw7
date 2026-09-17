@@ -1,0 +1,20 @@
+{
+  "prediction_rows_audited": 320,
+  "selection_reload_rows": 32,
+  "regression_reload_max_difference": 0.0,
+  "ordinal_logits_reload_max_difference": 0.0,
+  "loss_components_reconciled": true,
+  "ordered_cutpoints": [
+    -2.0003604888916016,
+    -1.0005930662155151,
+    -0.0008220672607421875,
+    0.9989562034606934,
+    1.9988863468170166
+  ],
+  "updated_parameter_groups": {
+    "encoder.": true,
+    "head.": true,
+    "ordinal_head.": true
+  },
+  "final_validation_evaluated": false
+}

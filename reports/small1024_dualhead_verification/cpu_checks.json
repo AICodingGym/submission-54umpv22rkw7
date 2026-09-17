@@ -1,0 +1,12 @@
+{
+  "common_initialization_and_rng_match": true,
+  "training_dropout_outputs_match": true,
+  "all_six_ordinal_targets_verified": true,
+  "ordinal_loss_reaches_encoder": true,
+  "ordinal_loss_does_not_directly_reach_regression_head": true,
+  "both_heads_receive_joint_gradients": true,
+  "cutpoints_ordered_after_update": true,
+  "padding_invariance": true,
+  "both_heads_save_reload_exact": true,
+  "legacy_checkpoint_compatible": true
+}

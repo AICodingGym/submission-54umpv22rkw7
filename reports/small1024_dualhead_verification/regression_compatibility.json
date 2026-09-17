@@ -1,0 +1,22 @@
+{
+  "legacy_cpu_parameters_and_mse_gradients_exact": true,
+  "gpu_smoke_comparison": {
+    "train": {
+      "max_raw_difference": 0.015625,
+      "B0_predictions_match": true,
+      "B1_predictions_match": true
+    },
+    "selection": {
+      "max_raw_difference": 0.0,
+      "B0_predictions_match": true,
+      "B1_predictions_match": true
+    },
+    "calibration": {
+      "max_raw_difference": 0.015625,
+      "B0_predictions_match": true,
+      "B1_predictions_match": true
+    }
+  },
+  "actual_small_initial_parameters_and_rng_match": true,
+  "note": "GPU mixed-precision training is not forced deterministic. Across runs, raw scores differ by up to 0.015625; all smoke integer predictions match. Within-checkpoint reload is exact."
+}
