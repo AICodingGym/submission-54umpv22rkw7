@@ -1,5 +1,5 @@
 {
-  "status": "audited_ready_for_submission",
+  "status": "submitted_below_platform_target",
   "model_dir": "runs/rlt_ema095_affine_v1",
   "version": "B1",
   "calibration_method": "affine",
@@ -14,5 +14,7 @@
   "platform_target": 0.82349,
   "final_validation_evaluated": false,
   "previous_candidate": "runs/rlt_cached_norm_v1",
-  "note": "Very small selection advantage after multiple development experiments; no claim of statistically reliable superiority."
+  "note": "Very small selection advantage after multiple development experiments; no claim of statistically reliable superiority.",
+  "platform_score": 0.82109,
+  "beats_platform_target": false
 }

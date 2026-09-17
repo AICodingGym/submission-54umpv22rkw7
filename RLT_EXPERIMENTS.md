@@ -90,9 +90,13 @@
     来源 `rlt_ema095_v1` 的原 B1 不被改写。仿射斜率 1.055，偏移 -0.23；
     本地提升很小，不宣称稳定优越。复现工具 `derive_affine_candidate.py` 会重新
     仅在 calibration 验证参数，再生成带来源指纹的派生目录；需另跑完整审计。
-13. 如当前候选仍未超过平台目标，已准备从平台最佳 512-token 基线导出的监督编码器，
+    派生候选完整审计通过，平台提交 **0.82109**，低于旧最佳 0.82349，也低于上一版
+    RLT 的 0.82311。因此目标尚未达到，本地极小提升未转化为平台提升；保留集仍封存。
+13. 下一组从平台最佳 512-token 基线导出的监督编码器出发，
     再使用完整 2048-token 输入训练 RLT，比较 K=4 与 K=1，其余使用原缓存归一化配置。
-    编码器 198 个张量与来源完全一致，不带原评分头；这一组尚未启动。
+    编码器 198 个张量与来源完全一致，不带原评分头。两组均为 seed 42、10 轮、
+    学习率 1e-4、dropout 0.1、D=256、重建权重 0.1、无 EMA、未加权，
+    输出 `runs/rlt_source512_k4_v1/`、`runs/rlt_source512_k1_v1/`。
     [导出核验](reports/deberta_base/supervised_encoder_export.json)、
     [单 latent 配置检查](reports/rlt_single_latent_verification.json)。
 
