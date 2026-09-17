@@ -1,0 +1,35 @@
+{
+  "model": "microsoft/deberta-v3-small",
+  "max_length": 1024,
+  "pooling": "mean",
+  "encoder_frozen": false,
+  "ordinal_weight": 0.3,
+  "prediction_head": "regression",
+  "run_dir": "runs/small1024_dualhead_v1/dual_03",
+  "selected_epoch": 6,
+  "version": "B1",
+  "rows": 1731,
+  "thresholds": [
+    1.5625,
+    2.433,
+    3.40625,
+    4.375,
+    4.982249999999993
+  ],
+  "model_sha256": "1ae46ce169b3e0d4f3c50f999bf8176cc002be4bd9a8b3d32b07bbbfe2ec28c1",
+  "submission_file": "reports/small1024_dual03_submission/submission.csv",
+  "submission_sha256": "8f8b7f0adc519dc4c7a50a91207e55bc44c1727b1e22e4667e6bd6549291c7cc",
+  "score_counts": {
+    "1": 132,
+    "2": 507,
+    "3": 584,
+    "4": 395,
+    "5": 85,
+    "6": 28
+  },
+  "sample_id_order_verified": true,
+  "threshold_mapping_verified": true,
+  "selection_B0": 0.8131078890094429,
+  "selection_B1": 0.8173703060117314,
+  "status": "prepared"
+}
