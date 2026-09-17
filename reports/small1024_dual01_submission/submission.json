@@ -1,0 +1,41 @@
+{
+  "model": "microsoft/deberta-v3-small",
+  "max_length": 1024,
+  "pooling": "mean",
+  "encoder_frozen": false,
+  "ordinal_weight": 0.1,
+  "prediction_head": "regression",
+  "run_dir": "runs/small1024_dualhead_v1/dual_01_interim_submission",
+  "source_run": "runs/small1024_dualhead_v1/dual_01",
+  "interim_submission": true,
+  "completed_epochs_at_snapshot": 9,
+  "selected_epoch": 4,
+  "version": "B1",
+  "thresholds": [
+    1.596625,
+    2.390625,
+    3.359375,
+    4.322000000000003,
+    4.944000000000003
+  ],
+  "rows": 1731,
+  "model_sha256": "1c5f9bfe7815af6dbf8e3e1c3e6243b21a424ddaec0ea75b060f2dc85f75339d",
+  "snapshot_hash_verified": true,
+  "selection_B0_matches_training_history": true,
+  "selection_B0": 0.815468583520557,
+  "selection_B1": 0.8300190242847092,
+  "final_validation_evaluated": false,
+  "submission_file": "reports/small1024_dual01_submission/submission.csv",
+  "submission_sha256": "fc29e4cff0e645d7b522652a59aafcb157629e80f9686cf3b19e02e03ddf903d",
+  "score_counts": {
+    "1": 153,
+    "2": 467,
+    "3": 626,
+    "4": 374,
+    "5": 84,
+    "6": 27
+  },
+  "sample_id_order_verified": true,
+  "threshold_mapping_verified": true,
+  "status": "prepared"
+}
