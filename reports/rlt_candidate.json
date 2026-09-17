@@ -1,5 +1,5 @@
 {
-  "status": "audited_ready_for_submission",
+  "status": "submitted_below_platform_target",
   "kind": "baseline_rlt_equal_blend",
   "single_model": false,
   "model_dir": "runs/rlt_baseline_blend_v1",
@@ -25,5 +25,7 @@
   "platform_target": 0.82349,
   "final_validation_evaluated": false,
   "previous_candidate": "runs/rlt_ema095_affine_v1",
-  "note": "Explicit 50/50 baseline + RLT fusion; not evidence that a standalone RLT model beats the baseline."
+  "note": "Explicit 50/50 baseline + RLT fusion; not evidence that a standalone RLT model beats the baseline.",
+  "platform_score": 0.82176,
+  "beats_platform_target": false
 }

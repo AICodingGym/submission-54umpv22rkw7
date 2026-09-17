@@ -129,6 +129,10 @@
     这是基线与 RLT 的两个组件融合，不是 RLT 单模型胜出；原单模型结果保留。
     两个组件的全部选择集原始预测重新加载逐项相同，融合指标复算通过。
     工具为 `prepare_rlt_blend.py` 与 `score_rlt_blend.py`；推理顺序加载两个组件。
+    平台提交 **0.82176**，未超过 0.82349；不据本地提升宣称平台更优。
+17. 下一融合对照仍固定 50/50，仅把基线组件替换为 `outputs_deberta_base` 的
+    512-token 模型，RLT 组件继续使用全文 `rlt_cached_norm_v1`。
+    输出 `runs/rlt_baseline512_blend_v1/`，仍先在 calibration 拟合分档方案，再评估 selection。
 
 现有实现的 `essay_bottleneck.verify` 和 `essay_bottleneck.verify_lengths`
 均已通过。它们验证实现正确性，不衡量正式评分质量。日志保存在
