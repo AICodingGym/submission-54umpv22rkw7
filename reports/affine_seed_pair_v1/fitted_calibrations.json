@@ -1,0 +1,155 @@
+{
+  "method": "Affine score calibration; slope 0.7..1.4 step 0.005, offset -1..1 step 0.005",
+  "tie_break": "Smallest mean squared threshold displacement from half integers",
+  "code_sha256": "2371b00037be020af93fb0b1051964fede2cf5677cefdb5f330670d6e79c8a98",
+  "models": {
+    "rlt_seed17_v1": {
+      "source_dir": "/home/chao/test/learning-agency-lab-automated-essay-scoring-2/runs/rlt_seed17_v1",
+      "model_sha256": "5cc654865f3a6d0bcdf1177c039552e97d08baaaeaaead91d91cb350a3b8e8b5",
+      "fit_split": "calibration",
+      "source_calibration_sha256": "78a54d52655f0c9649ebdfe4159431c760c8ea890c17caed556f30c692c6925d",
+      "calibration": {
+        "slope": 1.065,
+        "offset": -0.20999999999999996,
+        "thresholds": [
+          1.6056338028169015,
+          2.5446009389671365,
+          3.483568075117371,
+          4.422535211267606,
+          5.361502347417841
+        ],
+        "calibration_qwk": 0.8241351634271488
+      },
+      "calibration_metrics": {
+        "rows": 1557,
+        "qwk": 0.8241351634271487,
+        "mae": 0.35645472061657035,
+        "continuous_mae": 0.43221891056518946,
+        "confusion_matrix": [
+          [
+            75,
+            36,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            47,
+            286,
+            85,
+            7,
+            0,
+            0
+          ],
+          [
+            1,
+            111,
+            371,
+            78,
+            2,
+            0
+          ],
+          [
+            1,
+            8,
+            90,
+            228,
+            29,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            28,
+            56,
+            3
+          ],
+          [
+            0,
+            0,
+            1,
+            0,
+            4,
+            9
+          ]
+        ]
+      }
+    },
+    "rlt_seed2026_v1": {
+      "source_dir": "/home/chao/test/learning-agency-lab-automated-essay-scoring-2/runs/rlt_seed2026_v1",
+      "model_sha256": "1021bee87c888bdaa02eb18b23d19ef879094198bf5cf88f4372d7da85edc1d4",
+      "fit_split": "calibration",
+      "source_calibration_sha256": "800d3c322047732bd02b322b725fd7c41e34b6eca86b5024423bc57a6b4739f8",
+      "calibration": {
+        "slope": 1.005,
+        "offset": -0.020000000000000018,
+        "thresholds": [
+          1.5124378109452739,
+          2.5074626865671643,
+          3.502487562189055,
+          4.497512437810945,
+          5.492537313432836
+        ],
+        "calibration_qwk": 0.8199278168978477
+      },
+      "calibration_metrics": {
+        "rows": 1557,
+        "qwk": 0.8199278168978476,
+        "mae": 0.37315350032113037,
+        "continuous_mae": 0.4419381221901092,
+        "confusion_matrix": [
+          [
+            68,
+            43,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            42,
+            282,
+            93,
+            8,
+            0,
+            0
+          ],
+          [
+            1,
+            101,
+            361,
+            98,
+            2,
+            0
+          ],
+          [
+            0,
+            8,
+            77,
+            221,
+            50,
+            0
+          ],
+          [
+            0,
+            0,
+            1,
+            25,
+            58,
+            3
+          ],
+          [
+            0,
+            0,
+            1,
+            0,
+            4,
+            9
+          ]
+        ]
+      }
+    }
+  }
+}

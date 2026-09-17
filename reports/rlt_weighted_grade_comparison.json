@@ -1,0 +1,150 @@
+{
+  "split": "selection",
+  "version": "B0",
+  "grades": [
+    {
+      "true_grade": 1,
+      "rows": 112,
+      "baseline": {
+        "mean_prediction": 1.4196428571428572,
+        "accuracy": 0.625,
+        "mse": 0.5089285714285714
+      },
+      "unweighted": {
+        "mean_prediction": 1.4285714285714286,
+        "accuracy": 0.6071428571428571,
+        "mse": 0.5
+      },
+      "weight_025": {
+        "mean_prediction": 1.3928571428571428,
+        "accuracy": 0.6428571428571429,
+        "mse": 0.4642857142857143
+      },
+      "weight_050": {
+        "mean_prediction": 1.3571428571428572,
+        "accuracy": 0.6785714285714286,
+        "mse": 0.42857142857142855
+      }
+    },
+    {
+      "true_grade": 2,
+      "rows": 425,
+      "baseline": {
+        "mean_prediction": 2.0941176470588236,
+        "accuracy": 0.72,
+        "mse": 0.30117647058823527
+      },
+      "unweighted": {
+        "mean_prediction": 2.1176470588235294,
+        "accuracy": 0.7364705882352941,
+        "mse": 0.2776470588235294
+      },
+      "weight_025": {
+        "mean_prediction": 2.0870588235294116,
+        "accuracy": 0.7294117647058823,
+        "mse": 0.2847058823529412
+      },
+      "weight_050": {
+        "mean_prediction": 2.051764705882353,
+        "accuracy": 0.7176470588235294,
+        "mse": 0.2964705882352941
+      }
+    },
+    {
+      "true_grade": 3,
+      "rows": 563,
+      "baseline": {
+        "mean_prediction": 2.975133214920071,
+        "accuracy": 0.6802841918294849,
+        "mse": 0.3410301953818828
+      },
+      "unweighted": {
+        "mean_prediction": 2.9698046181172293,
+        "accuracy": 0.6660746003552398,
+        "mse": 0.3605683836589698
+      },
+      "weight_025": {
+        "mean_prediction": 2.9538188277087034,
+        "accuracy": 0.6536412078152753,
+        "mse": 0.37300177619893427
+      },
+      "weight_050": {
+        "mean_prediction": 2.9698046181172293,
+        "accuracy": 0.6287744227353463,
+        "mse": 0.40319715808170514
+      }
+    },
+    {
+      "true_grade": 4,
+      "rows": 356,
+      "baseline": {
+        "mean_prediction": 3.8398876404494384,
+        "accuracy": 0.6292134831460674,
+        "mse": 0.3960674157303371
+      },
+      "unweighted": {
+        "mean_prediction": 3.837078651685393,
+        "accuracy": 0.6460674157303371,
+        "mse": 0.3707865168539326
+      },
+      "weight_025": {
+        "mean_prediction": 3.803370786516854,
+        "accuracy": 0.651685393258427,
+        "mse": 0.3651685393258427
+      },
+      "weight_050": {
+        "mean_prediction": 3.842696629213483,
+        "accuracy": 0.651685393258427,
+        "mse": 0.3651685393258427
+      }
+    },
+    {
+      "true_grade": 5,
+      "rows": 88,
+      "baseline": {
+        "mean_prediction": 4.659090909090909,
+        "accuracy": 0.6363636363636364,
+        "mse": 0.4318181818181818
+      },
+      "unweighted": {
+        "mean_prediction": 4.636363636363637,
+        "accuracy": 0.6136363636363636,
+        "mse": 0.45454545454545453
+      },
+      "weight_025": {
+        "mean_prediction": 4.579545454545454,
+        "accuracy": 0.5568181818181818,
+        "mse": 0.5113636363636364
+      },
+      "weight_050": {
+        "mean_prediction": 4.613636363636363,
+        "accuracy": 0.5795454545454546,
+        "mse": 0.45454545454545453
+      }
+    },
+    {
+      "true_grade": 6,
+      "rows": 13,
+      "baseline": {
+        "mean_prediction": 5.384615384615385,
+        "accuracy": 0.38461538461538464,
+        "mse": 0.6153846153846154
+      },
+      "unweighted": {
+        "mean_prediction": 5.384615384615385,
+        "accuracy": 0.38461538461538464,
+        "mse": 0.6153846153846154
+      },
+      "weight_025": {
+        "mean_prediction": 5.230769230769231,
+        "accuracy": 0.23076923076923078,
+        "mse": 0.7692307692307693
+      },
+      "weight_050": {
+        "mean_prediction": 5.230769230769231,
+        "accuracy": 0.23076923076923078,
+        "mse": 0.7692307692307693
+      }
+    }
+  ]
+}
