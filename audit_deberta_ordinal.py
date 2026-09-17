@@ -62,7 +62,9 @@ def main():
         assert np.isclose(saved['bce'], bce, atol=1e-7, rtol=0)
         assert np.array_equal(cutpoints, np.asarray(saved['cutpoints'], dtype=np.float32))
         integer = np.searchsorted(np.arange(1.5, 6, 1), expected, side='right') + 1
-        check_metrics(saved['B0'], pred.score, expected, integer)
+        # ordinal_diagnostics computes metrics with float32 labels. Match its
+        # arithmetic dtype, keeping the existing strict metric tolerances.
+        check_metrics(saved['B0'], pred.score.to_numpy(dtype=np.float32), expected, integer)
         audited += len(pred)
     # Independently reload both heads on precisely the saved selection IDs.
     selection = pd.read_csv(directory / 'selection_predictions.csv', dtype={'essay_id': str}, float_precision='round_trip')

@@ -1,0 +1,25 @@
+{
+  "cause": "Ordinal report uses float32 labels; audit used int64 labels, yielding an approximately 1e-8 MAE difference.",
+  "fix": "Match ordinal metric label dtype to float32; existing strict tolerances unchanged.",
+  "training_and_inference_unchanged": true,
+  "verification": {
+    "prediction_rows_audited": 14019,
+    "selection_reload_rows": 1557,
+    "regression_reload_max_difference": 0.0,
+    "ordinal_logits_reload_max_difference": 0.0,
+    "loss_components_reconciled": true,
+    "ordered_cutpoints": [
+      -1.9895201921463013,
+      -0.938917875289917,
+      0.12313210964202881,
+      1.187874674797058,
+      2.253384590148926
+    ],
+    "updated_parameter_groups": {
+      "encoder.": true,
+      "head.": true,
+      "ordinal_head.": true
+    },
+    "final_validation_evaluated": false
+  }
+}

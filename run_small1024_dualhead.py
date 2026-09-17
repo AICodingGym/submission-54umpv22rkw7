@@ -14,23 +14,41 @@ from run_small1024_pooling import ROOT, write_json
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output-dir', type=Path, default=ROOT / 'runs/small1024_dualhead_v1')
+    parser.add_argument('--resume-audit-failure', action='store_true',
+                        help='Resume a failed ordinal audit without rerunning completed training')
     args = parser.parse_args()
     output = args.output_dir.resolve()
     output.mkdir(parents=True, exist_ok=True)
-    with (output / 'pipeline_claim.json').open('x') as stream:
-        json.dump({'pid': os.getpid(), 'started_at': time.time()}, stream)
-    status = {'pid': os.getpid(), 'state': 'running', 'completed': [], 'started_at': time.time()}
     files = ['deberta_baseline.py', 'run_small1024_dualhead.py', 'audit_deberta_ordinal.py',
              'verify_deberta_run.py', 'score_deberta.py']
     fingerprints = {name: hashlib.sha256((ROOT / name).read_bytes()).hexdigest() for name in files}
-    write_json(output / 'source_hashes.json', fingerprints)
+    if args.resume_audit_failure:
+        status = json.loads((output / 'pipeline_status.json').read_text())
+        assert status['state'] == 'failed' and status['stage'].endswith('_ordinal_audit')
+        previous_hashes = json.loads((output / 'source_hashes.json').read_text())
+        for name in ['deberta_baseline.py', 'verify_deberta_run.py', 'score_deberta.py']:
+            assert previous_hashes[name] == fingerprints[name], f'Training or inference changed: {name}'
+        # Only one recovery launch is allowed, preserving the original failure.
+        with (output / 'pipeline_resume_claim.json').open('x') as stream:
+            json.dump({'pid': os.getpid(), 'resumed_at': time.time(), 'previous_status': status,
+                       'previous_hashes': previous_hashes, 'resumed_hashes': fingerprints}, stream, indent=2)
+        status = {**status, 'pid': os.getpid(), 'state': 'running', 'resumed_at': time.time()}
+        status.pop('error', None)
+    else:
+        with (output / 'pipeline_claim.json').open('x') as stream:
+            json.dump({'pid': os.getpid(), 'started_at': time.time()}, stream)
+        status = {'pid': os.getpid(), 'state': 'running', 'completed': [], 'started_at': time.time()}
+        write_json(output / 'source_hashes.json', fingerprints)
 
     def command(stage, argv):
+        if stage in status['completed']:
+            return
         for name, digest in fingerprints.items():
             assert hashlib.sha256((ROOT / name).read_bytes()).hexdigest() == digest, f'Source changed: {name}'
         status.update(stage=stage, command=argv, updated_at=time.time())
         write_json(output / 'pipeline_status.json', status)
-        with (output / f'{stage}.log').open('x') as log:
+        log_path = output / f'{stage}{"_resumed" if args.resume_audit_failure else ""}.log'
+        with log_path.open('x') as log:
             subprocess.run([sys.executable, '-u', *argv], cwd=ROOT, stdout=log,
                            stderr=subprocess.STDOUT, check=True)
         status['completed'].append(stage)
