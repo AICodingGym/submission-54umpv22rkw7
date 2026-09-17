@@ -1,0 +1,14 @@
+{
+  "source_run": "/home/chao/test/learning-agency-lab-automated-essay-scoring-2/outputs_deberta_base",
+  "source_model_sha256": "980f20c2bf44e9dadcd9008849368819f795dc666a1c7bfe5dc18b2af2982eb6",
+  "source_selected_epoch": 5,
+  "source_max_length": 512,
+  "split_sha256": "6a744961c657093ef34c4910660acaeb0f7bbe8a03c156f01415a1be08c8f588",
+  "data_sha256": "ce6b0bd2c7d790a64ad3d2a8e15e3563d90e881c787638caa93504445caa65d0",
+  "encoder_tensors_verified": 198,
+  "tokenizer_vocab_verified": true,
+  "encoder_weights_sha256": "06ed0f11018387509e9c3174d4a1132536805972e29834cb3a1e27d4ca388c06",
+  "initialization": "Supervised train-split encoder; checkpoint selected on selection",
+  "baseline_score_head_exported": false,
+  "final_validation_evaluated": false
+}

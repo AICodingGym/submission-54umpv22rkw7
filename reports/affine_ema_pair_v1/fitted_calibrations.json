@@ -1,0 +1,155 @@
+{
+  "method": "Affine score calibration; slope 0.7..1.4 step 0.005, offset -1..1 step 0.005",
+  "tie_break": "Smallest mean squared threshold displacement from half integers",
+  "code_sha256": "2371b00037be020af93fb0b1051964fede2cf5677cefdb5f330670d6e79c8a98",
+  "models": {
+    "rlt_ema095_v1": {
+      "source_dir": "/home/chao/test/learning-agency-lab-automated-essay-scoring-2/runs/rlt_ema095_v1",
+      "model_sha256": "bd319a187b3704e8795b9229dbc42c98731756c25dfff5056862526b45c250bc",
+      "fit_split": "calibration",
+      "source_calibration_sha256": "63498f89f8197d945369dfa1f5019d1002b4532823a32f36654ad62f243d5ecd",
+      "calibration": {
+        "slope": 1.055,
+        "offset": -0.22999999999999998,
+        "thresholds": [
+          1.6398104265402844,
+          2.5876777251184837,
+          3.5355450236966828,
+          4.483412322274882,
+          5.431279620853081
+        ],
+        "calibration_qwk": 0.8217031249164433
+      },
+      "calibration_metrics": {
+        "rows": 1557,
+        "qwk": 0.8217031249164433,
+        "mae": 0.36416184971098264,
+        "continuous_mae": 0.4352044195568401,
+        "confusion_matrix": [
+          [
+            74,
+            37,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            50,
+            290,
+            80,
+            5,
+            0,
+            0
+          ],
+          [
+            2,
+            119,
+            363,
+            77,
+            2,
+            0
+          ],
+          [
+            1,
+            9,
+            85,
+            221,
+            40,
+            0
+          ],
+          [
+            0,
+            0,
+            2,
+            24,
+            60,
+            1
+          ],
+          [
+            0,
+            0,
+            1,
+            0,
+            6,
+            7
+          ]
+        ]
+      }
+    },
+    "rlt_ema099_v1": {
+      "source_dir": "/home/chao/test/learning-agency-lab-automated-essay-scoring-2/runs/rlt_ema099_v1",
+      "model_sha256": "bb9a68a72a36b5460886124688053e236ac991ce5cf1afeba0d4f43711578def",
+      "fit_split": "calibration",
+      "source_calibration_sha256": "38ff421b301ecbbbfd475de8c3deab65104312510fe0b9525b4e0c6db199d958",
+      "calibration": {
+        "slope": 1.065,
+        "offset": -0.245,
+        "thresholds": [
+          1.6384976525821597,
+          2.5774647887323945,
+          3.5164319248826295,
+          4.455399061032864,
+          5.394366197183099
+        ],
+        "calibration_qwk": 0.8233371129987335
+      },
+      "calibration_metrics": {
+        "rows": 1557,
+        "qwk": 0.8233371129987335,
+        "mae": 0.3622350674373796,
+        "continuous_mae": 0.4329514892421323,
+        "confusion_matrix": [
+          [
+            74,
+            37,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            55,
+            286,
+            79,
+            5,
+            0,
+            0
+          ],
+          [
+            2,
+            119,
+            364,
+            76,
+            2,
+            0
+          ],
+          [
+            2,
+            6,
+            89,
+            224,
+            35,
+            0
+          ],
+          [
+            0,
+            0,
+            1,
+            25,
+            60,
+            1
+          ],
+          [
+            0,
+            0,
+            1,
+            0,
+            5,
+            8
+          ]
+        ]
+      }
+    }
+  }
+}

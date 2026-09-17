@@ -1,0 +1,20 @@
+{
+  "status": "ready",
+  "file": "runs/rlt_ema095_affine_v1/submission.csv",
+  "rows": 1731,
+  "sha256": "24c7887914d3dc27d7abc03cdcef68d8a00e79b219223aaa661e593c0f3268d0",
+  "model_sha256": "bd319a187b3704e8795b9229dbc42c98731756c25dfff5056862526b45c250bc",
+  "selected_epoch": 1,
+  "version": "B1",
+  "calibration_method": "affine",
+  "score_counts": {
+    "1": 145,
+    "2": 550,
+    "3": 579,
+    "4": 331,
+    "5": 116,
+    "6": 10
+  },
+  "final_validation_evaluated": false,
+  "platform_target": 0.82349
+}

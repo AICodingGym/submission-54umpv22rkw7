@@ -1,0 +1,8 @@
+{
+  "beats_fixed_selection_target_B0_or_B1": false,
+  "platform_submitted": false,
+  "final_validation_evaluated": false,
+  "beats_fixed_selection_target_affine": true,
+  "affine_selection_qwk": 0.8342494364142687,
+  "derived_candidate": "runs/rlt_ema095_affine_v1"
+}

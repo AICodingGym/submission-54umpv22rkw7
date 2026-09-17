@@ -1,0 +1,115 @@
+{
+  "rlt_ema095_v1": {
+    "cache_sha256": "de406da244deccfc0c6ecb0ab1be85e153de098023083dfd4e00eea53da15777",
+    "ema_updates_verified": true,
+    "per_epoch_training_loss_differences_from_control": [
+      {
+        "loss": 0.00044202291838391083,
+        "score_loss": 0.0005068132277203929,
+        "reconstruction_loss": -0.0006478932323613629
+      },
+      {
+        "loss": 0.0006237025246714212,
+        "score_loss": 0.0005926175054089267,
+        "reconstruction_loss": 0.0003108527533563499
+      },
+      {
+        "loss": 0.007324587185139064,
+        "score_loss": 0.007287914235894699,
+        "reconstruction_loss": 0.0003667305965370793
+      },
+      {
+        "loss": -5.380184291864376e-05,
+        "score_loss": -7.096281405821747e-05,
+        "reconstruction_loss": 0.000171608929784961
+      },
+      {
+        "loss": 0.0018828581528398947,
+        "score_loss": 0.0018778860869619884,
+        "reconstruction_loss": 4.972057132640595e-05
+      },
+      {
+        "loss": 0.0017232586803484495,
+        "score_loss": 0.0017255640532761601,
+        "reconstruction_loss": -2.3053100709213847e-05
+      },
+      {
+        "loss": -0.0022927829557632673,
+        "score_loss": -0.002274284730095305,
+        "reconstruction_loss": -0.00018498462200822186
+      },
+      {
+        "loss": 0.00016181787551952653,
+        "score_loss": 0.00021471026183159103,
+        "reconstruction_loss": -0.0005289228806414914
+      },
+      {
+        "loss": 0.00025918802800717344,
+        "score_loss": 0.00033973998183889353,
+        "reconstruction_loss": -0.0008055188113645362
+      },
+      {
+        "loss": -4.365963605990064e-05,
+        "score_loss": 4.894846024616761e-05,
+        "reconstruction_loss": -0.0009260803830016817
+      }
+    ]
+  },
+  "rlt_ema099_v1": {
+    "cache_sha256": "de406da244deccfc0c6ecb0ab1be85e153de098023083dfd4e00eea53da15777",
+    "ema_updates_verified": true,
+    "per_epoch_training_loss_differences_from_control": [
+      {
+        "loss": 0.0037672568862452405,
+        "score_loss": 0.003691077636830853,
+        "reconstruction_loss": 0.0007618148219743492
+      },
+      {
+        "loss": -0.004696891212589094,
+        "score_loss": -0.004680752830732743,
+        "reconstruction_loss": -0.0001613842981881275
+      },
+      {
+        "loss": 0.0031946923141357164,
+        "score_loss": 0.0031954842715676557,
+        "reconstruction_loss": -7.920194688815219e-06
+      },
+      {
+        "loss": 0.0018194190027078505,
+        "score_loss": 0.001818652111474972,
+        "reconstruction_loss": 7.669655678721465e-06
+      },
+      {
+        "loss": 0.0011609102637327173,
+        "score_loss": 0.0011606768258718703,
+        "reconstruction_loss": 2.335701334177376e-06
+      },
+      {
+        "loss": 0.001485511019709812,
+        "score_loss": 0.0014922256154895897,
+        "reconstruction_loss": -6.714536475782573e-05
+      },
+      {
+        "loss": -0.0023287873354760347,
+        "score_loss": -0.0023092725527281005,
+        "reconstruction_loss": -0.00019514730686115422
+      },
+      {
+        "loss": -0.0001924907857810687,
+        "score_loss": -0.0001341835941977565,
+        "reconstruction_loss": -0.0005830721727264065
+      },
+      {
+        "loss": -0.0003119502098720972,
+        "score_loss": -0.00022398027352704686,
+        "reconstruction_loss": -0.0008797006151207154
+      },
+      {
+        "loss": -0.000164093675005611,
+        "score_loss": -6.762700909487829e-05,
+        "reconstruction_loss": -0.0009646671701603604
+      }
+    ]
+  },
+  "interpretation": "Same cached encoder features and prescribed training configuration except EMA; observed training losses are not bitwise identical. No deterministic trajectory equivalence or causal quality gain is claimed."
+}

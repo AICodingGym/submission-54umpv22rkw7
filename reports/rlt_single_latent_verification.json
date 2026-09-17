@@ -1,0 +1,9 @@
+{
+  "num_latents": 1,
+  "finite_forward_backward": true,
+  "frozen_encoder_no_gradient": true,
+  "query_gradient_present": true,
+  "padding_invariance": true,
+  "save_reload_exact": true,
+  "verification_encoder": "tiny synthetic BERT; no quality inference"
+}

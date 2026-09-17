@@ -1,18 +1,18 @@
 {
-  "status": "submitted_below_platform_target",
-  "model_dir": "runs/rlt_cached_norm_v1",
-  "version": "B0",
+  "status": "audited_ready_for_submission",
+  "model_dir": "runs/rlt_ema095_affine_v1",
+  "version": "B1",
+  "calibration_method": "affine",
   "selected_epoch": 1,
-  "model_sha256": "2106da2676b4ea51cc8ef16ff1a111cc46b1f8bc20301c166e23234e707b14d5",
+  "model_sha256": "bd319a187b3704e8795b9229dbc42c98731756c25dfff5056862526b45c250bc",
   "selection": {
-    "qwk": 0.8342006147154317,
-    "mae": 0.3384714193962749
+    "qwk": 0.8342494364142687,
+    "mae": 0.3468208092485549
   },
   "selection_target": 0.8341167069970928,
-  "selection_qwk_delta": 8.390771833888255e-05,
+  "selection_qwk_delta": 0.00013272941717590303,
   "platform_target": 0.82349,
   "final_validation_evaluated": false,
-  "note": "Selection advantage is only about 0.000084 QWK; no claim of statistically reliable superiority.",
-  "platform_score": 0.82311,
-  "beats_platform_target": false
+  "previous_candidate": "runs/rlt_cached_norm_v1",
+  "note": "Very small selection advantage after multiple development experiments; no claim of statistically reliable superiority."
 }

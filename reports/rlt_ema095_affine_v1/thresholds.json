@@ -1,0 +1,34 @@
+{
+  "thresholds": [
+    1.6398104265402844,
+    2.5876777251184837,
+    3.5355450236966828,
+    4.483412322274882,
+    5.431279620853081
+  ],
+  "fit_split": "calibration",
+  "selected_epoch": 1,
+  "calibration_override": {
+    "method": "Affine score calibration; slope 0.7..1.4 step 0.005, offset -1..1 step 0.005",
+    "source_run": "/home/chao/test/learning-agency-lab-automated-essay-scoring-2/runs/rlt_ema095_v1",
+    "source_model_sha256": "bd319a187b3704e8795b9229dbc42c98731756c25dfff5056862526b45c250bc",
+    "source_calibration_sha256": "63498f89f8197d945369dfa1f5019d1002b4532823a32f36654ad62f243d5ecd",
+    "fitted_parameters_sha256": "26ba7fd25b173022377dadd64309ec181b2eb5a730fd95d5229e8425b2ab96bb",
+    "packaging_code_sha256": "73079c790ff71108f36aa7a5f948774d32cc9bce8a1fa0ca1dd5db5b85702cc9",
+    "parameters": {
+      "slope": 1.055,
+      "offset": -0.22999999999999998,
+      "thresholds": [
+        1.6398104265402844,
+        2.5876777251184837,
+        3.5355450236966828,
+        4.483412322274882,
+        5.431279620853081
+      ],
+      "calibration_qwk": 0.8217031249164433
+    },
+    "fit_split": "calibration",
+    "weights_retrained": false,
+    "deployment_version": "B1"
+  }
+}
